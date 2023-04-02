@@ -93,6 +93,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="register">注册</el-button>
+              <el-button type="default" @click="resetForm">重置</el-button>
             </el-form-item>
           </div>
         </el-form>
@@ -260,7 +261,9 @@ export default {
     }
   },
   methods: {
-    // NOTE: 处理登录逻辑
+    resetForm() {
+      this.$refs.form.resetFields()
+    },
     async login() {
       // 异步发送post请求
       try {
@@ -383,6 +386,7 @@ export default {
         // TODO: URL需要修改成统一的格式（不要写localhost）
 
         // NOTE: 不需要在前端转换成JSON
+        this.$refs.form.resetFields() // 重置表单
       } catch (error) {
         console.error('登录失败', error)
         ElMessage({

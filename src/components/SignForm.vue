@@ -45,7 +45,8 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="signin">申请</el-button>
-        <el-button type="default" @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="default" @click="resetForm">重置</el-button>
+        <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -219,6 +220,11 @@ export default {
     }
   },
   methods: {
+    //NOTE: 重置表单
+    resetForm() {
+      this.$refs.form.resetFields()
+    },
+    //TODO: 缺少异常处理；修改成PUT请求
     signin() {
       // this.HandleCategories() //* 将多个单词用+拼起来
       // NOTE: 前端检查是否符合规范
@@ -267,6 +273,7 @@ export default {
             .finally(() => {
               this.loading = false // 关闭 loading 动画
             })
+          this.$refs.form.resetFields() // 重置表单
         } else {
           return false
         }
