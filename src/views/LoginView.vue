@@ -1,7 +1,10 @@
 <template>
   <div class="background"></div>
   <div class="center">
-    <!-- <el-tabs v-model="activeTab"> -->
+    <!-- TODO: 通过修改URL造成错误的消息提示 -->
+    <!-- <div class="errorInfo">
+      <h2>{{ error }}</h2>
+    </div> -->
     <el-tabs>
       <el-tab-pane label="登录" name="login">
         <el-form :model="loginForm" :label-width="label_width">
@@ -154,6 +157,7 @@ export default {
         confirmPassword: '',
         role: '1'
       },
+      error: null,
       // NOTE: 以下为前端输入格式检查
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
@@ -446,6 +450,10 @@ export default {
       // sleep 多少 ms
       return new Promise((resolve) => setTimeout(resolve, ms))
     }
+  },
+  // NOTE: 用于提示被重定向的用户错误信息
+  mounted() {
+    this.error = this.$route.query.error
   }
 }
 </script>

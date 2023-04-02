@@ -129,7 +129,11 @@ router.beforeEach((to, from, next) => {
   const role = sessionStorage.getItem('role')
   if (!token && to.path !== '/login') {
     //* 未登录用户重定向到登录页面
-    next('/login')
+    // next('/login')
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath, error: '请先登录' }      
+    })
   } else if (to.path.startsWith('/home')) {
     //* 已登录用户根据角色重定向到不同的页面：1: orduser, 2: vendor, 3: admin
     if (role == 1 && !to.path.startsWith('/home/orduser')) {
