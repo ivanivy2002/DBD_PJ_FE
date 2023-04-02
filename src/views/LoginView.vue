@@ -199,8 +199,6 @@ export default {
           callback()
         }
       },
-      //HACK: 引入$message组件
-      $message: this.message
     }
   },
   computed: {
@@ -364,8 +362,6 @@ export default {
             await this.sleep(50) //* 等待50ms
             console.log(this.loginForm.role)
             this.$router.push('/home/admin') //* 跳转到管理员主页
-            // router.push('home/admin')
-            // TODO: 登录之后的页面跳转
           } else {
             // console.error('登录失败', error)
             ElMessage({

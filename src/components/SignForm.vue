@@ -85,7 +85,7 @@ export default {
       activeTab: 'signin',
       categories: [],
       signForm: {
-        // FIXME: userName之后需要改掉, 用sessionStorage来存储
+        // TODO: userName之后需要改掉, 用sessionStorage来存储
         userName: '',
         shopName: '',
         // categories: '',
@@ -96,10 +96,8 @@ export default {
         address: '',
         fund: '',
         registrationTime: ''
-        // TODO: 日期格式以及多选框如何传递数据
         // TODO: 如何在这个时候传递用户名给后端
       },
-      // BUG: 无法检查rules
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
           callback(new Error('请输入正确格式的用户名！'))

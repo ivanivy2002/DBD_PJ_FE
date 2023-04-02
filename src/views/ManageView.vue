@@ -8,7 +8,6 @@
       <el-table-column prop="address" label="备案地址"></el-table-column>
       <el-table-column prop="fund" label="注册资金"></el-table-column>
       <el-table-column prop="registrationTime" label="注册时间"></el-table-column>
-      <!-- TODO: 需要拿取后端的状态（是否已经审核） -->
       <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
       <el-table-column prop="status" label="状态">
         <template #default="{ row }">
@@ -93,7 +92,6 @@ export default {
         this.ifApprove = 1
         console.log(row.userName)
         const response = await axios.get('http://localhost:9000/admin/handleRequest', {
-          // TODO: 下面userName应该改成row.userName
           params: {
             // userName: 'penny',
             userName: row.userName,

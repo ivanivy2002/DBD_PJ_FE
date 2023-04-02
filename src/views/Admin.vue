@@ -2,7 +2,6 @@
   <!--  <p>This is Admin.</p>-->
   <HeaderAdmin />
   <router-view />
-  <!-- TODO: view和组件覆盖怎么办？ 写一个类似于弹窗的东西？ -->
   <!-- <StoreTable /> -->
 </template>
 

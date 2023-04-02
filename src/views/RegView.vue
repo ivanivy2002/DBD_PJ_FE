@@ -9,7 +9,6 @@
           <el-form-item label="密码">
             <el-input v-model="loginForm.password" type="password"></el-input>
           </el-form-item>
-          <!-- TODO: 是否为管理员 -->
           <el-form-item label="管理员">
             <el-radio-group v-model="loginForm.role">
               <el-radio label="1" size="large">是</el-radio>
@@ -149,8 +148,6 @@ export default {
           callback()
         }
       },
-      //HACK: 引入$message组件
-      $message: this.message
     }
   },
   computed: {
@@ -227,7 +224,6 @@ export default {
           // HACK: sleep 50ms 未进行测试
           await this.sleep(50) //*
           useRouter().push('/') //* 跳转到主页
-          // TODO: 登录之后的页面跳转
         } else {
           console.error('登录失败', error)
           ElMessage({
@@ -246,7 +242,6 @@ export default {
       }
     },
     register() {
-      // HACK: 检查填写的表单是否符合rules
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
