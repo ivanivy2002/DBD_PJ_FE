@@ -4,7 +4,7 @@
   <div class="DiaButton">
     <el-button text @click="dialogFormVisible = true"> 申请开店 </el-button>
   </div>
-
+<div class="el-form">
   <el-dialog v-model="dialogFormVisible" title="申请开店">
     <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
       <el-form-item label="用户名" prop="userName">
@@ -50,6 +50,7 @@
       </el-form-item>
     </el-form>
   </el-dialog>
+</div>
 </template>
 
 <script>
@@ -304,8 +305,12 @@ export default {
 /*  width: 300px;*/
 /*}*/
 
-.dialog-footer button:first-child {
+/* .dialog-footer button:first-child {
   margin-right: 10px;
+} */
+
+.el-form {
+  z-index: 1000;
 }
 
 .DiaButton {
