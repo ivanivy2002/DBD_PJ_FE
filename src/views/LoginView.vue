@@ -202,7 +202,7 @@ export default {
         } else {
           callback()
         }
-      },
+      }
     }
   },
   computed: {

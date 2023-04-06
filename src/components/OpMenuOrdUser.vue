@@ -11,7 +11,7 @@ import { ElMessage } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 
 export default {
-  name: 'PCenterOrdUser',
+  name: 'OpMenuOrdUser',
   methods: {
     gotoStorePage() {
       this.$router.push('/home/orduser/store')

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-// import PCenterVendor from "@/components/PCenterVendor";
+// import OpMenuVendor from "@/components/OpMenuVendor";
 import HeaderVendor from '@/components/HeaderVendor'
 
 export default {

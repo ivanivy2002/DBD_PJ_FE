@@ -11,7 +11,7 @@ import { ElMessage } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 
 export default {
-  name: 'PCenterAdmin',
+  name: 'OpMenuAdmin',
   methods: {
     gotoManagePage() {
       this.$router.push('/home/admin/manage')

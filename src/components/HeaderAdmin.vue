@@ -12,18 +12,18 @@
     <div class="flex-grow" />
     <!--    <el-menu-item index="1">Processing Center</el-menu-item>-->
     <!--    <el-sub-menu index="2">-->
-    <PCenterAdmin />
+    <OpMenuAdmin />
     <!--    </el-sub-menu>-->
   </el-menu>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
-import PCenterAdmin from './PCenterAdmin.vue'
+import OpMenuAdmin from './OpMenuAdmin.vue'
 
 export default {
   name: 'HeaderAdmin',
-  components: { PCenterAdmin },
+  components: { OpMenuAdmin },
 
   setup() {
     const activeIndex = ref('1')

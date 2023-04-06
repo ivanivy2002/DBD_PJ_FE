@@ -30,8 +30,20 @@
           >
             同意
           </el-button> -->
-          <el-button type="success" size="small" @click="approveShop(row)" :disabled="isButtonDisabled(row)">同意</el-button>
-          <el-button type="danger" size="small" @click="rejectShop(row)" :disabled="isButtonDisabled(row)">拒绝</el-button>
+          <el-button
+            type="success"
+            size="small"
+            @click="approveShop(row)"
+            :disabled="isButtonDisabled(row)"
+            >同意</el-button
+          >
+          <el-button
+            type="danger"
+            size="small"
+            @click="rejectShop(row)"
+            :disabled="isButtonDisabled(row)"
+            >拒绝</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -58,16 +70,16 @@ export default {
   // NOTE: 用computed来实现按钮的disabled属性，如果不是待审核状态，就禁用按钮
   // NOTE: 需要注意的是，这里的row是一个参数，要在调用的时候传入
   computed: {
-  isButtonDisabled() {
-    return (row) => {
-      if (row.status !== '待审核') {
-        return true;
-      } else {
-        return false;
+    isButtonDisabled() {
+      return (row) => {
+        if (row.status !== '待审核') {
+          return true
+        } else {
+          return false
+        }
       }
-    };
+    }
   },
-},
   methods: {
     fetchData: async function () {
       try {

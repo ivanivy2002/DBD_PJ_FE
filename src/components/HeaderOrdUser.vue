@@ -12,18 +12,18 @@
     <div class="flex-grow" />
     <!--    <el-menu-item index="1">Processing Center</el-menu-item>-->
     <!--    <el-sub-menu index="2">-->
-    <PCenterOrdUser />
+    <OpMenuOrdUser />
     <!--    </el-sub-menu>-->
   </el-menu>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
-import PCenterOrdUser from './PCenterOrdUser.vue'
+import OpMenuOrdUser from './OpMenuOrdUser.vue'
 
 export default {
   name: 'HeaderOrdUser',
-  components: { PCenterOrdUser },
+  components: { OpMenuOrdUser },
 
   setup() {
     const activeIndex = ref('1')
