@@ -13,7 +13,6 @@
       <div class="card-content">商店简介：{{ store.intro }}</div>
     </div>
     <el-button type="normal" @click="gotoMCenter">修改商店</el-button>
-    W
   </div>
 
   <!--  <div class="flex justify-between items-center flex-wrap">-->
@@ -100,6 +99,9 @@ export default {
         registrationTime: '2016-12-19 15:43:30',
         shopName: '属根际'
       }
+    },
+    gotoMCenter() {
+      this.$router.push('/home/vendor/mcenter')
     }
   }
 }
