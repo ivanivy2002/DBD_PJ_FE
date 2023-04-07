@@ -51,7 +51,7 @@ export default {
   methods: {
     async fetchData() {
       const response = await axios.get('http://localhost:9000/home/display')
-      // BUG: 无法访问，这个问题应该和路由相关
+      // BUG: ↓无法访问，这个问题应该和路由相关
       // const response = await axios.get('api/home/display')
       console.log(response.data)
       return response.data

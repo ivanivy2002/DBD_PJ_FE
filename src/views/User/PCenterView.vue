@@ -2,18 +2,19 @@
   <div class="personal-center">
     <div class="personal-info">
       <h2>个人信息</h2>
-      <el-form :model="user" :rules="rules" ref="userForm" label-width="120px" class="user-form">
+      <el-form :model="userInfoForm" :rules="rules" ref="userInfo" label-width="120px" class="user-form">
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="user.username"></el-input>
+          <el-input v-model="userInfoForm.username"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="user.email"></el-input>
+          <el-input v-model="userInfoForm.email"></el-input>
         </el-form-item>
+        <!-- NOTE: 身份证号不可修改 -->
         <el-form-item label="身份证号" prop="idCard">
-          <el-input v-model="user.idCard"></el-input>
+          <el-input v-model="userInfoForm.idCard" disabled></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
-          <el-input v-model="user.phone"></el-input>
+          <el-input v-model="userInfoForm.phone"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm">提交</el-button>
@@ -66,10 +67,12 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
-      user: {
+      userInfoForm: {
         username: '',
         email: '',
         idCard: '',
@@ -91,15 +94,22 @@ export default {
     this.getBalance()
   },
   methods: {
-    getUserInfo() {
-      // 发送请求获取用户信息
-      // 示例代码
-      this.user = {
-        username: 'Alice',
-        email: 'alice@example.com',
-        idCard: '123456789012345678',
-        phone: '12345678901'
-      }
+    async getUserInfo() {// 发送请求获取用户信息
+      console.log(localStorage.getItem('id'))
+      const response = await axios.get('http://localhost:9000/user/displayInfo', {
+        params: {
+          userId: localStorage.getItem('id')//获取cookie中的id
+        }
+      })
+      console.log(response.data)
+
+      // // 示例代码
+      // this.userInfoForm = {
+      //   username: 'Alice',
+      //   email: 'alice@example.com',
+      //   idCard: '123456789012345678',
+      //   phone: '12345678901'
+      // }
     },
     getBalance() {
       // 发送请求获取余额
@@ -125,7 +135,7 @@ export default {
       }
     },
     submitForm() {
-      this.$refs.userForm.validate((valid) => {
+      this.$refs.userInfo.validate((valid) => {
         if (valid) {
           // 发送请求更新用户信息
           // 示例代码
@@ -134,7 +144,7 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.userForm.resetFields()
+      this.$refs.userInfo.resetFields()
     },
     submitPassword() {
       this.$refs.passwordForm.validate((valid) => {

@@ -3,6 +3,7 @@
     <template #title>操作中心</template>
     <el-menu-item index="2-1" disabled>申请开店</el-menu-item>
     <el-menu-item index="2-2" @click="gotoStorePage">查看首页</el-menu-item>
+    <el-menu-item index="2-3" @click="gotoPCenter">个人中心</el-menu-item>
   </el-sub-menu>
 </template>
 
@@ -15,6 +16,9 @@ export default {
   methods: {
     gotoStorePage() {
       this.$router.push('/home/orduser/store')
+    },
+    gotoPCenter() {
+      this.$router.push('/home/orduser/profile')
     }
   },
   setup() {
