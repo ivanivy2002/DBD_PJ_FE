@@ -57,6 +57,7 @@
 
 <script>
 import axios from 'axios'
+import {ElMessage} from "element-plus";
 export default {
   name: 'MCenterView',
   data() {
@@ -67,7 +68,6 @@ export default {
         address: '超级天空城3区55街道干碎小区',
         intro: 'what is life for?',
         idNumber: '30212566965845212X',
-        phoneNumber: '18566965325'
       },
       balance: 100,
       rechargeAmount: 0,
@@ -84,28 +84,6 @@ export default {
           callback()
         }
       },
-      //* 中国大陆手机号格式：以数字 1 开头、第二位是 3-9 中的任意一个数字，后面紧跟着 9 个数字的字符串
-      validatePhoneNumber: (rule, value, callback) => {
-        if (!/^1[3-9]\d{9}$/.test(value)) {
-          callback(new Error('请输入正确的手机号！'))
-        } else {
-          callback()
-        }
-      },
-      validatePassword: (rule, value, callback) => {
-        if (!/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{6,32}$/.test(value)) {
-          callback(new Error('密码⻓度为6-32个字符；字⺟，数字或者特殊字符（-_）⾄少包含两种！'))
-        } else {
-          callback()
-        }
-      },
-      validateConfirmPassword: (rule, value, callback) => {
-        if (value !== this.registerForm.password) {
-          callback(new Error('两次输入的密码不一致！'))
-        } else {
-          callback()
-        }
-      }
     }
   },
   mounted() {
@@ -126,37 +104,6 @@ export default {
           },
           { validator: this.validateshopName, trigger: 'blur' }
         ],
-        phoneNumber: [{ required: true, validator: this.validatePhoneNumber, trigger: 'blur' }],
-        email: [
-          {
-            required: true,
-            type: 'email',
-            message: '请输入正确的邮箱地址！',
-            trigger: ['blur', 'change']
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: '密码不能为空',
-            trigger: 'blur'
-          },
-          {
-            validator: this.validatePassword,
-            min: 6,
-            max: 32,
-            // message: '请输入正确格式的密码！',
-            trigger: 'blur'
-          }
-        ],
-        confirmPassword: [
-          {
-            required: true,
-            message: '请再次输入密码',
-            trigger: 'blur'
-          },
-          { validator: this.validateConfirmPassword, trigger: 'blur' }
-        ]
       }
     }
   },
