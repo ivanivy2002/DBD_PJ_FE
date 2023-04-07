@@ -3,7 +3,7 @@
   <!--  TODO:[feat SignForm to make full function]-->
   <div class="DiaButton">
     <el-button text @click="dialogFormVisible = true"> 申请开店</el-button>
-    <el-button index="2-2" @click="gotoStoreInfo">查看首页</el-button>
+    <el-button index="2-2" @click="gotoStoreInfo">查看商店</el-button>
   </div>
   <div class="el-form">
     <el-dialog v-model="dialogFormVisible" title="申请开店">
