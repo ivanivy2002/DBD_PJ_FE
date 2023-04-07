@@ -426,11 +426,11 @@ h2 {
   background-color: #4db8ff;
 }
 
-.el-button[type="primary"] {
+.el-button[type='primary'] {
   background-color: #4db8ff;
 }
 
-.el-button[type="primary"]:hover {
+.el-button[type='primary']:hover {
   background-color: #3da6ff;
 }
 

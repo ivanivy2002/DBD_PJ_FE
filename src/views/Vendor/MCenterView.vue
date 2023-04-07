@@ -2,15 +2,16 @@
   This is MCenterView
 
   <!--  TODO: 表单-->
-  <div>表单在此..
+  <div>
+    表单在此..
     <div class="el-form">
       <el-dialog v-model="dialogFormVisible" title="申请开店">
         <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
           <el-form-item label="用户名" prop="userName">
             <el-input
-                v-model="signForm.userName"
-                placeholder="请输入您的用户名以供确认"
-                onfocus="if (this.placeholder == this.value) this.value = ''"
+              v-model="signForm.userName"
+              placeholder="请输入您的用户名以供确认"
+              onfocus="if (this.placeholder == this.value) this.value = ''"
             ></el-input>
           </el-form-item>
           <el-form-item label="店名" prop="shopName">

@@ -14,6 +14,9 @@
     </div>
     <el-button type="normal" @click="gotoMCenter">修改商店</el-button>
   </div>
+  <div class="box">
+    <div class="cardCommodity">商品们</div>
+  </div>
 
   <!--  <div class="flex justify-between items-center flex-wrap">-->
   <!--    <div-->
@@ -109,9 +112,17 @@ export default {
 
 <style scoped>
 .box {
-  width: 200px;
-  height: 200px;
+  width: 500px;
+  /*height: 200px;*/
   border: 2px solid #ccc;
+  margin: auto;
+  margin-top: 150px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
   box-shadow: 0 0 10px #999;
+  /*display: flex;*/
+  justify-content: center;
+  /*justify-items: center;*/
 }
 </style>
