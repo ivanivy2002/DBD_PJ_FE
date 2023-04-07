@@ -2,7 +2,13 @@
   <div class="personal-center">
     <div class="personal-info">
       <h2>个人信息</h2>
-      <el-form :model="userInfoForm" :rules="rules" ref="userInfo" label-width="120px" class="user-form">
+      <el-form
+        :model="userInfoForm"
+        :rules="rules"
+        ref="userInfo"
+        label-width="120px"
+        class="user-form"
+      >
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="userInfoForm.userName"></el-input>
         </el-form-item>
@@ -17,26 +23,38 @@
           <el-input v-model="userInfoForm.phoneNumber"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-button type="primary" @click="changeInfo">提交</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="personal-fund">
+    <div class="personal-balance">
       <h2>个人资金</h2>
       <p>当前余额: {{ balance }}</p>
-      <el-form :model="fund" :rules="fundRules" ref="fundForm" label-width="120px" class="fund-form">
+      <el-form
+        :model="balance"
+        :rules="balanceRules"
+        ref="balanceForm"
+        label-width="120px"
+        class="balance-form"
+      >
         <el-form-item label="充值金额" prop="amount">
-          <el-input v-model="fund.amount"></el-input>
+          <el-input v-model="balance.amount"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="recharge">充值</el-button>
+          <el-button type="primary" @click="recharge(amount)">充值</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="change-password">
       <h2>修改密码</h2>
-      <el-form :model="password" :rules="passwordRules" ref="passwordForm" label-width="120px" class="password-form">
+      <el-form
+        :model="password"
+        :rules="passwordRules"
+        ref="passwordForm"
+        label-width="120px"
+        class="password-form"
+      >
         <el-form-item label="原密码" prop="oldPassword">
           <el-input v-model="password.oldPassword" type="password"></el-input>
         </el-form-item>
@@ -66,8 +84,8 @@ export default {
         idNumber: '',
         phoneNumber: ''
       },
-      fund: {
-        amount: ''
+      balance: {
+        amount: 100
       },
       password: {
         oldPassword: '',
@@ -108,7 +126,7 @@ export default {
         //   email: 'alice@example.com',
         //   idNumber: '123456789012345678',
         //   phoneNumber: '12345678901'
-        // }        
+        // }
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -139,14 +157,87 @@ export default {
       // // 前端写死的假数据
       // this.balance = 100.0
     },
-    recharge() {
-      this.$refs.fundForm.validate((valid) => {
+    async recharge() {
+      try {
+        const response = await axios.post('http://localhost:9000/user/recharge', {
+          userId: localStorage.getItem('id'),//获取cookie中的id
+          amount: this.balance.amount
+        })
+        this.balance = response.data.balance
+        ElMessage({
+          showClose: true,
+          type: 'success', //如果失败,未连接上后端
+          message: '充值成功'
+        })
+        this.getBalance() //刷新余额
+      } catch (error) {
+        console.log(error)
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败,未连接上后端
+          message: '充值失败, 开发问题'
+        })
+      }
+    },
+    async changeInfo() {
+      try {
+        // NOTE: 验证表单是否符合规范
+        this.$refs.userInfo.validate((valid) => {
+          console.log(valid)
+          if (valid) {
+            const response = await axios.post('http://localhost:9000/user/changeInfo', {
+              userId: localStorage.getItem('id'),//获取cookie中的id
+              userName: this.userInfoForm.userName,
+              email: this.userInfoForm.email,
+              idNumber: this.userInfoForm.idNumber,
+              phoneNumber: this.userInfoForm.phoneNumber
+              // NOTE: 这里应该不需要password，因为修改信息不需要密码
+            })
+            this.userInfoForm = response.data
+            ElMessage({
+              showClose: true,
+              type: 'success', //如果失败,未连接上后端
+              message: '修改信息成功'
+            })
+            this.getUserInfo() //刷新信息
+          }
+        })
+
+      } catch (error) {
+        console.log(error)
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败,未连接上后端
+          message: '修改信息失败, 开发问题'
+        })
+      }
+    },
+    async changePassword() {
+      this.$refs.passwordForm.validate((valid) => {
+        console.log(valid)
         if (valid) {
-          // 发送请求充值
-          // 示例代码
-          this.balance += Number(this.fund.amount)
-          this.fund.amount = ''
-          this.$message.success('充值成功')
+          try {
+            const response = await axios.post('http://localhost:9000/user/changePassword', {
+              userId: localStorage.getItem('id'),//获取cookie中的id
+              oldPassword: this.password.oldPassword,
+              newPassword: this.password.newPassword
+            })
+            this.password = response.data
+            ElMessage({
+              showClose: true,
+              type: 'success', //如果失败,未连接上后端
+              message: '修改密码成功'
+            })
+            this.getUserInfo() //刷新信息
+          } catch (error) {
+            console.log(error)
+            ElMessage({
+              showClose: true,
+              type: 'error', //如果失败,未连接上后端
+              message: '修改密码失败, 开发问题'
+            })
+          }
+          this.$message.success('密码更新成功')
         }
       })
     },
@@ -157,27 +248,10 @@ export default {
         callback()
       }
     },
-    submitForm() {
-      this.$refs.userInfo.validate((valid) => {
-        if (valid) {
-          // 发送请求更新用户信息
-          // 示例代码
-          this.$message.success('个人信息更新成功')
-        }
-      })
-    },
-    resetForm() {
+    resetForm() {//* 重置表单
       this.$refs.userInfo.resetFields()
     },
-    submitPassword() {
-      this.$refs.passwordForm.validate((valid) => {
-        if (valid) {
-          // 发送请求更新密码
-          // 示例代码
-          this.$message.success('密码更新成功')
-        }
-      })
-    }
+
   }
 }
 </script>
@@ -190,13 +264,13 @@ export default {
 }
 
 .personal-info,
-.personal-fund,
+.personal-balance,
 .change-password {
   margin-bottom: 30px;
 }
 
 .user-form,
-.fund-form,
+.balance-form,
 .password-form {
   max-width: 400px;
   margin: 20px auto;
