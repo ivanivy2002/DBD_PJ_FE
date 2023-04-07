@@ -9,7 +9,7 @@ import AboutView from '@/views/AboutView'
 import OrdUser from '@/views/OrdUser'
 import Admin from '@/views/Admin'
 import Vendor from '@/views/Vendor'
-import ManageView from '@/views/ManageView'
+import ManageStoreView from '@/views/ManageStoreView'
 import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
 import StoreInfoView from '@/views/StoreInfoView'
@@ -57,7 +57,7 @@ const router = createRouter({
           children: [
             {
               path: '/home/admin/manage',
-              component: ManageView
+              component: ManageStoreView
             },
             {
               path: '/home/admin/store',

@@ -56,7 +56,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
 export default {
-  name: 'MyComponent',
+  name: 'ManageStoreView',
   data() {
     return {
       state: {
