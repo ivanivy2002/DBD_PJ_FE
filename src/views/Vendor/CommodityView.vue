@@ -2,18 +2,18 @@
   <!--  TODO: 一条条记录的表单怎么写-->
   一条条记录的表单怎么写?
   <div>
-  <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
+    <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
   </div>
   <div class="el-form">
     <el-dialog v-model="dialogFormVisible" title="申请上架商品">
       <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
-<!--        <el-form-item label="用户名" prop="userName">-->
-<!--          <el-input-->
-<!--            v-model="signForm.userName"-->
-<!--            placeholder="请输入您的用户名以供确认"-->
-<!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-<!--          ></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="用户名" prop="userName">-->
+        <!--          <el-input-->
+        <!--            v-model="signForm.userName"-->
+        <!--            placeholder="请输入您的用户名以供确认"-->
+        <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+        <!--          ></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item label="商品名称" prop="shopName">
           <el-input v-model="signForm.shopName"></el-input>
         </el-form-item>
@@ -29,21 +29,21 @@
           </el-checkbox-group>
         </el-form-item>
 
-<!--        <el-form-item label="身份证号" prop="idNumber">-->
-<!--          <el-input v-model="signForm.idNumber"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="身份证号" prop="idNumber">-->
+        <!--          <el-input v-model="signForm.idNumber"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item label="商品简介" prop="intro">
           <el-input v-model="signForm.intro"></el-input>
         </el-form-item>
-<!--        <el-form-item label="备案地址" prop="address">-->
-<!--          <el-input v-model="signForm.address"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="注册资金" prop="fund">-->
-<!--          <el-input v-model="signForm.fund"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="注册时间" prop="registrationTime">-->
-<!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="备案地址" prop="address">-->
+        <!--          <el-input v-model="signForm.address"></el-input>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="注册资金" prop="fund">-->
+        <!--          <el-input v-model="signForm.fund"></el-input>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="注册时间" prop="registrationTime">-->
+        <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="signin">申请</el-button>
           <el-button type="default" @click="resetForm">重置</el-button>
@@ -239,40 +239,40 @@ export default {
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-              .post('http://localhost:9000/shop/reg', this.signForm)
-              .then((response) => {
-                console.log(response.data)
-                // NOTE: 只有当后端返回200时显示注册成功
-                if (response.data.code == 200) {
-                  console.log('申请提交成功')
-                  ElMessage({
-                    //用于弹出消息提示
-                    showClose: true,
-                    type: 'success', //如果成功
-                    message: '申请提交成功'
-                  })
-                  this.dialogFormVisible = false
-                } else {
-                  console.error('申请提交失败，请重试！')
-                  ElMessage({
-                    showClose: true,
-                    type: 'error', //如果失败输出状态码
-                    message: '申请提交失败:' + response.data.msg
-                  })
-                }
-              })
-              .catch((error) => {
-                console.error(error)
+            .post('http://localhost:9000/shop/reg', this.signForm)
+            .then((response) => {
+              console.log(response.data)
+              // NOTE: 只有当后端返回200时显示注册成功
+              if (response.data.code == 200) {
+                console.log('申请提交成功')
+                ElMessage({
+                  //用于弹出消息提示
+                  showClose: true,
+                  type: 'success', //如果成功
+                  message: '申请提交成功'
+                })
+                this.dialogFormVisible = false
+              } else {
+                console.error('申请提交失败，请重试！')
                 ElMessage({
                   showClose: true,
-                  type: 'error', //如果失败，未连接上后端
-                  message: '申请提交失败:vue好像有什么地方错了呢'
+                  type: 'error', //如果失败输出状态码
+                  message: '申请提交失败:' + response.data.msg
                 })
-                // this.$message.error('数据保存失败，' + error.toString())
+              }
+            })
+            .catch((error) => {
+              console.error(error)
+              ElMessage({
+                showClose: true,
+                type: 'error', //如果失败，未连接上后端
+                message: '申请提交失败:vue好像有什么地方错了呢'
               })
-              .finally(() => {
-                this.loading = false // 关闭 loading 动画
-              })
+              // this.$message.error('数据保存失败，' + error.toString())
+            })
+            .finally(() => {
+              this.loading = false // 关闭 loading 动画
+            })
           this.$refs.form.resetFields() // 重置表单
         } else {
           return false
@@ -292,7 +292,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped></style>
