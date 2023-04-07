@@ -289,7 +289,6 @@ export default {
           // localStorage.setItem('user', JSON.stringify(user))
           // localStorage.getItem('token')
           console.log(response)
-          console.log(response.data.code)
           if (response.data.code == 200) {
             console.log('登录成功', response.data) //控制台输出
             ElMessage({
@@ -303,11 +302,10 @@ export default {
             sessionStorage.setItem('id', response.data.id)
             sessionStorage.setItem('username', response.data.userName)
             const role = sessionStorage.getItem('role')
-            console.log(role)
 
             // HACK: sleep 50ms 未进行测试
             await this.sleep(50) //* 等待50ms
-            if (response.data.role == 1) {
+            if (response.role == 1) {
               this.backUrl = '/home/orduser' //* 跳转到普通用户主页
             } else {
               this.backUrl = '/home/vendor' //* 跳转到商户主页
@@ -324,11 +322,12 @@ export default {
         } else if (this.loginForm.role == 1) {
           //* 管理员
           // this.backUrl = 'http://localhost:9000/admin/login'
-          this.backUrl = 'api/admin/login'
+          // TODO: 后端接口有些修改，前端也需要相应修正，管理员和非管理员URL相同
+          this.backUrl = 'api/user/login'
           const response = await axios.get(this.backUrl, {
             params: {
               // 查询
-              adminName: this.loginForm.userName,
+              userName: this.loginForm.userName,
               password: this.loginForm.password
               // session: this.loginForm.session
             }
