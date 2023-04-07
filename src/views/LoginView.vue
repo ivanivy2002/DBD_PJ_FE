@@ -141,7 +141,7 @@ export default {
       loginForm: {
         userName: '',
         password: '',
-        role: '1',
+        role: '1'
       },
       registerForm: {
         userName: '',

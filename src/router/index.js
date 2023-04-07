@@ -13,6 +13,7 @@ import ManageView from '@/views/ManageView'
 import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
 import StoreInfoView from '@/views/StoreInfoView'
+import ordUserRoutes from './ordUser.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -113,7 +114,9 @@ const router = createRouter({
       path: '/fun',
       name: 'fun',
       component: FunView
-    }
+    },
+    // 将 ordUser.js 中定义的路由添加到 routes 数组中
+    ...ordUserRoutes
   ]
 })
 
