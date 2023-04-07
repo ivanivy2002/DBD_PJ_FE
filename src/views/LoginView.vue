@@ -142,11 +142,6 @@ export default {
         userName: '',
         password: '',
         role: '1',
-        session: {
-          role: '1',
-          userName: '',
-          id: ''
-        }
       },
       registerForm: {
         userName: '',
@@ -269,8 +264,6 @@ export default {
     async login() {
       // 异步发送post请求
       try {
-        this.loginForm.session.role = this.loginForm.role
-        this.loginForm.session.userName = this.loginForm.userName
         const router = useRouter()
         // NOTE: 区分是管理员还是非管理员
         console.log(this.loginForm.role)
