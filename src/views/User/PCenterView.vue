@@ -10,17 +10,34 @@
         class="user-form"
       >
         <el-form-item label="用户名" prop="userName">
-          <el-input v-model="userInfoForm.userName"></el-input>
+          <el-input
+            v-model="userInfoForm.userName"
+            :placeholder="userInfoForm.userName"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+          ></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="userInfoForm.email"></el-input>
+          <el-input
+            v-model="userInfoForm.email"
+            :placeholder="userInfoForm.email"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+          ></el-input>
         </el-form-item>
         <!-- NOTE: 身份证号不可修改 -->
         <el-form-item label="身份证号" prop="idNumber">
-          <el-input v-model="userInfoForm.idNumber" disabled></el-input>
+          <el-input
+            v-model="userInfoForm.idNumber"
+            :placeholder="userInfoForm.idNumber"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+            disabled
+          ></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phoneNumber">
-          <el-input v-model="userInfoForm.phoneNumber"></el-input>
+          <el-input
+            v-model="userInfoForm.phoneNumber"
+            :placeholder="userInfoForm.phoneNumber"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="changeInfo">提交</el-button>
@@ -38,11 +55,11 @@
         label-width="120px"
         class="balance-form"
       >
-        <el-form-item label="充值金额" prop="amount">
-          <el-input v-model="balance.amount"></el-input>
+        <el-form-item label="充值金额" prop="balance">
+          <el-input v-model="balance"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="recharge(amount)">充值</el-button>
+          <el-button type="primary" @click="recharge(balance)">充值</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -79,19 +96,17 @@ export default {
   data() {
     return {
       userInfoForm: {
-        userName: '',
+        userName: 'gan',
         email: '',
         idNumber: '',
         phoneNumber: ''
       },
-      balance: {
-        amount: 100
-      },
+      balance: 100,
       password: {
         oldPassword: '',
         newPassword: '',
         confirmPassword: ''
-      },
+      }
     }
   },
   mounted() {
@@ -100,13 +115,14 @@ export default {
     this.getBalance()
   },
   methods: {
-    async getUserInfo() {// 发送请求获取用户信息
+    async getUserInfo() {
+      // 发送请求获取用户信息
       try {
         // TODO: 未做session测试
-        console.log(localStorage.getItem('id'))// 从session中拿数据像后端请求
+        console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
         const response = await axios.get('http://localhost:9000/user/displayInfo', {
           params: {
-            userId: localStorage.getItem('id')//获取cookie中的id
+            userId: localStorage.getItem('id') //获取cookie中的id
           }
         })
         // NOTE: 如果修改的话需要更新session
@@ -114,7 +130,8 @@ export default {
         sessionStorage.setItem('id', response.data.id)
         sessionStorage.setItem('userName', response.data.userName)
         console.log(response.data)
-        this.userInfoForm = {//* 拿数据
+        this.userInfoForm = {
+          //* 拿数据
           userName: response.data.userName,
           email: response.data.email,
           idNumber: response.data.idNumber,
@@ -135,17 +152,16 @@ export default {
           message: '修改信息失败, 开发问题'
         })
       }
-
     },
-    async getBalance() {// 发送请求获取余额
+    async getBalance() {
+      // 发送请求获取余额
       try {
         const response = await axios.get('http://localhost:9000/user/displayAccount', {
           params: {
-            userId: localStorage.getItem('id')//获取cookie中的id
+            userId: localStorage.getItem('id') //获取cookie中的id
           }
         })
         this.balance = response.data.balance
-
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -157,13 +173,14 @@ export default {
       // // 前端写死的假数据
       // this.balance = 100.0
     },
-    async recharge() {
+    recharge() {
       try {
-        const response = await axios.post('http://localhost:9000/user/recharge', {
-          userId: localStorage.getItem('id'),//获取cookie中的id
-          amount: this.balance.amount
+        const response = axios.post('http://localhost:9000/user/recharge', {
+          userId: localStorage.getItem('id'), //获取cookie中的id
+          amount: this.balance
+          // TODO: 这里amount和balance的命名和关系
         })
-        this.balance = response.data.balance
+        // this.balance = response.data.balance
         ElMessage({
           showClose: true,
           type: 'success', //如果失败,未连接上后端
@@ -179,21 +196,21 @@ export default {
         })
       }
     },
-    async changeInfo() {
+    changeInfo() {
       try {
         // NOTE: 验证表单是否符合规范
         this.$refs.userInfo.validate((valid) => {
           console.log(valid)
           if (valid) {
-            const response = await axios.post('http://localhost:9000/user/changeInfo', {
-              userId: localStorage.getItem('id'),//获取cookie中的id
+            const response = axios.put('http://localhost:9000/user/changeInfo', {
+              userId: localStorage.getItem('id'), //获取cookie中的id
               userName: this.userInfoForm.userName,
               email: this.userInfoForm.email,
               idNumber: this.userInfoForm.idNumber,
               phoneNumber: this.userInfoForm.phoneNumber
               // NOTE: 这里应该不需要password，因为修改信息不需要密码
             })
-            this.userInfoForm = response.data
+            // this.userInfoForm = response.data
             ElMessage({
               showClose: true,
               type: 'success', //如果失败,未连接上后端
@@ -202,7 +219,6 @@ export default {
             this.getUserInfo() //刷新信息
           }
         })
-
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -212,17 +228,17 @@ export default {
         })
       }
     },
-    async changePassword() {
+    changePassword() {
       this.$refs.passwordForm.validate((valid) => {
         console.log(valid)
         if (valid) {
           try {
-            const response = await axios.post('http://localhost:9000/user/changePassword', {
-              userId: localStorage.getItem('id'),//获取cookie中的id
+            const response = axios.put('http://localhost:9000/user/changePassword', {
+              userId: localStorage.getItem('id'), //获取cookie中的id
               oldPassword: this.password.oldPassword,
               newPassword: this.password.newPassword
             })
-            this.password = response.data
+            // this.password = response.data
             ElMessage({
               showClose: true,
               type: 'success', //如果失败,未连接上后端
@@ -241,17 +257,17 @@ export default {
         }
       })
     },
-    confirmPasswordValidator(rule, value, callback) {
-      if (value !== this.password.newPassword) {
-        callback(new Error('两次输入的密码不一致'))
-      } else {
-        callback()
-      }
-    },
-    resetForm() {//* 重置表单
+    // confirmPasswordValidator(rule, value, callback) {
+    //   if (value !== this.password.newPassword) {
+    //     callback(new Error('两次输入的密码不一致'))
+    //   } else {
+    //     callback()
+    //   }
+    // },
+    resetForm() {
+      //* 重置表单
       this.$refs.userInfo.resetFields()
-    },
-
+    }
   }
 }
 </script>
