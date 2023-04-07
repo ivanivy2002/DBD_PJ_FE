@@ -4,7 +4,7 @@
     <!--    <el-menu-item index="2-1" @click="applyform">申请开店</el-menu-item>-->
     <!-- NOTE: 这个组件的按钮写在组件内部 -->
     <SignForm />
-    <!--     <el-menu-item index="2-2" @click="gotoTargetPage">查看首页</el-menu-item>-->
+    <!--         <el-menu-item index="2-2" @click="gotoTargetPage">查看商店</el-menu-item>-->
   </el-sub-menu>
 </template>
 

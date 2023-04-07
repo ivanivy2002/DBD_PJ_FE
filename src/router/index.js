@@ -14,6 +14,8 @@ import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
 import StoreInfoView from '@/views/StoreInfoView'
 import ordUserRoutes from './ordUser.js'
+import MCenterView from '@/views/Vendor/MCenterView'
+import CommodityView from '@/views/Vendor/CommodityView'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -72,22 +74,26 @@ const router = createRouter({
         {
           // path: '/vendor',
           path: '/home/vendor',
-          component: Vendor
-          // children: [
-          //   {
-          //     // path: '/home/vendor/storeinfo',
-          //     // component: StoreInfoView
-          //   },
-          //   {
-          //     // path: '/home/vendor/',
-          //     // redirect: '/home/vendor/store'
-          //   },
-          // ]
-        },
-        {
-          path: '/home/vendor/storeinfo',
-          component: StoreInfoView
+          component: Vendor,
+          children: [
+            {
+              path: '/home/vendor/storeinfo',
+              component: StoreInfoView
+            },
+            {
+              path: '/home/vendor/mcenter',
+              component: MCenterView
+            },
+            {
+              path: '/home/vendor/commodity',
+              component: CommodityView
+            }
+          ]
         }
+        // {
+        //   path: '/home/vendor/storeinfo',
+        //   component: StoreInfoView
+        // },
       ]
     },
     {

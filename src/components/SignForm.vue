@@ -314,6 +314,7 @@ export default {
 
 .el-form {
   z-index: 1000;
+  /*pointer-events: none;*/
 }
 
 .DiaButton {
