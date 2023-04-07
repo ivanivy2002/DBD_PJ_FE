@@ -1,7 +1,7 @@
 <template>
   <div class="personal-center">
     <div class="personal-info">
-      <h2>个人信息</h2>
+      <h2>修改个人信息</h2>
       <el-form
         :model="userInfoForm"
         :rules="rules"
@@ -67,15 +67,15 @@
       <h2>修改密码</h2>
       <el-form
         :model="password"
-        :rules="passwordRules"
+        :rules="rules"
         ref="passwordForm"
         label-width="120px"
         class="password-form"
       >
-        <el-form-item label="原密码" prop="oldPassword">
+        <el-form-item label="原密码" prop="password">
           <el-input v-model="password.oldPassword" type="password"></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="newPassword">
+        <el-form-item label="新密码" prop="password">
           <el-input v-model="password.newPassword" type="password"></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="confirmPassword">
@@ -97,15 +97,45 @@ export default {
     return {
       userInfoForm: {
         userName: 'gan',
-        email: '',
-        idNumber: '',
-        phoneNumber: ''
+        email: '2251@vwv.com',
+        idNumber: '30212566965845212X',
+        phoneNumber: '18566965325'
       },
       balance: 100,
       password: {
-        oldPassword: '',
+        oldPassword: '8859zz',
         newPassword: '',
         confirmPassword: ''
+      },
+      // NOTE: 以下为前端输入格式检查
+      validateUserName: (rule, value, callback) => {
+        if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
+          callback(new Error('用户名仅能出现英⽂字符、数字与下划线，⻓度为3-10个字符！'))
+        } else {
+          callback()
+        }
+      },
+      //* 中国大陆手机号格式：以数字 1 开头、第二位是 3-9 中的任意一个数字，后面紧跟着 9 个数字的字符串
+      validatePhoneNumber: (rule, value, callback) => {
+        if (!/^1[3-9]\d{9}$/.test(value)) {
+          callback(new Error('请输入正确的手机号！'))
+        } else {
+          callback()
+        }
+      },
+      validatePassword: (rule, value, callback) => {
+        if (!/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^[^\s\u4e00-\u9fa5]{6,32}$/.test(value)) {
+          callback(new Error('密码⻓度为6-32个字符；字⺟，数字或者特殊字符（-_）⾄少包含两种！'))
+        } else {
+          callback()
+        }
+      },
+      validateConfirmPassword: (rule, value, callback) => {
+        if (value !== this.registerForm.password) {
+          callback(new Error('两次输入的密码不一致！'))
+        } else {
+          callback()
+        }
       }
     }
   },
@@ -113,6 +143,53 @@ export default {
     // 获取用户信息和余额
     this.getUserInfo()
     this.getBalance()
+  },
+  computed: {
+    //* 使用 required: true 规定该输入框是必填的，如果用户未输入用户名，则会弹出一个提示信息：“请输入用户名”。
+    //* 使用 trigger: 'blur' 规定在用户离开输入框时进行验证
+    rules: function () {
+      return {
+        userName: [
+          {
+            required: true,
+            message: '用户名不能为空',
+            trigger: 'blur'
+          },
+          { validator: this.validateUserName, trigger: 'blur' }
+        ],
+        phoneNumber: [{ required: true, validator: this.validatePhoneNumber, trigger: 'blur' }],
+        email: [
+          {
+            required: true,
+            type: 'email',
+            message: '请输入正确的邮箱地址！',
+            trigger: ['blur', 'change']
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '密码不能为空',
+            trigger: 'blur'
+          },
+          {
+            validator: this.validatePassword,
+            min: 6,
+            max: 32,
+            // message: '请输入正确格式的密码！',
+            trigger: 'blur'
+          }
+        ],
+        confirmPassword: [
+          {
+            required: true,
+            message: '请再次输入密码',
+            trigger: 'blur'
+          },
+          { validator: this.validateConfirmPassword, trigger: 'blur' }
+        ]
+      }
+    }
   },
   methods: {
     async getUserInfo() {
@@ -266,7 +343,8 @@ export default {
     // },
     resetForm() {
       //* 重置表单
-      this.$refs.userInfo.resetFields()
+      this.$refs.userInfo.resetFields();
+      this.getUserInfo();//刷新表单
     }
   }
 }
