@@ -12,8 +12,8 @@
       </div>
       <div class="card-content">商店简介：{{ store.intro }}</div>
     </div>
-    <el-button type="normal">修改商店信息</el-button>
-    <el-button type="danger">申请删除商店</el-button>
+    <el-button type="normal" @click="gotoMCenter">修改商店</el-button>
+    W
   </div>
 
   <!--  <div class="flex justify-between items-center flex-wrap">-->
