@@ -2,42 +2,24 @@
   <div class="personal-center">
     <div class="personal-info">
       <h2>修改个人信息</h2>
-      <el-form
-        :model="userInfoForm"
-        :rules="rules"
-        ref="userInfo"
-        label-width="120px"
-        class="user-form"
-      >
+      <el-form :model="userInfoForm" :rules="rules" ref="userInfo" label-width="120px" class="user-form">
+        <!-- BUG: 输入值之后移开鼠标再点击不会变成原来的值 -->
         <el-form-item label="用户名" prop="userName">
-          <el-input
-            v-model="userInfoForm.userName"
-            :placeholder="userInfoForm.userName"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-          ></el-input>
+          <el-input v-model="userInfoForm.userName" :placeholder="userInfoForm.userName"
+            onfocus="if (this.placeholder == this.value) this.value = ''"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input
-            v-model="userInfoForm.email"
-            :placeholder="userInfoForm.email"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-          ></el-input>
+          <el-input v-model="userInfoForm.email" :placeholder="userInfoForm.email"
+            onfocus="if (this.placeholder == this.value) this.value = ''"></el-input>
         </el-form-item>
         <!-- NOTE: 身份证号不可修改 -->
         <el-form-item label="身份证号" prop="idNumber">
-          <el-input
-            v-model="userInfoForm.idNumber"
-            :placeholder="userInfoForm.idNumber"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-            disabled
-          ></el-input>
+          <el-input v-model="userInfoForm.idNumber" :placeholder="userInfoForm.idNumber"
+            onfocus="if (this.placeholder == this.value) this.value = ''" disabled></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phoneNumber">
-          <el-input
-            v-model="userInfoForm.phoneNumber"
-            :placeholder="userInfoForm.phoneNumber"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-          ></el-input>
+          <el-input v-model="userInfoForm.phoneNumber" :placeholder="userInfoForm.phoneNumber"
+            onfocus="if (this.placeholder == this.value) this.value = ''"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="changeInfo">提交</el-button>
@@ -48,32 +30,20 @@
     <div class="personal-balance">
       <h2>个人资金</h2>
       <p>当前余额: {{ balance }}</p>
-      <el-form
-        :model="balance"
-        :rules="balanceRules"
-        ref="balanceForm"
-        label-width="120px"
-        class="balance-form"
-      >
+      <el-form :model="balance" :rules="balanceRules" ref="balanceForm" label-width="120px" class="balance-form">
         <el-form-item label="充值金额" prop="balance">
-          <el-input v-model="balance"></el-input>
+          <el-input v-model="rechargeAmount" type="number"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="recharge(balance)">充值</el-button>
+          <el-button type="primary" @click="recharge(rechargeAmount)">充值</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="change-password">
       <h2>修改密码</h2>
-      <el-form
-        :model="password"
-        :rules="rules"
-        ref="passwordForm"
-        label-width="120px"
-        class="password-form"
-      >
+      <el-form :model="password" :rules="rules" ref="passwordForm" label-width="120px" class="password-form">
         <el-form-item label="原密码" prop="password">
-          <el-input v-model="password.oldPassword" type="password"></el-input>
+          <el-input type="password"></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="password">
           <el-input v-model="password.newPassword" type="password"></el-input>
@@ -102,8 +72,9 @@ export default {
         phoneNumber: '18566965325'
       },
       balance: 100,
+      rechargeAmount: 0,
       password: {
-        oldPassword: '8859zz',
+        oldPassword: '',
         newPassword: '',
         confirmPassword: ''
       },
@@ -287,13 +258,22 @@ export default {
               phoneNumber: this.userInfoForm.phoneNumber
               // NOTE: 这里应该不需要password，因为修改信息不需要密码
             })
+            if (response.code === 200) {
+              ElMessage({
+                showClose: true,
+                type: 'success', //如果失败,未连接上后端
+                message: '修改信息成功'
+              })
+              this.getUserInfo() //刷新信息              
+            } else {
+              console.error('修改个人信息失败')
+              ElMessage({
+                showClose: true,
+                type: 'error', //如果失败输出状态码
+                message: '注册失败:' + response.msg
+              })
+            }
             // this.userInfoForm = response.data
-            ElMessage({
-              showClose: true,
-              type: 'success', //如果失败,未连接上后端
-              message: '修改信息成功'
-            })
-            this.getUserInfo() //刷新信息
           }
         })
       } catch (error) {
@@ -316,12 +296,22 @@ export default {
               newPassword: this.password.newPassword
             })
             // this.password = response.data
-            ElMessage({
-              showClose: true,
-              type: 'success', //如果失败,未连接上后端
-              message: '修改密码成功'
-            })
-            this.getUserInfo() //刷新信息
+            if (response.code === 200) {
+              ElMessage({
+                showClose: true,
+                type: 'success', //如果失败,未连接上后端
+                message: '修改密码成功'
+              })
+              this.getUserInfo() //刷新信息              
+            } else {
+              console.error('修改密码失败')
+              ElMessage({
+                showClose: true,
+                type: 'error', //如果失败输出状态码
+                message: '注册失败:' + response.msg
+              })
+            }
+
           } catch (error) {
             console.log(error)
             ElMessage({
