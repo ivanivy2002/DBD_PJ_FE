@@ -16,6 +16,7 @@
   </div>
   <div class="box">
     <div class="cardCommodity">商品们</div>
+    <el-button type="normal" @click="gotoCommodity">修改商品</el-button>
   </div>
 
   <!--  <div class="flex justify-between items-center flex-wrap">-->
@@ -105,6 +106,9 @@ export default {
     },
     gotoMCenter() {
       this.$router.push('/home/vendor/mcenter')
+    },
+    gotoCommodity() {
+      this.$router.push('/home/vendor/commodity')
     }
   }
 }
