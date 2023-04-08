@@ -40,21 +40,6 @@ const router = createRouter({
       component: NewHome,
       children: [
         {
-          // path: '/orduser',
-          path: '/home/orduser',
-          component: OrdUser,
-          children: [
-            {
-              path: '/home/orduser/store',
-              component: StoreTableView
-            },
-            {
-              path: '/home/orduser',
-              redirect: '/home/orduser/store'
-            }
-          ]
-        },
-        {
           // path: '/admin',
           path: '/home/admin',
           component: Admin,

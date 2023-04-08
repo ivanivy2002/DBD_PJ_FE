@@ -4,6 +4,7 @@ import Vendor from '@/views/Vendor'
 import StoreInfoView from '@/views/Vendor/StoreInfoView'
 import MCenterView from '@/views/Vendor/MCenterView'
 import CommodityView from '@/views/Vendor/CommodityView'
+import PCenterVendorView from '@/views/Vendor/PCenterVendorView'
 
 export default [
   {
@@ -24,8 +25,8 @@ export default [
       },
       {
         path: '/home/vendor/profile',
-        name: 'PCenterView',
-        component: PCenterView
+        name: 'PCenterVendorView',
+        component: PCenterVendorView
       }
     ]
   }
