@@ -92,7 +92,7 @@
 
 <script>
 import axios from 'axios'
-
+import ElMessage from 'element-plus'
 export default {
   data() {
     return {
@@ -194,28 +194,30 @@ export default {
     }
   },
   methods: {
-    async getUserInfo() {
+    getUserInfo() {
       // 发送请求获取用户信息
       try {
         // TODO: 未做session测试
         console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
-        const response = await axios.get('http://localhost:9000/user/displayInfo', {
+        const response = axios.get('http://localhost:9000/user/displayInfo', {
           params: {
-            userId: localStorage.getItem('id') //获取cookie中的id
+            // userId: localStorage.getItem('id') //获取cookie中的id
+            userId: 21
           }
         })
         // NOTE: 如果修改的话需要更新session
         sessionStorage.setItem('role', response.data.role)
         sessionStorage.setItem('id', response.data.id)
         sessionStorage.setItem('userName', response.data.userName)
-        console.log(response.data)
+        console.log(response)
         this.userInfoForm = {
           //* 拿数据
-          userName: response.data.userName,
-          email: response.data.email,
-          idNumber: response.data.idNumber,
-          phoneNumber: response.data.phoneNumber
+          userName: response.data.data.userName,
+          email: response.data.data.email,
+          idNumber: response.data.data.idNumber,
+          phoneNumber: response.data.data.phoneNumber
         }
+
         // // 前端写死的假数据
         // this.userInfoForm = {
         //   userName: 'Alice',
@@ -232,15 +234,16 @@ export default {
         })
       }
     },
-    async getBalance() {
+    getBalance() {
       // 发送请求获取余额
       try {
-        const response = await axios.get('http://localhost:9000/user/displayAccount', {
+        const response = axios.get('http://localhost:9000/user/displayAccount', {
           params: {
-            userId: localStorage.getItem('id') //获取cookie中的id
+            // userId: localStorage.getItem('id') //获取cookie中的id
+            userId: 21
           }
         })
-        this.balance = response.data.balance
+        this.balance = response.data.data.balance
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -255,10 +258,14 @@ export default {
     recharge() {
       try {
         const response = axios.post('http://localhost:9000/user/recharge', {
-          userId: localStorage.getItem('id'), //获取cookie中的id
-          amount: this.balance
-          // TODO: 这里amount和balance的命名和关系
+          params: {
+            // userId: localStorage.getItem('id'), //获取cookie中的id
+            userId: 21,
+            amount: this.balance
+            // TODO: 这里amount和balance的命名和关系            
+          }
         })
+        console.log(response)
         // this.balance = response.data.balance
         ElMessage({
           showClose: true,
@@ -282,14 +289,16 @@ export default {
           console.log(valid)
           if (valid) {
             const response = axios.put('http://localhost:9000/user/changeInfo', {
-              userId: localStorage.getItem('id'), //获取cookie中的id
+              // userId: localStorage.getItem('id'), //获取cookie中的id
+              userId: 21,
               userName: this.userInfoForm.userName,
               email: this.userInfoForm.email,
               idNumber: this.userInfoForm.idNumber,
               phoneNumber: this.userInfoForm.phoneNumber
               // NOTE: 这里应该不需要password，因为修改信息不需要密码
             })
-            if (response.code === 200) {
+            console.log(response)
+            if (response.data.code === 200) {
               ElMessage({
                 showClose: true,
                 type: 'success', //如果失败,未连接上后端
@@ -327,7 +336,7 @@ export default {
               newPassword: this.password.newPassword
             })
             // this.password = response.data
-            if (response.code === 200) {
+            if (response.data.code === 200) {
               ElMessage({
                 showClose: true,
                 type: 'success', //如果失败,未连接上后端
