@@ -7,15 +7,19 @@
   <!--  </div>-->
   <div class="box">
     <div class="card">
-      <div class="card-title">商店名称: {{ shopInfoForm.shopName }}</div>
+      <div class="card-content">商店名称: {{ shopInfoForm.shopName }}</div>
       <!-- <div class="card-content">商品类别：{{ store.categories }}</div> -->
       <div class="card-content">
         <span class="category-title">商品类别：</span>
         <div class="category-list">
-          <span v-for="(category, index) in shopInfoForm.categories" :key="index">{{ category }}</span>
+          <span v-for="(category, index) in shopInfoForm.categories" :key="index">{{
+            category
+          }}</span>
         </div>
       </div>
       <div class="card-content">商店简介：{{ shopInfoForm.intro }}</div>
+      <div class="card-content">备案地址：{{ shopInfoForm.address }}</div>
+      <div class="card-content">商店资金：{{ shopInfoForm.fund }}</div>
     </div>
     <el-button type="normal" @click="gotoMCenter">修改商店</el-button>
   </div>
@@ -23,7 +27,6 @@
     <div class="cardCommodity">商品们</div>
     <el-button type="normal" @click="gotoCommodity">修改商品</el-button>
   </div>
-
 </template>
 
 <script>
@@ -33,52 +36,25 @@ import { ElMessage } from 'element-plus'
 
 export default {
   name: 'StoreInfoView',
-  setup() {
-    // const shadowGroup = ref([
-    //   {
-    //     name: 'Basic Shadow',
-    //     type: '',
-    //   },
-    //   {
-    //     name: 'Light Shadow',
-    //     type: 'light',
-    //   },
-    //   {
-    //     name: 'Lighter Shadow',
-    //     type: 'lighter',
-    //   },
-    //   {
-    //     name: 'Dark Shadow',
-    //     type: 'dark',
-    //   },
-    // ])
-    // function getCssVarName(type) {
-    //   return `--el-box-shadow${type ? '-' : ''}${type}`;
-    // }
-    // return{
-    //   getCssVarName,
-    //   shadowGroup,
-    // }
-  },
   data() {
     return {
       shopInfoForm: {
-        shopName: 'gan',
+        shopName: 'gan1',
         idNumber: '30212566965845212X',
         id: 21,
         vendorId: 21,
         userName: 'ivan',
-        categories: 'GPT',
-        intro: ' 加油',
-        address: '浙江',
+        categories: ['GPT', 'food'],
+        intro: '加油',
+        address: '江苏',
         regStatus: '已通过',
         removeStatus: '未申请',
-        fund: 1.0E7,
+        fund: 1.0e7
       }
     }
   },
   mounted() {
-    this.getShopInfo();
+    this.getShopInfo()
   },
   methods: {
     async getShopInfo() {
@@ -88,14 +64,23 @@ export default {
         console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
         const response = await axios.get('http://localhost:9000/shop/displayInfo', {
           params: {
-            shopId: localStorage.getItem('id') //获取cookie中的id
+            userId: localStorage.getItem('id') //获取cookie中的id
           }
         })
         // NOTE: 如果修改的话需要更新session
         console.log(response.data)
         this.shopInfoForm = {
           //* 拿数据
-          userName: response.data.userName,
+          shopName: response.data.shopName,
+          id: response.data.id,
+          vendorId: response.data.vendorId,
+          // userName: response.data.userName,
+          categories: response.data.categories,
+          intro: response.data.intro,
+          address: response.data.address,
+          regStatus: response.data.regStatus,
+          removeStatus: response.data.removeStatus,
+          fund: 1.0e7,
           email: response.data.email,
           idNumber: response.data.idNumber,
           phoneNumber: response.data.phoneNumber
@@ -151,7 +136,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  /*align-items: center;*/
   height: 100%;
   background-color: white;
   /*background-color: transparent;*/
@@ -179,7 +164,7 @@ export default {
 }
 .category-title {
   margin-right: 5px;
-  font-weight: bold;
+  /*font-weight: bold;*/
 }
 
 .category-list {

@@ -28,6 +28,11 @@
             <el-checkbox label="clothing">服装</el-checkbox>
             <el-checkbox label="electronics">电子产品</el-checkbox>
             <el-checkbox label="GPT">GPT</el-checkbox>
+            <el-input
+              v-model="catagoryInput"
+              placeholder="请输入自定义的商品类别："
+              onfocus="if (this.placeholder == this.value) this.value = ''"
+            ></el-input>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
