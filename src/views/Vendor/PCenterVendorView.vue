@@ -2,24 +2,43 @@
   <div class="personal-center">
     <div class="personal-info">
       <h2>修改个人信息</h2>
-      <el-form :model="userInfoForm" :rules="rules" ref="userInfo" label-width="120px" class="user-form">
+      <el-form
+        :model="userInfoForm"
+        :rules="rules"
+        ref="userInfo"
+        label-width="120px"
+        class="user-form"
+      >
         <!-- BUG: 输入值之后移开鼠标再点击不会变成原来的值 -->
         <el-form-item label="用户名" prop="userName">
-          <el-input v-model="userInfoForm.userName" :placeholder="userInfoForm.userName"
-            onfocus="if (this.placeholder == this.value) this.value = ''"></el-input>
+          <el-input
+            v-model="userInfoForm.userName"
+            :placeholder="userInfoForm.userName"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+          ></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="userInfoForm.email" :placeholder="userInfoForm.email"
-            onfocus="if (this.placeholder == this.value) this.value = ''"></el-input>
+          <el-input
+            v-model="userInfoForm.email"
+            :placeholder="userInfoForm.email"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+          ></el-input>
         </el-form-item>
         <!-- NOTE: 身份证号不可修改 -->
         <el-form-item label="身份证号" prop="idNumber">
-          <el-input v-model="userInfoForm.idNumber" :placeholder="userInfoForm.idNumber"
-            onfocus="if (this.placeholder == this.value) this.value = ''" disabled></el-input>
+          <el-input
+            v-model="userInfoForm.idNumber"
+            :placeholder="userInfoForm.idNumber"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+            disabled
+          ></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phoneNumber">
-          <el-input v-model="userInfoForm.phoneNumber" :placeholder="userInfoForm.phoneNumber"
-            onfocus="if (this.placeholder == this.value) this.value = ''"></el-input>
+          <el-input
+            v-model="userInfoForm.phoneNumber"
+            :placeholder="userInfoForm.phoneNumber"
+            onfocus="if (this.placeholder == this.value) this.value = ''"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="changeInfo">提交</el-button>
@@ -30,7 +49,13 @@
     <div class="personal-balance">
       <h2>个人资金</h2>
       <p>当前余额: {{ balance }}</p>
-      <el-form :model="balance" :rules="balanceRules" ref="balanceForm" label-width="120px" class="balance-form">
+      <el-form
+        :model="balance"
+        :rules="balanceRules"
+        ref="balanceForm"
+        label-width="120px"
+        class="balance-form"
+      >
         <el-form-item label="充值金额" prop="balance">
           <el-input v-model="rechargeAmount" type="number"></el-input>
         </el-form-item>
@@ -41,7 +66,13 @@
     </div>
     <div class="change-password">
       <h2>修改密码</h2>
-      <el-form :model="changePasswordForm" :rules="rules" ref="passwordForm" label-width="120px" class="password-form">
+      <el-form
+        :model="changePasswordForm"
+        :rules="rules"
+        ref="passwordForm"
+        label-width="120px"
+        class="password-form"
+      >
         <el-form-item label="原密码" prop="oldPassword">
           <el-input v-model="changePasswordForm.oldPassword" type="password"></el-input>
         </el-form-item>
@@ -184,25 +215,27 @@ export default {
       try {
         // TODO: 未做session测试
         console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
-        const response = axios.get('http://localhost:9000/user/displayInfo', {
-          params: {
-            // userId: localStorage.getItem('id') //获取cookie中的id
-            userId: 20
-          }
-        }).then(response => {
-          console.log(response)
-          this.userInfoForm = {
-            //* 拿数据
-            userName: response.data.data.userName,
-            email: response.data.data.email,
-            idNumber: response.data.data.idNumber,
-            phoneNumber: response.data.data.phoneNumber
-          }
-          // TODO: 如果修改的话需要更新session
-          // sessionStorage.setItem('role', response.data.role)
-          // sessionStorage.setItem('id', response.data.id)
-          // sessionStorage.setItem('userName', response.data.userName)
-        })
+        const response = axios
+          .get('http://localhost:9000/user/displayInfo', {
+            params: {
+              // userId: localStorage.getItem('id') //获取cookie中的id
+              userId: 20
+            }
+          })
+          .then((response) => {
+            console.log(response)
+            this.userInfoForm = {
+              //* 拿数据
+              userName: response.data.data.userName,
+              email: response.data.data.email,
+              idNumber: response.data.data.idNumber,
+              phoneNumber: response.data.data.phoneNumber
+            }
+            // TODO: 如果修改的话需要更新session
+            // sessionStorage.setItem('role', response.data.role)
+            // sessionStorage.setItem('id', response.data.id)
+            // sessionStorage.setItem('userName', response.data.userName)
+          })
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -215,15 +248,16 @@ export default {
     getBalance() {
       // 发送请求获取余额
       try {
-        const response = axios.get('http://localhost:9000/user/displayAccount', {
-          params: {
-            // userId: localStorage.getItem('id') //获取cookie中的id
-            userId: 20
-          }
-        }).then(response => {
-          this.balance = response.data.balance
-        })
-
+        const response = axios
+          .get('http://localhost:9000/user/displayAccount', {
+            params: {
+              // userId: localStorage.getItem('id') //获取cookie中的id
+              userId: 20
+            }
+          })
+          .then((response) => {
+            this.balance = response.data.balance
+          })
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -238,23 +272,25 @@ export default {
     recharge(rechargeAmount) {
       try {
         // NOTE: 下面第二个参数是null很有意思
-        const response = axios.post('http://localhost:9000/user/recharge', null, {
-          params: {
-            // userId: localStorage.getItem('id'), //获取cookie中的id
-            userId: 20,
-            amount: rechargeAmount
-            // TODO: 这里amount和balance的命名和关系
-          }
-        }).then(response => {
-          console.log(response)
-          // this.balance = response.data.balance
-          ElMessage({
-            showClose: true,
-            type: 'success', //如果失败,未连接上后端
-            message: '充值成功'
+        const response = axios
+          .post('http://localhost:9000/user/recharge', null, {
+            params: {
+              // userId: localStorage.getItem('id'), //获取cookie中的id
+              userId: 20,
+              amount: rechargeAmount
+              // TODO: 这里amount和balance的命名和关系
+            }
           })
-          this.getBalance() //刷新余额          
-        })
+          .then((response) => {
+            console.log(response)
+            // this.balance = response.data.balance
+            ElMessage({
+              showClose: true,
+              type: 'success', //如果失败,未连接上后端
+              message: '充值成功'
+            })
+            this.getBalance() //刷新余额
+          })
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -270,33 +306,35 @@ export default {
         this.$refs.userInfo.validate((valid) => {
           console.log(valid)
           if (valid) {
-            const response = axios.put('http://localhost:9000/user/changeInfo', {
-              // userId: localStorage.getItem('id'), //获取cookie中的id
-              userId: 20,
-              userName: this.userInfoForm.userName,
-              email: this.userInfoForm.email,
-              idNumber: this.userInfoForm.idNumber,
-              phoneNumber: this.userInfoForm.phoneNumber
-              // NOTE: 这里应该不需要password，因为修改信息不需要密码
-            }).then(response => {
-              console.log(response)
-              if (response.data.code === 200) {
-                ElMessage({
-                  showClose: true,
-                  type: 'success', //如果失败,未连接上后端
-                  message: '修改信息成功'
-                })
-                this.getUserInfo() //刷新信息
-              } else {
-                console.error('修改个人信息失败')
-                ElMessage({
-                  showClose: true,
-                  type: 'error', //如果失败输出状态码
-                  message: '注册失败:' + response.data.msg
-                })
-              }
-              // this.userInfoForm = response.data
-            })
+            const response = axios
+              .put('http://localhost:9000/user/changeInfo', {
+                // userId: localStorage.getItem('id'), //获取cookie中的id
+                userId: 20,
+                userName: this.userInfoForm.userName,
+                email: this.userInfoForm.email,
+                idNumber: this.userInfoForm.idNumber,
+                phoneNumber: this.userInfoForm.phoneNumber
+                // NOTE: 这里应该不需要password，因为修改信息不需要密码
+              })
+              .then((response) => {
+                console.log(response)
+                if (response.data.code === 200) {
+                  ElMessage({
+                    showClose: true,
+                    type: 'success', //如果失败,未连接上后端
+                    message: '修改信息成功'
+                  })
+                  this.getUserInfo() //刷新信息
+                } else {
+                  console.error('修改个人信息失败')
+                  ElMessage({
+                    showClose: true,
+                    type: 'error', //如果失败输出状态码
+                    message: '注册失败:' + response.data.msg
+                  })
+                }
+                // this.userInfoForm = response.data
+              })
           }
         })
       } catch (error) {
@@ -313,33 +351,34 @@ export default {
         console.log(valid)
         if (valid) {
           try {
-            const response = axios.put('http://localhost:9000/user/changePassword', null, {
-              params: {
-                // userId: localStorage.getItem('id'), //获取cookie中的id
+            const response = axios
+              .put('http://localhost:9000/user/changePassword', null, {
+                params: {
+                  // userId: localStorage.getItem('id'), //获取cookie中的id
 
-                password: this.changePasswordForm.oldPassword,
-                newPassword: this.changePasswordForm.newPassword,
-                userId: 20
-              }
-            }).then(response => {
-              console.log(response)
-              if (response.data.code === 200) {
-                ElMessage({
-                  showClose: true,
-                  type: 'success', //如果失败,未连接上后端
-                  message: '修改密码成功'
-                })
-                this.getUserInfo() //刷新信息
-              } else {
-                // console.error('修改密码失败')
-                ElMessage({
-                  showClose: true,
-                  type: 'error', //如果失败输出状态码
-                  message: '注册失败:' + response.data.msg
-                })
-              }
-            })
-
+                  password: this.changePasswordForm.oldPassword,
+                  newPassword: this.changePasswordForm.newPassword,
+                  userId: 20
+                }
+              })
+              .then((response) => {
+                console.log(response)
+                if (response.data.code === 200) {
+                  ElMessage({
+                    showClose: true,
+                    type: 'success', //如果失败,未连接上后端
+                    message: '修改密码成功'
+                  })
+                  this.getUserInfo() //刷新信息
+                } else {
+                  // console.error('修改密码失败')
+                  ElMessage({
+                    showClose: true,
+                    type: 'error', //如果失败输出状态码
+                    message: '注册失败:' + response.data.msg
+                  })
+                }
+              })
           } catch (error) {
             console.log(error)
             ElMessage({
