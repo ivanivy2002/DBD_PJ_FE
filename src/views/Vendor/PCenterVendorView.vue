@@ -354,12 +354,10 @@ export default {
             const response = axios
               .put('http://localhost:9000/user/changePassword', null, {
                 params: {
-
-
                   password: this.changePasswordForm.oldPassword,
                   newPassword: this.changePasswordForm.newPassword,
                   // userId: 20
-                  userId: localStorage.getItem('userId'), //获取cookie中的id
+                  userId: localStorage.getItem('userId') //获取cookie中的id
                 }
               })
               .then((response) => {
