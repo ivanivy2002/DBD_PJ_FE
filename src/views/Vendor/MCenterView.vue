@@ -25,10 +25,10 @@
           ></el-input>
         </el-form-item>
         <!-- NOTE: 身份证号不可修改 -->
-        <el-form-item label="备案地址" prop="idNumber">
+        <el-form-item label="备案地址" prop="vendorId">
           <el-input
-            v-model="shopInfoForm.idNumber"
-            :placeholder="shopInfoForm.idNumber"
+            v-model="shopInfoForm.vendorId"
+            :placeholder="shopInfoForm.vendorId"
             onfocus="if (this.placeholder == this.value) this.value = ''"
             disabled
           ></el-input>
@@ -42,7 +42,7 @@
     <div class="shop-balance">
       <h2>商店资金</h2>
       <p>当前余额: {{ balance }}</p>
-      <!--      :model="balance"-->
+      <!-- :model="balance"-->
       <el-form ref="balanceForm" label-width="120px" class="balance-form">
         <el-form-item label="充值金额" prop="balance">
           <el-input v-model="rechargeAmount" type="number"></el-input>
@@ -57,7 +57,7 @@
 
 <script>
 import axios from 'axios'
-import {ElMessage} from "element-plus";
+import { ElMessage } from 'element-plus'
 export default {
   name: 'MCenterView',
   data() {
@@ -67,7 +67,7 @@ export default {
         email: '2251@vwv.com',
         address: '超级天空城3区55街道干碎小区',
         intro: 'what is life for?',
-        idNumber: '30212566965845212X',
+        vendorId: '30212566965845212X'
       },
       balance: 100,
       rechargeAmount: 0,
@@ -83,7 +83,7 @@ export default {
         } else {
           callback()
         }
-      },
+      }
     }
   },
   mounted() {
@@ -103,7 +103,7 @@ export default {
             trigger: 'blur'
           },
           { validator: this.validateshopName, trigger: 'blur' }
-        ],
+        ]
       }
     }
   },
@@ -127,14 +127,14 @@ export default {
           //* 拿数据
           shopName: response.data.shopName,
           email: response.data.email,
-          idNumber: response.data.idNumber,
+          vendorId: response.data.vendorId,
           phoneNumber: response.data.phoneNumber
         }
         // // 前端写死的假数据
         // this.shopInfoForm = {
         //   shopName: 'Alice',
         //   email: 'alice@example.com',
-        //   idNumber: '123456789012345678',
+        //   vendorId: '123456789012345678',
         //   phoneNumber: '12345678901'
         // }
       } catch (error) {
@@ -199,7 +199,7 @@ export default {
               shopId: localStorage.getItem('id'), //获取cookie中的id
               shopName: this.shopInfoForm.shopName,
               email: this.shopInfoForm.email,
-              idNumber: this.shopInfoForm.idNumber,
+              vendorId: this.shopInfoForm.vendorId,
               phoneNumber: this.shopInfoForm.phoneNumber
               // NOTE: 这里应该不需要password，因为修改信息不需要密码
             })
