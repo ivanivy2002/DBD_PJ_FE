@@ -263,7 +263,7 @@ export default {
             // userId: localStorage.getItem('id'), //获取cookie中的id
             userId: 21,
             amount: this.balance
-            // TODO: 这里amount和balance的命名和关系            
+            // TODO: 这里amount和balance的命名和关系
           }
         })
         console.log(response)

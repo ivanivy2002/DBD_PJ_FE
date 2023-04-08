@@ -12,7 +12,9 @@
       <div class="card-content">
         <span class="category-title">商品类别：</span>
         <div class="category-list">
-          <span v-for="(category, index) in shopInfoForm.categories" :key="index">{{ category }}</span>
+          <span v-for="(category, index) in shopInfoForm.categories" :key="index">{{
+            category
+          }}</span>
         </div>
       </div>
       <div class="card-content">商店简介：{{ shopInfoForm.intro }}</div>
@@ -23,7 +25,6 @@
     <div class="cardCommodity">商品们</div>
     <el-button type="normal" @click="gotoCommodity">修改商品</el-button>
   </div>
-
 </template>
 
 <script>
@@ -73,12 +74,12 @@ export default {
         address: '浙江',
         regStatus: '已通过',
         removeStatus: '未申请',
-        fund: 1.0E7,
+        fund: 1.0e7
       }
     }
   },
   mounted() {
-    this.getShopInfo();
+    this.getShopInfo()
   },
   methods: {
     async getShopInfo() {
