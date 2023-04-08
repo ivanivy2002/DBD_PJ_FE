@@ -2,8 +2,9 @@
   <!-- Form -->
   <!--  TODO:[feat SignForm to make full function]-->
   <div class="DiaButton">
-    <el-button text @click="dialogFormVisible = true"> 申请开店</el-button>
-    <el-button index="2-2" @click="gotoStoreInfo">查看商店</el-button>
+    <el-menu-item text @click="dialogFormVisible = true"> 申请开店</el-menu-item>
+    <el-menu-item index="2-2" @click="gotoStoreInfo">查看商店</el-menu-item>
+    <el-menu-item index="2-3" @click="gotoPCenter">个人中心</el-menu-item>
   </div>
   <div class="el-form">
     <el-dialog v-model="dialogFormVisible" title="申请开店">
@@ -225,6 +226,9 @@ export default {
     resetForm() {
       this.$refs.form.resetFields()
     },
+    gotoPCenter() {
+      this.$router.push('/home/vendor/profile')
+    },
     //TODO: 缺少异常处理；修改成PUT请求
     signin() {
       // this.HandleCategories() //* 将多个单词用+拼起来
@@ -314,11 +318,15 @@ export default {
 
 .el-form {
   z-index: 1000;
+  padding: 10px;
+
+  /*--el-bg-color: #ffffff;*/
   /*pointer-events: none;*/
 }
 
 .DiaButton {
-  margin: 12px;
+  /*margin: 12px;*/
+  /*padding: 10px;*/
   /*padding-top: 10px;*/
   /*background-color: #53A6FC;*/
   /*border-color: #1890ff;*/

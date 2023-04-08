@@ -44,7 +44,7 @@ export default {
 
 <style>
 .background {
-  background: url('../assets/images/background.jpg') no-repeat center center fixed;
+  /*background: url('../assets/images/background.jpg') no-repeat center center fixed;*/
 
   width: 100%; /* 大小设置成100% */
   height: 100%;

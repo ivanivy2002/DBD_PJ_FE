@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import ordUserRoutes from './ordUser.js'
+import vendorRoutes from './vendor.js'
+
 // import HomeView from '../views/WelcomeView.vue'
 // import UserView from '../views/UserView.vue'
 import LoginView from '../views/LoginView.vue'
@@ -12,8 +15,7 @@ import Vendor from '@/views/Vendor'
 import ManageStoreView from '@/views/ManageStoreView'
 import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
-import StoreInfoView from '@/views/StoreInfoView'
-import ordUserRoutes from './ordUser.js'
+import StoreInfoView from '@/views/Vendor/StoreInfoView'
 import MCenterView from '@/views/Vendor/MCenterView'
 import CommodityView from '@/views/Vendor/CommodityView'
 
@@ -70,26 +72,8 @@ const router = createRouter({
               redirect: '/home/admin/manage'
             }
           ]
-        },
-        {
-          // path: '/vendor',
-          path: '/home/vendor',
-          component: Vendor,
-          children: [
-            {
-              path: '/home/vendor/storeinfo',
-              component: StoreInfoView
-            },
-            {
-              path: '/home/vendor/mcenter',
-              component: MCenterView
-            },
-            {
-              path: '/home/vendor/commodity',
-              component: CommodityView
-            }
-          ]
         }
+
         // {
         //   path: '/home/vendor/storeinfo',
         //   component: StoreInfoView
@@ -122,7 +106,8 @@ const router = createRouter({
       component: FunView
     },
     // 将 ordUser.js 中定义的路由添加到 routes 数组中
-    ...ordUserRoutes
+    ...ordUserRoutes,
+    ...vendorRoutes
   ]
 })
 

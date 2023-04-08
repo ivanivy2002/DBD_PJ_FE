@@ -1,10 +1,10 @@
 <script>
 // import { RouterLink, RouterView } from 'vue-router'
-import TrueHeader from '@/components/TrueHeader'
+// import TrueHeader from '@/components/TrueHeader'
 
 export default {
-  name: 'LayOut',
-  components: { TrueHeader }
+  name: 'LayOut'
+  // components: { TrueHeader }
 }
 </script>
 

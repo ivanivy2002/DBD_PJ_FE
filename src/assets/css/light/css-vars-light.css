@@ -1,0 +1,12 @@
+html.dark {
+  /* 自定义light背景颜色 */
+  --el-bg-color: rgb(255, 255, 255);
+}
+:root {
+  --el-bg-color: rgb(255, 255, 255);
+  --el-color-primary: #409eff;
+  --el-color-success: #67c23a;
+  --el-color-warning: #e6a23c;
+  --el-color-error: #f56c6c;
+  --el-color-info: #909399;
+}

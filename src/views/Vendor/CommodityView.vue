@@ -1,21 +1,68 @@
 <template>
   <!--  TODO: 一条条记录的表单怎么写-->
-  一条条记录的表单怎么写?
   <div>
-  <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
+    <el-table :data="state.tableData" style="width: 100%">
+      <el-table-column prop="commodityName" label="商品名称"></el-table-column>
+      <el-table-column prop="categories" label="商品类别"></el-table-column>
+      <el-table-column prop="intro" label="商品简介"></el-table-column>
+      <el-table-column prop="address" label="备案地址"></el-table-column>
+      <el-table-column prop="fund" label="注册资金"></el-table-column>
+      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>
+      <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
+      <el-table-column prop="status" label="状态">
+        <template #default="{ row }">
+          <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
+          <el-tag
+            :type="
+              row.status === '待审核' ? 'warning' : row.status === '已通过' ? 'success' : 'danger'
+            "
+            >{{ row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <!-- <el-button
+            v-if="row.status === '待审核'"
+            type="primary"
+            size="small"
+            @click="approveShop(row)"
+          >
+            同意
+          </el-button> -->
+          <el-button
+            type="success"
+            size="small"
+            @click="approveShop(row)"
+            :disabled="isButtonDisabled(row)"
+            >同意</el-button
+          >
+          <el-button
+            type="danger"
+            size="small"
+            @click="rejectShop(row)"
+            :disabled="isButtonDisabled(row)"
+            >拒绝</el-button
+          >
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+  <div>
+    <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
   </div>
   <div class="el-form">
     <el-dialog v-model="dialogFormVisible" title="申请上架商品">
       <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
-<!--        <el-form-item label="用户名" prop="userName">-->
-<!--          <el-input-->
-<!--            v-model="signForm.userName"-->
-<!--            placeholder="请输入您的用户名以供确认"-->
-<!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-<!--          ></el-input>-->
-<!--        </el-form-item>-->
-        <el-form-item label="商品名称" prop="shopName">
-          <el-input v-model="signForm.shopName"></el-input>
+        <!--        <el-form-item label="用户名" prop="userName">-->
+        <!--          <el-input-->
+        <!--            v-model="signForm.userName"-->
+        <!--            placeholder="请输入您的用户名以供确认"-->
+        <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+        <!--          ></el-input>-->
+        <!--        </el-form-item>-->
+        <el-form-item label="商品名称" prop="commodityName">
+          <el-input v-model="signForm.commodityName"></el-input>
         </el-form-item>
         <!-- <el-form-item label="商品类别">
           <el-input v-model="signForm.categories"></el-input>
@@ -29,21 +76,21 @@
           </el-checkbox-group>
         </el-form-item>
 
-<!--        <el-form-item label="身份证号" prop="idNumber">-->
-<!--          <el-input v-model="signForm.idNumber"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="身份证号" prop="idNumber">-->
+        <!--          <el-input v-model="signForm.idNumber"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item label="商品简介" prop="intro">
           <el-input v-model="signForm.intro"></el-input>
         </el-form-item>
-<!--        <el-form-item label="备案地址" prop="address">-->
-<!--          <el-input v-model="signForm.address"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="注册资金" prop="fund">-->
-<!--          <el-input v-model="signForm.fund"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="注册时间" prop="registrationTime">-->
-<!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        <el-form-item label="备案地址" prop="address">-->
+        <!--          <el-input v-model="signForm.address"></el-input>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="注册资金" prop="fund">-->
+        <!--          <el-input v-model="signForm.fund"></el-input>-->
+        <!--        </el-form-item>-->
+        <!--        <el-form-item label="注册时间" prop="registrationTime">-->
+        <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="signin">申请</el-button>
           <el-button type="default" @click="resetForm">重置</el-button>
@@ -82,13 +129,19 @@ export default {
   },
   data() {
     return {
+      state: {
+        tableData: []
+      },
+      storesData: [],
+      ifApprove: 0,
+      userName: '',
       dialogFormVisible: false,
       activeTab: 'signin',
       categories: [],
       signForm: {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
         userName: '',
-        shopName: '',
+        commodityName: '',
         // categories: '',
         // NOTE: 用数组传成功！！
         categories: [],
@@ -106,9 +159,9 @@ export default {
           callback()
         }
       },
-      validateShopName: (rule, value, callback) => {
+      validatecommodityName: (rule, value, callback) => {
         if (value.length > 12) {
-          callback(new Error('店名长度不能超过12个字符！'))
+          callback(new Error('商品名称长度不能超过12个字符！'))
         } else {
           callback()
         }
@@ -123,7 +176,7 @@ export default {
       },
       validateIntro: (rule, value, callback) => {
         if (value.length > 128) {
-          callback(new Error('商店简介不能超过128个字符！'))
+          callback(new Error('商品简介不能超过128个字符！'))
         } else {
           callback()
         }
@@ -149,6 +202,15 @@ export default {
     }
   },
   computed: {
+    isButtonDisabled() {
+      return (row) => {
+        if (row.status !== '待审核') {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
     rules: function () {
       return {
         userName: [
@@ -159,13 +221,13 @@ export default {
           },
           { validator: this.validateUserName, trigger: 'blur' }
         ],
-        shopName: [
+        commodityName: [
           {
             required: true,
-            message: '店名不能为空！',
+            message: '商品名称不能为空！',
             trigger: 'blur'
           },
-          { validator: this.validateShopName, trigger: 'blur' }
+          { validator: this.validatecommodityName, trigger: 'blur' }
         ],
         categories: [
           { type: 'array', required: true, message: '请选择至少一个商品类别', trigger: 'submit' } //* 点击提交时触发验证
@@ -175,7 +237,7 @@ export default {
         intro: [
           {
             required: true,
-            message: '商店简介不能为空！',
+            message: '商品简介不能为空！',
             trigger: 'blur'
           },
           { validator: this.validateIntro, min: 1, max: 128, trigger: 'blur' }
@@ -239,40 +301,40 @@ export default {
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-              .post('http://localhost:9000/shop/reg', this.signForm)
-              .then((response) => {
-                console.log(response.data)
-                // NOTE: 只有当后端返回200时显示注册成功
-                if (response.data.code == 200) {
-                  console.log('申请提交成功')
-                  ElMessage({
-                    //用于弹出消息提示
-                    showClose: true,
-                    type: 'success', //如果成功
-                    message: '申请提交成功'
-                  })
-                  this.dialogFormVisible = false
-                } else {
-                  console.error('申请提交失败，请重试！')
-                  ElMessage({
-                    showClose: true,
-                    type: 'error', //如果失败输出状态码
-                    message: '申请提交失败:' + response.data.msg
-                  })
-                }
-              })
-              .catch((error) => {
-                console.error(error)
+            .post('http://localhost:9000/shop/reg', this.signForm)
+            .then((response) => {
+              console.log(response.data)
+              // NOTE: 只有当后端返回200时显示注册成功
+              if (response.data.code == 200) {
+                console.log('申请提交成功')
+                ElMessage({
+                  //用于弹出消息提示
+                  showClose: true,
+                  type: 'success', //如果成功
+                  message: '申请提交成功'
+                })
+                this.dialogFormVisible = false
+              } else {
+                console.error('申请提交失败，请重试！')
                 ElMessage({
                   showClose: true,
-                  type: 'error', //如果失败，未连接上后端
-                  message: '申请提交失败:vue好像有什么地方错了呢'
+                  type: 'error', //如果失败输出状态码
+                  message: '申请提交失败:' + response.data.msg
                 })
-                // this.$message.error('数据保存失败，' + error.toString())
+              }
+            })
+            .catch((error) => {
+              console.error(error)
+              ElMessage({
+                showClose: true,
+                type: 'error', //如果失败，未连接上后端
+                message: '申请提交失败:vue好像有什么地方错了呢'
               })
-              .finally(() => {
-                this.loading = false // 关闭 loading 动画
-              })
+              // this.$message.error('数据保存失败，' + error.toString())
+            })
+            .finally(() => {
+              this.loading = false // 关闭 loading 动画
+            })
           this.$refs.form.resetFields() // 重置表单
         } else {
           return false
@@ -289,10 +351,93 @@ export default {
     },
     gotoStoreInfo() {
       this.$router.push('/home/vendor/storeinfo')
+    },
+    fetchData: async function () {
+      try {
+        const response = await axios.get('http://localhost:9000/admin/display')
+        this.storesData = response.data
+        this.storesData = this.removeZerosInObjectArray(this.storesData)
+        this.state.tableData = response.data.map((row) => {
+          // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
+          console.log(row)
+          // row = this.removeZerosInObjectArray(row)
+          return row
+        })
+        // console.log(this.state.tableData)
+        // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
+        console.log(this.state.tableData)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    approveShop: async function (row) {
+      try {
+        this.ifApprove = 1
+        console.log(row.userName)
+        const response = await axios.get('http://localhost:9000/admin/handleRequest', {
+          params: {
+            // userName: 'penny',
+            userName: row.userName,
+            ifApprove: this.ifApprove
+          }
+        })
+        if (response.data.code == 200) {
+          ElMessage.success('已同意开店')
+          this.fetchData()
+        } else if (response.data.code == 400) {
+          ElMessage.error('同意开店失败，请重新尝试')
+          this.fetchData()
+        }
+      } catch (error) {
+        ElMessage.error('Sorry,好像有什么地方出错了')
+        this.fetchData()
+        console.log(error)
+      }
+    },
+    rejectShop: async function (row) {
+      try {
+        this.ifApprove = 2
+        this.userName = row.userName
+        await axios.get('http://localhost:9000/admin/handleRequest', {
+          params: {
+            userName: row.userName,
+            ifApprove: this.ifApprove
+          }
+        })
+        ElMessage.success('已拒绝开店')
+        this.fetchData()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // NOTE: 去掉数组末尾多余的零
+    removeTrailingZeros(arr) {
+      if (arr == null) {
+        console.log('这个店没有选商品类别')
+        return arr
+      } else {
+        // NOTE: 用===的时候小心
+        // TODO：后期优化可以确定类型之后用===，现在先用==
+        while (arr[arr.length - 1] == 0) {
+          arr.pop()
+        }
+        return arr
+        // return arr.map((item) => item.toString().replace(/0+$/, '') || item);
+      }
+    },
+    removeZerosInObjectArray(arr) {
+      let i
+      for (i = 0; i < arr.length; i++) {
+        arr[i].categories = this.removeTrailingZeros(arr[i].categories)
+      }
     }
+  },
+  // NOTE: 用computed来实现按钮的disabled属性，如果不是待审核状态，就禁用按钮
+  // NOTE: 需要注意的是，这里的row是一个参数，要在调用的时候传入
+  mounted: function () {
+    this.fetchData()
   }
 }
-
 </script>
 
 <style scoped></style>
