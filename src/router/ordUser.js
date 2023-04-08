@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PCenterView from '../views/User/PCenterView.vue'
+import PCenterOrdUserView from '../views/ordUser/PCenterOrdUserView.vue'
 import OrdUser from '@/views/OrdUser'
 import StoreTableView from '@/views/StoreTableView'
 
@@ -19,8 +19,8 @@ export default [
       },
       {
         path: '/home/orduser/profile',
-        name: 'PCenterView',
-        component: PCenterView
+        name: 'PCenterOrdUserView',
+        component: PCenterOrdUserView
       }
     ]
   }

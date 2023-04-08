@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PCenterView from '../views/User/PCenterView.vue'
 import Vendor from '@/views/Vendor'
 import StoreInfoView from '@/views/Vendor/StoreInfoView'
 import MCenterView from '@/views/Vendor/MCenterView'
