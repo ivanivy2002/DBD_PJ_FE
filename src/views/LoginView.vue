@@ -283,11 +283,6 @@ export default {
           console.log(response.data)
           // 处理登录逻辑，例如将token和用户信息保存到浏览器本地缓存
           localStorage.setItem('token', token)
-          // localStorage.setItem('role', user.role)
-          // localStorage.setItem('id', user.id)
-          // localStorage.setItem('userName', user.userName)
-          // localStorage.setItem('user', JSON.stringify(user))
-          // localStorage.getItem('token')
           console.log(response)
           if (response.data.code == 200) {
             console.log('登录成功', response.data) //控制台输出
@@ -298,11 +293,12 @@ export default {
               message: '登录成功'
             })
             // NOTE: 将从Controller层获取的用户信息存储到sessionStorage中
-            sessionStorage.setItem('role', response.data.role)
-            sessionStorage.setItem('id', response.data.id)
-            sessionStorage.setItem('username', response.data.userName)
+            // sessionStorage.setItem('role', response.data.role)
+            // sessionStorage.setItem('id', response.data.id)
+            // sessionStorage.setItem('username', response.data.userName)
             const role = sessionStorage.getItem('role')
-
+            console.log(role)
+            console.log('111')
             // HACK: sleep 50ms 未进行测试
             await this.sleep(50) //* 等待50ms
             if (response.role == 1) {
