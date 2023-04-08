@@ -293,12 +293,13 @@ export default {
               message: '登录成功'
             })
             // NOTE: 将从Controller层获取的用户信息存储到sessionStorage中
-            // sessionStorage.setItem('role', response.data.role)
-            // sessionStorage.setItem('id', response.data.id)
-            // sessionStorage.setItem('username', response.data.userName)
-            const role = sessionStorage.getItem('role')
+            localStorage.setItem('role', response.data.role)
+            localStorage.setItem('userId', response.data.userId)
+            localStorage.setItem('username', response.data.userName)
+            const role = localStorage.getItem('role')
+            // NOTE: 这个测试成功了
             console.log(role)
-            console.log('111')
+            console.log(localStorage)
             // HACK: sleep 50ms 未进行测试
             await this.sleep(50) //* 等待50ms
             if (response.role == 1) {

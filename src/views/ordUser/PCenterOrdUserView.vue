@@ -214,12 +214,12 @@ export default {
       // 发送请求获取用户信息
       try {
         // TODO: 未做session测试
-        console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
+        console.log(localStorage.getItem('userId')) // 从session中拿数据向后端请求
         const response = axios
           .get('http://localhost:9000/user/displayInfo', {
             params: {
-              // userId: localStorage.getItem('id') //获取cookie中的id
-              userId: 20
+              userId: localStorage.getItem('userId') //获取cookie中的id
+              // userId: 20
             }
           })
           .then((response) => {
@@ -251,8 +251,8 @@ export default {
         const response = axios
           .get('http://localhost:9000/user/displayAccount', {
             params: {
-              // userId: localStorage.getItem('id') //获取cookie中的id
-              userId: 20
+              userId: localStorage.getItem('userId') //获取cookie中的id
+              // userId: 20
             }
           })
           .then((response) => {
@@ -275,8 +275,8 @@ export default {
         const response = axios
           .post('http://localhost:9000/user/recharge', null, {
             params: {
-              // userId: localStorage.getItem('id'), //获取cookie中的id
-              userId: 20,
+              userId: localStorage.getItem('userId'), //获取cookie中的id
+              // userId: 20,
               amount: rechargeAmount
               // TODO: 这里amount和balance的命名和关系
             }
@@ -308,8 +308,8 @@ export default {
           if (valid) {
             const response = axios
               .put('http://localhost:9000/user/changeInfo', {
-                // userId: localStorage.getItem('id'), //获取cookie中的id
-                userId: 20,
+                userId: localStorage.getItem('userId'), //获取cookie中的id
+                // userId: 20,
                 userName: this.userInfoForm.userName,
                 email: this.userInfoForm.email,
                 idNumber: this.userInfoForm.idNumber,
@@ -354,11 +354,12 @@ export default {
             const response = axios
               .put('http://localhost:9000/user/changePassword', null, {
                 params: {
-                  // userId: localStorage.getItem('id'), //获取cookie中的id
+
 
                   password: this.changePasswordForm.oldPassword,
                   newPassword: this.changePasswordForm.newPassword,
-                  userId: 20
+                  // userId: 20
+                  userId: localStorage.getItem('userId'), //获取cookie中的id
                 }
               })
               .then((response) => {
