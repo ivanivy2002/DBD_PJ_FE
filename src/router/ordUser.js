@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import PCenterOrdUserView from '../views/ordUser/PCenterOrdUserView.vue'
 import OrdUser from '@/views/OrdUser'
 import StoreTableView from '@/views/StoreTableView'
+import ordUserCommodityView from '@/views/ordUser/ordUserCommodityView'
 
 export default [
   {
@@ -16,6 +17,11 @@ export default [
       {
         path: '/home/orduser',
         redirect: '/home/orduser/store'
+      },
+      {
+        path: '/home/orduser/commodity',
+        name: 'ordUserCommodityView',
+        component: ordUserCommodityView
       },
       {
         path: '/home/orduser/profile',

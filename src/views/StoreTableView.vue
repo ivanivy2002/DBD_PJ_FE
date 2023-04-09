@@ -1,11 +1,13 @@
 <template>
   <div class="dashboard">
-    <el-row>
-      <!-- <el-col v-for="(store, index) in stores" :key="index" :xs="24" :sm="12" :md="8" :lg="6"> -->
-      <el-col v-for="store in stores" :key="store.shopName">
-        <div class="card">
-          <div class="card-title">{{ store.shopName }}</div>
-          <!-- <div class="card-content">商品类别：{{ store.categories }}</div> -->
+    <el-row gutter="24">
+      <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
+        <el-card class="animated-card" shadow="hover">
+          <div slot="header" class="card-header">
+            <div class="card-title" @click="navigateToCommodity(store.id)">
+              {{ store.shopName }}
+            </div>
+          </div>
           <div class="card-content">
             <span class="category-title">商品类别：</span>
             <div class="category-list">
@@ -13,11 +15,13 @@
             </div>
           </div>
           <div class="card-content">商店简介：{{ store.intro }}</div>
-        </div>
+        </el-card>
       </el-col>
     </el-row>
   </div>
 </template>
+
+<!-- other code remains the same -->
 
 <script>
 // import { reactive } from 'vue'
@@ -41,6 +45,7 @@ export default {
       // storesData = storesResponse.data //* 无须重新赋值
       // this.removeZerosInObjectArray(storesData)
       this.stores = storesResponse.data.map((store) => ({
+        id: store.id,
         shopName: store.shopName,
         // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
         categories: store.categories.split('+').map((category) => category.trim()),
@@ -54,6 +59,7 @@ export default {
   methods: {
     async fetchData() {
       try {
+        // TODO: 相对路径（'api/home/display'）访问出错，这个问题应该和路由相关
         const response = await axios.get('http://localhost:9000/home/displayShop')
         // const response = await axios.get('api/home/display')
         console.log(response.data)
@@ -62,34 +68,13 @@ export default {
         console.log(error)
         throw error
       }
-      // const response = await axios.get('http://localhost:9000/home/displayShop').then(response => {
-      //   // BUG: ↓无法访问，这个问题应该和路由相关
-      //   // const response = await axios.get('api/home/display')
-      //   console.log(response.data)
-      //   return response.data
-      // })
     },
-    // NOTE: 去掉数组末尾多余的零
-    removeTrailingZeros(arr) {
-      if (arr == null) {
-        console.log('这个店没有选商品类别')
-        return arr
-      } else {
-        // NOTE: 用===的时候小心
-        // TODO：后期优化可以确定类型之后用===，现在先用==
-        while (arr[arr.length - 1] == 0) {
-          arr.pop()
-        }
-        return arr
-        // return arr.map((item) => item.toString().replace(/0+$/, '') || item);
-      }
+    navigateToCommodity(shopId) {
+      localStorage.setItem('shopId', shopId)
+      // TODO: 这里的路由上面需不需要显示shopId
+      // this.$router.push({ path: `/home/orduser/commodity/${shopId}` });
+      this.$router.push({ path: `/home/orduser/commodity/` })
     }
-    // removeZerosInObjectArray(arr) {
-    //   let i
-    //   for (i = 0; i < arr.length; i++) {
-    //     arr[i].categories = this.removeTrailingZeros(arr[i].categories)
-    //   }
-    // }
   }
 }
 </script>
@@ -97,27 +82,40 @@ export default {
 <style scoped>
 .dashboard {
   padding: 24px;
-  background-color: transparent;
+  background-color: #232836;
+  min-height: 100vh;
 }
 
-.card {
-  background-color: transparent;
+.animated-card {
+  background-color: #2c3b4d;
   opacity: 100%;
-  /* #fff; */
   border-radius: 4px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   padding: 24px;
   margin-bottom: 24px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.animated-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .card-title {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 12px;
+  cursor: pointer; /* 鼠标悬停时显示手型 */
+  color: #19cde9;
 }
 
 .card-content {
   font-size: 24px;
+  color: #cfd8dc;
 }
 
 .card-content {
@@ -129,6 +127,7 @@ export default {
 .category-title {
   margin-right: 5px;
   font-weight: bold;
+  color: #cfd8dc;
 }
 
 .category-list {
