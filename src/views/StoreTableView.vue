@@ -35,26 +35,39 @@ export default {
     }
   },
   async mounted() {
-    const storesData = await this.fetchData()
-    console.log(storesData)
-    this.removeZerosInObjectArray(storesData)
-    console.log(storesData)
-    this.stores = storesData.map((store) => ({
-      // store.categories = store.categories.map((category) => category.replace(/0+$/, '')),
-      shopName: store.shopName,
-      categories: this.removeTrailingZeros(store.categories),
-      // categories: store.categories,
-      intro: store.intro
-    }))
-    // console.log(store.categories)
+    try {
+      const storesResponse = await this.fetchData()
+      console.log(storesResponse.data)
+      // storesData = storesResponse.data //* 无须重新赋值
+      // this.removeZerosInObjectArray(storesData)
+      this.stores = storesResponse.data.map((store) => ({
+        shopName: store.shopName,
+        // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
+        categories: store.categories.split('+').map((category) => category.trim()),
+        intro: store.intro
+      }))
+      // console.log(store.categories)
+    } catch (error) {
+      console.log(error)
+    }
   },
   methods: {
     async fetchData() {
-      const response = await axios.get('http://localhost:9000/home/display')
-      // BUG: ↓无法访问，这个问题应该和路由相关
-      // const response = await axios.get('api/home/display')
-      console.log(response.data)
-      return response.data
+      try {
+        const response = await axios.get('http://localhost:9000/home/displayShop')
+        // const response = await axios.get('api/home/display')
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        console.log(error)
+        throw error
+      }
+      // const response = await axios.get('http://localhost:9000/home/displayShop').then(response => {
+      //   // BUG: ↓无法访问，这个问题应该和路由相关
+      //   // const response = await axios.get('api/home/display')
+      //   console.log(response.data)
+      //   return response.data
+      // })
     },
     // NOTE: 去掉数组末尾多余的零
     removeTrailingZeros(arr) {
@@ -70,13 +83,13 @@ export default {
         return arr
         // return arr.map((item) => item.toString().replace(/0+$/, '') || item);
       }
-    },
-    removeZerosInObjectArray(arr) {
-      let i
-      for (i = 0; i < arr.length; i++) {
-        arr[i].categories = this.removeTrailingZeros(arr[i].categories)
-      }
     }
+    // removeZerosInObjectArray(arr) {
+    //   let i
+    //   for (i = 0; i < arr.length; i++) {
+    //     arr[i].categories = this.removeTrailingZeros(arr[i].categories)
+    //   }
+    // }
   }
 }
 </script>
