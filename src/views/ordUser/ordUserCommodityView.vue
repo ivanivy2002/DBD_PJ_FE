@@ -70,6 +70,13 @@ export default {
       }
     },
     addToCart(commodityId) {
+      const response = axios.post('http://localhost:9000/shoppingCart/addCommodity/', null, {
+        // NOTE: 传一个body
+        userId: localStorage.getItem('userId'),
+        commodityId: commodityId,
+        commodityNum: 1
+        // commodityPrice:
+      })
       console.log(`Adding commodity with ID ${commodityId} to cart`)
     }
   }

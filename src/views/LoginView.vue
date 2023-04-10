@@ -292,7 +292,7 @@ export default {
               type: 'success', //如果成功
               message: '登录成功'
             })
-            // NOTE: 将从Controller层获取的用户信息存储到sessionStorage中
+            // NOTE: 将从Controller层获取的用户信息存储到localStorage中
             localStorage.setItem('role', response.data.role)
             localStorage.setItem('userId', response.data.userId)
             localStorage.setItem('username', response.data.userName)
@@ -347,10 +347,10 @@ export default {
               type: 'success', //如果成功
               message: '登录成功'
             })
-            // NOTE: 将从Controller层获取的用户信息存储到sessionStorage中
-            sessionStorage.setItem('role', response.data.role)
-            sessionStorage.setItem('id', response.data.id)
-            sessionStorage.setItem('username', response.data.userName)
+            // NOTE: 将从Controller层获取的用户信息存储到localStorage中
+            localStorage.setItem('role', response.data.role)
+            localStorage.setItem('id', response.data.id)
+            localStorage.setItem('username', response.data.userName)
             // HACK: sleep 50ms 未进行测试
             await this.sleep(50) //* 等待50ms
             console.log(this.loginForm.role)
