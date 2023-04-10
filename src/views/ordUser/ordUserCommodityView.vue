@@ -11,10 +11,10 @@
       >
         <el-card class="commodity-card" shadow="hover">
           <div slot="header" class="commodity-header">
-            <div class="commodity-name">{{ commodity.name }}</div>
+            <div class="commodity-name">{{ commodity.commodityName }}</div>
           </div>
+          <div class="commodity-content">介绍：{{ commodity.intro }}</div>
           <div class="commodity-content">价格：{{ commodity.price }}</div>
-          <div class="commodity-content">库存：{{ commodity.stock }}</div>
           <el-button type="primary" @click="addToCart(commodity.id)">添加到购物车</el-button>
         </el-card>
       </el-col>
@@ -35,21 +35,40 @@ export default {
   },
   data() {
     return {
-      storeId: '', // 假设storeId已经从localStorage中获取
+      shopId: '', // 假设shopId已经从localStorage中获取
       commodities: []
     }
   },
   async mounted() {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/home/orduser/commodity/${this.storeId}`
-      )
-      this.commodities = response.data
+      const commoditiesResponse = await this.fetchData()
+      console.log(commoditiesResponse.data)
+      this.commodities = commoditiesResponse.data.map((commodity) => ({
+        id: commodity.id,
+        commodityName: commodity.commodityName,
+        intro: commodity.intro,
+        price: commodity.price
+      }))
+      // TODO: 选择哪一种？
+      // `http://localhost:9000/home/displayCommodity/${this.shopId}`
+      // `http://localhost:9000/commodity/displayQualified/`
     } catch (error) {
       console.log(error)
     }
   },
   methods: {
+    async fetchData() {
+      try {
+        this.shopId = localStorage.getItem('shopId')
+        const response = await axios.get('http://localhost:9000/commodity/displayQualified/', {
+          params: { shopId: this.shopId }
+        })
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
     addToCart(commodityId) {
       console.log(`Adding commodity with ID ${commodityId} to cart`)
     }

@@ -2,9 +2,9 @@
   <div class="dashboard">
     <el-row gutter="24">
       <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
-        <el-card class="animated-card" shadow="hover">
+        <el-card class="animated-card" shadow="hover" @click="navigateToCommodity(store.id)">
           <div slot="header" class="card-header">
-            <div class="card-title" @click="navigateToCommodity(store.id)">
+            <div class="card-title">
               {{ store.shopName }}
             </div>
           </div>
@@ -48,6 +48,7 @@ export default {
         id: store.id,
         shopName: store.shopName,
         // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
+        // TODO: 目前categories字段的值不能为NULL，否则会报错
         categories: store.categories.split('+').map((category) => category.trim()),
         intro: store.intro
       }))
@@ -70,7 +71,7 @@ export default {
       }
     },
     navigateToCommodity(shopId) {
-      localStorage.setItem('shopId', shopId)
+      localStorage.setItem('shopId', shopId) // 将shopId存入localStorage
       // TODO: 这里的路由上面需不需要显示shopId
       // this.$router.push({ path: `/home/orduser/commodity/${shopId}` });
       this.$router.push({ path: `/home/orduser/commodity/` })
@@ -92,6 +93,7 @@ export default {
   border-radius: 4px;
   padding: 24px;
   margin-bottom: 24px;
+  cursor: pointer; /* 鼠标悬停时显示手型 */
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
