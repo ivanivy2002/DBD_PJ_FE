@@ -4,6 +4,7 @@
     <el-menu-item index="2-1" disabled>申请开店</el-menu-item>
     <el-menu-item index="2-2" @click="gotoStorePage">查看首页</el-menu-item>
     <el-menu-item index="2-3" @click="gotoPCenter">个人中心</el-menu-item>
+    <el-menu-item index="2-4" @click="gotoShoppingCart">查看购物车</el-menu-item>
   </el-sub-menu>
 </template>
 
@@ -19,6 +20,9 @@ export default {
     },
     gotoPCenter() {
       this.$router.push('/home/orduser/profile')
+    },
+    gotoShoppingCart() {
+      this.$router.push('/home/orduser/shoppingcart')
     }
   },
   setup() {
