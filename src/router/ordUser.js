@@ -3,6 +3,7 @@ import PCenterOrdUserView from '../views/ordUser/PCenterOrdUserView.vue'
 import OrdUser from '@/views/OrdUser'
 import StoreTableView from '@/views/StoreTableView'
 import ordUserCommodityView from '@/views/ordUser/ordUserCommodityView'
+import ShoppingCartView from '@/views/ordUser/ShoppingCartView'
 
 export default [
   {
@@ -27,6 +28,11 @@ export default [
         path: '/home/orduser/profile',
         name: 'PCenterOrdUserView',
         component: PCenterOrdUserView
+      },
+      {
+        path: '/home/orduser/cart',
+        name: 'ShoppingCartView',
+        component: ShoppingCartView
       }
     ]
   }
