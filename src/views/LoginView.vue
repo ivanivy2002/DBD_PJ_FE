@@ -295,6 +295,7 @@ export default {
             // NOTE: 将从Controller层获取的用户信息存储到localStorage中
             localStorage.setItem('role', response.data.role)
             localStorage.setItem('userId', response.data.userId)
+            localStorage.setItem('shopId', response.data.shopId)
             localStorage.setItem('username', response.data.userName)
             const role = localStorage.getItem('role')
             // NOTE: 这个测试成功了
