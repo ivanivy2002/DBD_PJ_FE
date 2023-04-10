@@ -1,43 +1,43 @@
 <template>
   <div class="shop-center">
     <div class="shop-info">
-      <h2>修改商店信息</h2>
-      <el-form
-        :model="shopInfoForm"
-        :rules="rules"
-        ref="shopInfo"
-        label-width="120px"
-        class="shop-form"
-      >
-        <!-- BUG: 输入值之后移开鼠标再点击不会变成原来的值 -->
-        <el-form-item label="商店名称" prop="shopName">
-          <el-input
-            v-model="shopInfoForm.shopName"
-            :placeholder="shopInfoForm.shopName"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="商店简介" prop="intro">
-          <el-input
-            v-model="shopInfoForm.intro"
-            :placeholder="shopInfoForm.intro"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-          ></el-input>
-        </el-form-item>
-        <!-- NOTE: 身份证号不可修改 -->
-        <el-form-item label="备案地址" prop="vendorId">
-          <el-input
-            v-model="shopInfoForm.vendorId"
-            :placeholder="shopInfoForm.vendorId"
-            onfocus="if (this.placeholder == this.value) this.value = ''"
-            disabled
-          ></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="changeInfo">提交</el-button>
-          <el-button @click="resetForm">重置</el-button>
-        </el-form-item>
-      </el-form>
+      <h2>修改商店信息(目前不需要！)</h2>
+      <!--      <el-form-->
+      <!--        :model="shopInfoForm"-->
+      <!--        :rules="rules"-->
+      <!--        ref="shopInfo"-->
+      <!--        label-width="120px"-->
+      <!--        class="shop-form"-->
+      <!--      >-->
+      <!--        &lt;!&ndash; BUG: 输入值之后移开鼠标再点击不会变成原来的值 &ndash;&gt;-->
+      <!--        <el-form-item label="商店名称" prop="shopName">-->
+      <!--          <el-input-->
+      <!--            v-model="shopInfoForm.shopName"-->
+      <!--            :placeholder="shopInfoForm.shopName"-->
+      <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+      <!--          ></el-input>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item label="商店简介" prop="intro">-->
+      <!--          <el-input-->
+      <!--            v-model="shopInfoForm.intro"-->
+      <!--            :placeholder="shopInfoForm.intro"-->
+      <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+      <!--          ></el-input>-->
+      <!--        </el-form-item>-->
+      <!--        &lt;!&ndash; NOTE: 身份证号不可修改 &ndash;&gt;-->
+      <!--        <el-form-item label="备案地址" prop="vendorId">-->
+      <!--          <el-input-->
+      <!--            v-model="shopInfoForm.vendorId"-->
+      <!--            :placeholder="shopInfoForm.vendorId"-->
+      <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+      <!--            disabled-->
+      <!--          ></el-input>-->
+      <!--        </el-form-item>-->
+      <!--        <el-form-item>-->
+      <!--          <el-button type="primary" @click="changeInfo">提交</el-button>-->
+      <!--          <el-button @click="resetForm">重置</el-button>-->
+      <!--        </el-form-item>-->
+      <!--      </el-form>-->
     </div>
     <div class="shop-balance">
       <h2>商店资金</h2>
@@ -62,13 +62,13 @@ export default {
   name: 'MCenterView',
   data() {
     return {
-      shopInfoForm: {
-        shopName: 'GanSuiShop',
-        email: '2251@vwv.com',
-        address: '超级天空城3区55街道干碎小区',
-        intro: 'what is life for?',
-        vendorId: '30212566965845212X'
-      },
+      // shopInfoForm: {
+      //   shopName: 'GanSuiShop',
+      //   email: '2251@vwv.com',
+      //   address: '超级天空城3区55街道干碎小区',
+      //   intro: 'what is life for?',
+      //   vendorId: '30212566965845212X'
+      // },
       balance: 100,
       rechargeAmount: 0,
       password: {
@@ -88,7 +88,7 @@ export default {
   },
   mounted() {
     // 获取用户信息和余额
-    this.getshopInfo()
+    // this.getShopInfo()
     this.getBalance()
   },
   computed: {
@@ -108,7 +108,7 @@ export default {
     }
   },
   methods: {
-    async getshopInfo() {
+    async getShopInfo() {
       // 发送请求获取用户信息
       try {
         // TODO: 未做session测试
@@ -209,7 +209,7 @@ export default {
                 type: 'success', //如果失败,未连接上后端
                 message: '修改信息成功'
               })
-              this.getshopInfo() //刷新信息
+              this.getShopInfo() //刷新信息
             } else {
               console.error('修改商店信息失败')
               ElMessage({
@@ -247,7 +247,7 @@ export default {
                 type: 'success', //如果失败,未连接上后端
                 message: '修改密码成功'
               })
-              this.getshopInfo() //刷新信息
+              this.getShopInfo() //刷新信息
             } else {
               console.error('修改密码失败')
               ElMessage({
@@ -278,7 +278,7 @@ export default {
     resetForm() {
       //* 重置表单
       this.$refs.shopInfo.resetFields()
-      this.getshopInfo() //刷新表单
+      this.getShopInfo() //刷新表单
     }
   }
 }

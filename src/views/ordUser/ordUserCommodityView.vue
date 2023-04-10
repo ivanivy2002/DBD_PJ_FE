@@ -76,7 +76,7 @@ export default {
           // id: null,
           userId: localStorage.getItem('userId'),
           commodityId: commodityId,
-          commodityNum: 1,
+          commodityNum: 1
           // commodityPrice: null,
           // status: null
         })
@@ -84,22 +84,21 @@ export default {
         console.log(`Adding commodity with ID ${commodityId} to cart`)
         if (response.data.code === 200) {
           ElMessage({
-              //用于弹出消息提示
-              showClose: true,
-              type: 'success', //如果成功
-              message: '添加成功'
-            })
+            //用于弹出消息提示
+            showClose: true,
+            type: 'success', //如果成功
+            message: '添加成功'
+          })
         } else {
           ElMessage({
-              showClose: true,
-              type: 'error', //如果失败输出状态码
-              message: '操作失败:' + response.data.msg
-            })          
-        } 
+            showClose: true,
+            type: 'error', //如果失败输出状态码
+            message: '操作失败:' + response.data.msg
+          })
+        }
       } catch (error) {
         console.log(error)
       }
-
     }
   }
 }
