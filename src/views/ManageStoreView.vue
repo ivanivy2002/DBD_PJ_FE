@@ -85,6 +85,7 @@ export default {
       try {
         const response = await axios.get('http://localhost:9000/admin/display')
         this.storesData = response.data
+        // TODO: 下面的函数需要修改（字符串解析）
         this.storesData = this.removeZerosInObjectArray(this.storesData)
         this.state.tableData = response.data.map((row) => {
           // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')

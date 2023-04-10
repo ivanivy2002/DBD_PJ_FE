@@ -22,7 +22,7 @@ export default {
       this.$router.push('/home/orduser/profile')
     },
     gotoShoppingCart() {
-      this.$router.push('/home/orduser/shoppingcart')
+      this.$router.push('/home/orduser/cart')
     }
   },
   setup() {

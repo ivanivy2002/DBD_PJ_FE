@@ -21,6 +21,8 @@
 
 <script>
 import { ElTable, ElTableColumn, ElTag } from 'element-plus'
+import { method } from 'lodash'
+import axios from 'axios'
 
 export default {
   components: {
@@ -30,28 +32,42 @@ export default {
   },
   data() {
     return {
-      cartItems: [
-        {
-          name: '商品1',
-          description: '商品1的介绍',
-          price: 10.5,
-          quantity: 2,
-          invalid: false
-        },
-        {
-          name: '商品2',
-          description: '商品2的介绍',
-          price: 15.99,
-          quantity: 1,
-          invalid: true
-        }
-        // ... 其他商品
-      ]
+      userId: 0,
+      cartItems: []
     }
   },
   filters: {
     currency(value) {
       return '¥' + parseFloat(value).toFixed(2)
+    }
+  },
+  mounted() {
+    this.userId = localStorage.getItem('userId')
+    // console.log(this.cartItems)
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      const response = axios
+        .get('http://localhost:9000/shoppingCart/displayShoppingCart', {
+          params: { userId: this.userId }
+        })
+        .then((response) => {
+          console.log(response.data)
+          this.cartItems = response.data.data.map((row) => {
+            console.log(row)
+            return row
+          })
+        })
+    },
+    removeCommodity(commodityId) {
+      const response = axios.delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+        params: {
+          userId: this.userId,
+          // TODO: 数组考虑如何传数据
+          commodityIdArray: ''
+        }
+      })
     }
   }
 }
