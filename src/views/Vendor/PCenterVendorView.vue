@@ -256,7 +256,7 @@ export default {
             }
           })
           .then((response) => {
-            this.balance = response.data.balance
+            this.balance = response.data.data.balance
           })
       } catch (error) {
         console.log(error)
