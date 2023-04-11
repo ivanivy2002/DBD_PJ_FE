@@ -63,5 +63,6 @@ export default {
 }
 
 #loginButton {
+  color: aqua;
 }
 </style>

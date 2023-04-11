@@ -10,7 +10,9 @@
       </el-table-column>
       <el-table-column prop="quantity" label="数量" width="120" />
       <el-table-column label="失效" width="120">
-        <template slot-scope="{ row }">
+        <!-- BUG: _ctx.row is undefined -->
+        <!-- <template slot-scope="{ row }"> -->
+        <template #default="{ row }">
           <el-tag v-if="row.invalid" type="danger">已失效</el-tag>
           <el-tag v-else type="success">正常</el-tag>
         </template>
@@ -21,7 +23,7 @@
 
 <script>
 import { ElTable, ElTableColumn, ElTag } from 'element-plus'
-import { method } from 'lodash'
+// import { method } from 'lodash'
 import axios from 'axios'
 
 export default {
