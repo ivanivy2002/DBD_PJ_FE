@@ -31,7 +31,9 @@
           <span class="store-info-value">{{ shopInfoForm.fund }}</span>
         </div>
       </div>
-      <el-button type="primary" class="store-info-btn" @click="gotoMCenter">修改商店</el-button>
+      <el-button type="primary" class="store-info-btn" @click="gotoMCenter"
+        >修改商店信息/充值</el-button
+      >
     </el-card>
     <el-card class="commodity-card">
       <div slot="header" class="commodity-title">商品管理</div>
@@ -151,6 +153,32 @@ export default {
 </script>
 
 <style scoped>
+.el-button {
+  float: right;
+  margin-bottom: 20px;
+  margin-right: 35px;
+  scale: 1.25;
+}
+.el-button:hover {
+  /*cursor: pointer;*/
+  cursor: pointer;
+  /*box-shadow: 0 0 1em rgba(14, 90, 164, 0.55);*/
+  /*!*box-shadow: 0 0 1em #07070767;*!*/
+  /*-webkit-transform: scale(1.01);*/
+  /*transform: scale(1.01);*/
+  /*transition: transform 0.7s ease, box-shadow 0.7s ease;*/
+  /*padding: 20px;*/
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+.el-card:hover {
+  box-shadow: 0 0 1em rgb(255, 255, 255);
+  /*box-shadow: 0 0 1em #07070767;*/
+  -webkit-transform: scale(1.01);
+  transform: scale(1);
+  transition: transform 0.7s ease, box-shadow 0.5s ease;
+}
+
 .store-info {
   display: flex;
   flex-direction: column;
@@ -171,6 +199,7 @@ export default {
 
 .store-info-content {
   padding: 20px;
+  /*font-size: xx-large;*/
 }
 
 .store-info-item {
@@ -201,14 +230,17 @@ export default {
 .commodity-btn {
   margin-top: 20px;
 }
+
 .commodity-card {
   width: 600px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
+
 .commodity-title {
   font-size: 20px;
   font-weight: bold;
 }
+
 .commodity-content {
   padding: 20px;
 }

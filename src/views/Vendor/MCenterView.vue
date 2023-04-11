@@ -58,6 +58,7 @@
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+
 export default {
   name: 'MCenterView',
   data() {
@@ -69,21 +70,22 @@ export default {
       //   intro: 'what is life for?',
       //   vendorId: '30212566965845212X'
       // },
+      shopId: null,
       balance: 100,
-      rechargeAmount: 0,
-      password: {
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      },
+      rechargeAmount: 0
+      // password: {
+      //   oldPassword: '',
+      //   newPassword: '',
+      //   confirmPassword: ''
+      // },
       // NOTE: 以下为前端输入格式检查
-      validateShopName: (rule, value, callback) => {
-        if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
-          callback(new Error('商店名称仅能出现英⽂字符、数字与下划线，⻓度为3-10个字符！'))
-        } else {
-          callback()
-        }
-      }
+      // validateShopName: (rule, value, callback) => {
+      //   if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
+      //     callback(new Error('商店名称仅能出现英⽂字符、数字与下划线，⻓度为3-10个字符！'))
+      //   } else {
+      //     callback()
+      //   }
+      // }
     }
   },
   mounted() {
@@ -108,53 +110,58 @@ export default {
     }
   },
   methods: {
-    async getShopInfo() {
-      // 发送请求获取用户信息
-      try {
-        // TODO: 未做session测试
-        console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
-        const response = await axios.get('http://localhost:9000/shop/displayInfo', {
-          params: {
-            shopId: localStorage.getItem('id') //获取cookie中的id
-          }
-        })
-        // NOTE: 如果修改的话需要更新session
-        sessionStorage.setItem('role', response.data.role)
-        sessionStorage.setItem('id', response.data.id)
-        sessionStorage.setItem('shopName', response.data.shopName)
-        console.log(response.data)
-        this.shopInfoForm = {
-          //* 拿数据
-          shopName: response.data.shopName,
-          email: response.data.email,
-          vendorId: response.data.vendorId,
-          phoneNumber: response.data.phoneNumber
-        }
-        // // 前端写死的假数据
-        // this.shopInfoForm = {
-        //   shopName: 'Alice',
-        //   email: 'alice@example.com',
-        //   vendorId: '123456789012345678',
-        //   phoneNumber: '12345678901'
-        // }
-      } catch (error) {
-        console.log(error)
-        ElMessage({
-          showClose: true,
-          type: 'error', //如果失败,未连接上后端
-          message: '修改信息失败, 开发问题'
-        })
-      }
-    },
+    // async getShopInfo() {
+    //   // 发送请求获取用户信息
+    //   try {
+    //     // TODO: 未做session测试
+    //     console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
+    //     const response = await axios.get('http://localhost:9000/shop/displayInfo', {
+    //       params: {
+    //         shopId: localStorage.getItem('id') //获取cookie中的id
+    //       }
+    //     })
+    //     // NOTE: 如果修改的话需要更新session
+    //     sessionStorage.setItem('role', response.data.role)
+    //     sessionStorage.setItem('id', response.data.id)
+    //     sessionStorage.setItem('shopName', response.data.shopName)
+    //     console.log(response.data)
+    //     this.shopInfoForm = {
+    //       //* 拿数据
+    //       shopName: response.data.shopName,
+    //       email: response.data.email,
+    //       vendorId: response.data.vendorId,
+    //       phoneNumber: response.data.phoneNumber
+    //     }
+    //     // // 前端写死的假数据
+    //     // this.shopInfoForm = {
+    //     //   shopName: 'Alice',
+    //     //   email: 'alice@example.com',
+    //     //   vendorId: '123456789012345678',
+    //     //   phoneNumber: '12345678901'
+    //     // }
+    //   } catch (error) {
+    //     console.log(error)
+    //     ElMessage({
+    //       showClose: true,
+    //       type: 'error', //如果失败,未连接上后端
+    //       message: '修改信息失败, 开发问题'
+    //     })
+    //   }
+    // },
     async getBalance() {
       // 发送请求获取余额
       try {
-        const response = await axios.get('http://localhost:9000/shop/displayAccount', {
-          params: {
-            shopId: localStorage.getItem('id') //获取cookie中的id
-          }
-        })
-        this.balance = response.data.balance
+        // eslint-disable-next-line no-unused-vars
+        const response = await axios
+          .get('http://localhost:9000/shop/displayAccount', {
+            params: {
+              shopId: localStorage.getItem('shopId') //获取cookie中的id
+            }
+          })
+          .then((response) => {
+            this.balance = response.data.data.balance
+            console.log('balance ' + this.balance)
+          })
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -166,20 +173,35 @@ export default {
       // // 前端写死的假数据
       // this.balance = 100.0
     },
-    recharge() {
+    recharge(rechargeAmount) {
+      console.log('rechargeAmount before try ' + this.rechargeAmount)
       try {
-        const response = axios.post('http://localhost:9000/shop/recharge', {
-          shopId: localStorage.getItem('id'), //获取cookie中的id
-          amount: this.balance
-          // TODO: 这里amount和balance的命名和关系
-        })
-        // this.balance = response.data.balance
-        ElMessage({
-          showClose: true,
-          type: 'success', //如果失败,未连接上后端
-          message: '充值成功'
-        })
-        this.getBalance() //刷新余额
+        // this.shopId = localStorage.getItem('shopId')
+        // eslint-disable-next-line no-unused-vars
+        const response = axios
+          .post('http://localhost:9000/shop/recharge', null, {
+            params: {
+              shopId: localStorage.getItem('shopId'),
+              // shopId: this.shopId,
+              // shopId: localStorage.getItem('shopId'), //获取cookie中的id
+              // amount: this.rechargeAmount,
+              amount: rechargeAmount
+              // amount: this.balance,
+              // TODO: 这里amount和balance的命名和关系
+            }
+          })
+          .then((response) => {
+            // console.log(response)
+            console.log('shopId af post' + localStorage.getItem('shopId'))
+            console.log('rechargeAmount after post' + this.rechargeAmount)
+            // this.balance = response.data.balance
+            ElMessage({
+              showClose: true,
+              type: 'success', //如果失败,未连接上后端
+              message: '充值成功'
+            })
+            this.getBalance() //刷新余额
+          })
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -189,96 +211,96 @@ export default {
         })
       }
     },
-    changeInfo() {
-      try {
-        // NOTE: 验证表单是否符合规范
-        this.$refs.shopInfo.validate((valid) => {
-          console.log(valid)
-          if (valid) {
-            const response = axios.put('http://localhost:9000/shop/changeInfo', {
-              shopId: localStorage.getItem('id'), //获取cookie中的id
-              shopName: this.shopInfoForm.shopName,
-              email: this.shopInfoForm.email,
-              vendorId: this.shopInfoForm.vendorId,
-              phoneNumber: this.shopInfoForm.phoneNumber
-              // NOTE: 这里应该不需要password，因为修改信息不需要密码
-            })
-            if (response.code === 200) {
-              ElMessage({
-                showClose: true,
-                type: 'success', //如果失败,未连接上后端
-                message: '修改信息成功'
-              })
-              this.getShopInfo() //刷新信息
-            } else {
-              console.error('修改商店信息失败')
-              ElMessage({
-                showClose: true,
-                type: 'error', //如果失败输出状态码
-                message: '注册失败:' + response.msg
-              })
-            }
-            // this.shopInfoForm = response.data
-          }
-        })
-      } catch (error) {
-        console.log(error)
-        ElMessage({
-          showClose: true,
-          type: 'error', //如果失败,未连接上后端
-          message: '修改信息失败, 开发问题'
-        })
-      }
-    },
-    changePassword() {
-      this.$refs.passwordForm.validate((valid) => {
-        console.log(valid)
-        if (valid) {
-          try {
-            const response = axios.put('http://localhost:9000/shop/changePassword', {
-              shopId: localStorage.getItem('id'), //获取cookie中的id
-              oldPassword: this.password.oldPassword,
-              newPassword: this.password.newPassword
-            })
-            // this.password = response.data
-            if (response.code === 200) {
-              ElMessage({
-                showClose: true,
-                type: 'success', //如果失败,未连接上后端
-                message: '修改密码成功'
-              })
-              this.getShopInfo() //刷新信息
-            } else {
-              console.error('修改密码失败')
-              ElMessage({
-                showClose: true,
-                type: 'error', //如果失败输出状态码
-                message: '注册失败:' + response.msg
-              })
-            }
-          } catch (error) {
-            console.log(error)
-            ElMessage({
-              showClose: true,
-              type: 'error', //如果失败,未连接上后端
-              message: '修改密码失败, 开发问题'
-            })
-          }
-          this.$message.success('密码更新成功')
-        }
-      })
-    },
-    // confirmPasswordValidator(rule, value, callback) {
-    //   if (value !== this.password.newPassword) {
-    //     callback(new Error('两次输入的密码不一致'))
-    //   } else {
-    //     callback()
-    //   }
+    // changeInfo() {
+    //     try {
+    //         // NOTE: 验证表单是否符合规范
+    //         this.$refs.shopInfo.validate((valid) => {
+    //             console.log(valid)
+    //             if (valid) {
+    //                 const response = axios.put('http://localhost:9000/shop/changeInfo', {
+    //                     shopId: localStorage.getItem('id'), //获取cookie中的id
+    //                     shopName: this.shopInfoForm.shopName,
+    //                     email: this.shopInfoForm.email,
+    //                     vendorId: this.shopInfoForm.vendorId,
+    //                     phoneNumber: this.shopInfoForm.phoneNumber
+    //                     // NOTE: 这里应该不需要password，因为修改信息不需要密码
+    //                 })
+    //                 if (response.code === 200) {
+    //                     ElMessage({
+    //                         showClose: true,
+    //                         type: 'success', //如果失败,未连接上后端
+    //                         message: '修改信息成功'
+    //                     })
+    //                     this.getShopInfo() //刷新信息
+    //                 } else {
+    //                     console.error('修改商店信息失败')
+    //                     ElMessage({
+    //                         showClose: true,
+    //                         type: 'error', //如果失败输出状态码
+    //                         message: '注册失败:' + response.msg
+    //                     })
+    //                 }
+    //                 // this.shopInfoForm = response.data
+    //             }
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //         ElMessage({
+    //             showClose: true,
+    //             type: 'error', //如果失败,未连接上后端
+    //             message: '修改信息失败, 开发问题'
+    //         })
+    //     }
     // },
+    // changePassword() {
+    //     this.$refs.passwordForm.validate((valid) => {
+    //         console.log(valid)
+    //         if (valid) {
+    //             try {
+    //                 const response = axios.put('http://localhost:9000/shop/changePassword', {
+    //                     shopId: localStorage.getItem('id'), //获取cookie中的id
+    //                     oldPassword: this.password.oldPassword,
+    //                     newPassword: this.password.newPassword
+    //                 })
+    //                 // this.password = response.data
+    //                 if (response.code === 200) {
+    //                     ElMessage({
+    //                         showClose: true,
+    //                         type: 'success', //如果失败,未连接上后端
+    //                         message: '修改密码成功'
+    //                     })
+    //                     this.getShopInfo() //刷新信息
+    //                 } else {
+    //                     console.error('修改密码失败')
+    //                     ElMessage({
+    //                         showClose: true,
+    //                         type: 'error', //如果失败输出状态码
+    //                         message: '注册失败:' + response.msg
+    //                     })
+    //                 }
+    //             } catch (error) {
+    //                 console.log(error)
+    //                 ElMessage({
+    //                     showClose: true,
+    //                     type: 'error', //如果失败,未连接上后端
+    //                     message: '修改密码失败, 开发问题'
+    //                 })
+    //             }
+    //             this.$message.success('密码更新成功')
+    //         }
+    //     })
+    // },
+    // // confirmPasswordValidator(rule, value, callback) {
+    // //   if (value !== this.password.newPassword) {
+    // //     callback(new Error('两次输入的密码不一致'))
+    // //   } else {
+    // //     callback()
+    // //   }
+    // // },
     resetForm() {
       //* 重置表单
       this.$refs.shopInfo.resetFields()
-      this.getShopInfo() //刷新表单
+      // this.getShopInfo() //刷新表单
     }
   }
 }
@@ -302,12 +324,20 @@ body {
 .shop-balance,
 .change-password {
   background-color: #444444;
+  /*background-color: #444444;*/
   padding: 30px;
   border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  /*box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);*/
   margin-bottom: 20px;
   width: 100%;
   max-width: 600px;
+
+  cursor: pointer;
+  /*box-shadow: 0 0 1em rgb(255, 255, 255);*/
+  box-shadow: 0 0 1em #07070767;
+  -webkit-transform: scale(1.01);
+  transform: scale(1.01);
+  transition: transform 0.7s ease, box-shadow 0.7s ease;
 }
 
 h2 {
