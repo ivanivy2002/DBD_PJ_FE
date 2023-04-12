@@ -51,7 +51,7 @@
           <el-input v-model="signForm.registrationTime" type="date"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="signin">申请</el-button>
+          <el-button type="primary" @click="signIn">申请</el-button>
           <el-button type="default" @click="resetForm">重置</el-button>
           <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
         </el-form-item>
@@ -235,7 +235,7 @@ export default {
       this.$router.push('/home/vendor/profile')
     },
     //TODO: 缺少异常处理；修改成PUT请求
-    signin() {
+    signIn() {
       // this.HandleCategories() //* 将多个单词用+拼起来
       // NOTE: 前端检查是否符合规范
       this.$refs.form.validate((valid) => {
