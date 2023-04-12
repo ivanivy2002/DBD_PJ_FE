@@ -46,7 +46,7 @@
                             :key="commodity.commodityName"
                             :xs="24"
                             :sm="12"
-                            :md="8"
+                            :md="10"
                             :lg="6"
                     >
                         <el-card class="animated-card" shadow="hover">
@@ -55,15 +55,8 @@
                                     {{ commodity.commodityName }}
                                 </div>
                             </div>
-                            <div class="card-content">
-                                <span class="category-title">商品类别：</span>
-                                <div class="category-list">
-                  <span v-for="(category, index) in commodity.categories" :key="index">{{
-                      category
-                      }}</span>
-                                </div>
-                            </div>
-                            <div class="card-content">商店简介：{{ commodity.intro }}</div>
+                            <div class="card-content">商品价格：{{ commodity.price }}</div>
+                            <div class="card-content">商品简介：{{ commodity.intro }}</div>
                         </el-card>
                     </el-col>
                 </el-row>
@@ -83,7 +76,7 @@ export default {
         ElRow,
         ElCol,
         ElCard,
-        ElButton
+        ElButton,
     },
     name: 'StoreInfoView',
     data() {
@@ -183,7 +176,7 @@ export default {
             try {
                 this.shopId = localStorage.getItem('shopId')
                 const response = await axios.get('http://localhost:9000/commodity/displayQualified/', {
-                    params: { shopId: this.shopId }
+                    params: {shopId: this.shopId}
                 })
                 console.log(response.data)
                 return response.data
@@ -214,6 +207,10 @@ export default {
     /*padding: 20px;*/
     transform: scale(1.1);
     transition: transform 0.2s ease;
+}
+
+.el-card {
+    /*width:100%;*/
 }
 
 .el-card:hover {
@@ -289,4 +286,39 @@ export default {
 .commodity-content {
     padding: 20px;
 }
+.card-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    color: #19cde9;
+}
+.card-content {
+    font-size: 14px;
+    color: rgba(1, 0, 73, 0.75);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.animated-card {
+    background-color: rgb(255, 255, 255);
+    opacity: 100%;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 24px;
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.animated-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
 </style>
