@@ -1,7 +1,8 @@
 <template>
   <div class="store-info">
     <el-card class="store-info-card">
-      <div slot="header" class="store-info-title">商店信息</div>
+      <!--slot="header"-->
+      <div class="store-info-title">商店信息</div>
       <div class="store-info-content">
         <div class="store-info-item">
           <span class="store-info-label">商店名称：</span>
@@ -32,12 +33,34 @@
         </div>
       </div>
       <el-button type="primary" class="store-info-btn" @click="gotoMCenter"
-        >修改商店信息/充值</el-button
-      >
+        >修改商店信息/充值
+      </el-button>
     </el-card>
     <el-card class="commodity-card">
-      <div slot="header" class="commodity-title">商品管理</div>
-      <div class="commodity-content"></div>
+      <!--            slot="header"-->
+      <div class="commodity-title">商品管理</div>
+      <div class="commodity-content">
+        <el-row gutter="24">
+          <el-col
+            v-for="commodity in commodities"
+            :key="commodity.commodityName"
+            :xs="24"
+            :sm="12"
+            :md="10"
+            :lg="6"
+          >
+            <el-card class="animated-card" shadow="hover">
+              <div class="card-header">
+                <div class="card-title">
+                  {{ commodity.commodityName }}
+                </div>
+              </div>
+              <div class="card-content">商品价格：{{ commodity.price }}</div>
+              <div class="card-content">商品简介：{{ commodity.intro }}</div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
       <el-button type="primary" class="commodity-btn" @click="gotoCommodity">修改商品</el-button>
     </el-card>
   </div>
@@ -46,9 +69,15 @@
 <script>
 // import {ref} from 'vue'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElRow, ElCol, ElCard, ElButton, ElMessage } from 'element-plus'
 
 export default {
+  components: {
+    ElRow,
+    ElCol,
+    ElCard,
+    ElButton
+  },
   name: 'StoreInfoView',
   data() {
     return {
@@ -68,19 +97,28 @@ export default {
         createTime: '202022',
         deleteTime: '202022',
         updateTime: '202022'
-      }
+      },
+      commodities: []
     }
   },
   // This function is called when the component is mounted
   async mounted() {
-    // Call the getShopInfo function to fetch data from the backend
     await this.getShopInfo()
-    // Log a message to indicate that the component has been mounted and the data has been fetched
     console.log('Out: 2. After this.getShopInfo, mounted')
-    // Log the name of the shop to the console
     console.log(this.shopInfoForm.shopName)
+    try {
+      const commoditiesResponse = await this.fetchData()
+      console.log(commoditiesResponse.data)
+      this.commodities = commoditiesResponse.data.map((commodity) => ({
+        id: commodity.id,
+        commodityName: commodity.commodityName,
+        intro: commodity.intro,
+        price: commodity.price
+      }))
+    } catch (error) {
+      console.error()
+    }
   },
-
 
   methods: {
     async getShopInfo() {
@@ -120,8 +158,8 @@ export default {
               deleteTime: response.data.data.deleteTime,
               updateTime: response.data.data.updateTime
             }
-            console.log('Out: 1. After Fetching data into shopInfoForm')
-            console.log(this.shopInfoForm.shopName)
+            // console.log('Out: 1. After Fetching data into shopInfoForm')
+            // console.log(this.shopInfoForm.shopName)
           })
       } catch (error) {
         console.log(error)
@@ -132,22 +170,6 @@ export default {
         })
       }
     },
-    // getShopInfo() {
-    //   this.store = {
-    //     id: 85,
-    //     vendorId: 10,
-    //     fund: 74,
-    //     categories: ['ut adipisicing ut', 'cupidatat amet', 'sit dolore', 'irure pariatur quis'],
-    //     status: 'ex nulla Excepteur sit et',
-    //     intro: 'Lorem quis veniam velit',
-    //     address: '北京玉溪市尼玛县',
-    //     productInfo: 'ullamco',
-    //     userName: '孔秀兰',
-    //     idNumber: 62,
-    //     registrationTime: '2016-12-19 15:43:30',
-    //     shopName: '属根际'
-    //   }
-    // },
     // 跳转到商家中心
     gotoMCenter() {
       this.$router.push('/home/vendor/mcenter')
@@ -155,9 +177,19 @@ export default {
     // 跳转到商品管理
     gotoCommodity() {
       this.$router.push('/home/vendor/commodity')
+    },
+    async fetchData() {
+      try {
+        this.shopId = localStorage.getItem('shopId')
+        const response = await axios.get('http://localhost:9000/commodity/displayQualified/', {
+          params: { shopId: this.shopId }
+        })
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        console.log(error)
+      }
     }
-
-
   }
 }
 </script>
@@ -169,6 +201,7 @@ export default {
   margin-right: 35px;
   scale: 1.25;
 }
+
 .el-button:hover {
   /*cursor: pointer;*/
   cursor: pointer;
@@ -181,6 +214,11 @@ export default {
   transform: scale(1.1);
   transition: transform 0.4s ease;
 }
+
+.el-card {
+  /*width:100%;*/
+}
+
 .el-card:hover {
   box-shadow: 0 0 1em rgb(255, 255, 255);
   /*box-shadow: 0 0 1em #07070767;*/
@@ -253,5 +291,39 @@ export default {
 
 .commodity-content {
   padding: 20px;
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  cursor: pointer; /* 鼠标悬停时显示手型 */
+  color: #19cde9;
+}
+.card-content {
+  font-size: 14px;
+  color: rgba(1, 0, 73, 0.75);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.animated-card {
+  background-color: rgb(255, 255, 255);
+  opacity: 100%;
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 24px;
+  cursor: pointer; /* 鼠标悬停时显示手型 */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.animated-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 </style>

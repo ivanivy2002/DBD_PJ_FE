@@ -3,11 +3,11 @@
   <div>
     <el-table :data="state.tableData" style="width: 100%">
       <el-table-column prop="commodityName" label="商品名称"></el-table-column>
-      <el-table-column prop="categories" label="商品类别"></el-table-column>
       <el-table-column prop="intro" label="商品简介"></el-table-column>
-      <el-table-column prop="address" label="备案地址"></el-table-column>
-      <el-table-column prop="fund" label="注册资金"></el-table-column>
-      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>
+      <el-table-column prop="price" label="商品价格"></el-table-column>
+      <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
+      <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
+      <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
       <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
       <el-table-column prop="status" label="状态">
         <template #default="{ row }">
@@ -23,27 +23,27 @@
       <el-table-column label="操作">
         <template #default="{ row }">
           <!-- <el-button
-            v-if="row.status === '待审核'"
-            type="primary"
-            size="small"
-            @click="approveShop(row)"
-          >
-            同意
-          </el-button> -->
+                      v-if="row.status === '待审核'"
+                      type="primary"
+                      size="small"
+                      @click="approveShop(row)"
+                    >
+                      同意
+                    </el-button> -->
           <el-button
             type="success"
             size="small"
             @click="approveShop(row)"
             :disabled="isButtonDisabled(row)"
-            >同意</el-button
-          >
+            >同意
+          </el-button>
           <el-button
             type="danger"
             size="small"
             @click="rejectShop(row)"
             :disabled="isButtonDisabled(row)"
-            >拒绝</el-button
-          >
+            >拒绝
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -65,8 +65,8 @@
           <el-input v-model="signForm.commodityName"></el-input>
         </el-form-item>
         <!-- <el-form-item label="商品类别">
-          <el-input v-model="signForm.categories"></el-input>
-        </el-form-item> -->
+                  <el-input v-model="signForm.categories"></el-input>
+                </el-form-item> -->
         <el-form-item label="商品类别" prop="categories">
           <el-checkbox-group v-model="signForm.categories">
             <el-checkbox label="food">食品</el-checkbox>
@@ -92,7 +92,7 @@
         <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
         <!--        </el-form-item>-->
         <el-form-item>
-          <el-button type="primary" @click="signin">申请</el-button>
+          <el-button type="primary" @click="signIn">申请</el-button>
           <el-button type="default" @click="resetForm">重置</el-button>
           <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
         </el-form-item>
@@ -132,15 +132,15 @@ export default {
       state: {
         tableData: []
       },
-      storesData: [],
+      commoditiesData: [],
       ifApprove: 0,
       userName: '',
       dialogFormVisible: false,
-      activeTab: 'signin',
+      activeTab: 'signIn',
       categories: [],
       signForm: {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
-        userName: '',
+        // userName: '',
         commodityName: '',
         // categories: '',
         // NOTE: 用数组传成功！！
@@ -159,7 +159,7 @@ export default {
           callback()
         }
       },
-      validatecommodityName: (rule, value, callback) => {
+      validateCommodityName: (rule, value, callback) => {
         if (value.length > 12) {
           callback(new Error('商品名称长度不能超过12个字符！'))
         } else {
@@ -197,7 +197,6 @@ export default {
           callback()
         }
       },
-
       $message: this.message //引入$message组件
     }
   },
@@ -227,7 +226,7 @@ export default {
             message: '商品名称不能为空！',
             trigger: 'blur'
           },
-          { validator: this.validatecommodityName, trigger: 'blur' }
+          { validator: this.validateCommodityName, trigger: 'blur' }
         ],
         categories: [
           { type: 'array', required: true, message: '请选择至少一个商品类别', trigger: 'submit' } //* 点击提交时触发验证
@@ -287,7 +286,7 @@ export default {
       this.$refs.form.resetFields()
     },
     //TODO: 缺少异常处理；修改成PUT请求
-    signin() {
+    signIn() {
       // this.HandleCategories() //* 将多个单词用+拼起来
       // NOTE: 前端检查是否符合规范
       this.$refs.form.validate((valid) => {
@@ -301,7 +300,7 @@ export default {
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-            .post('http://localhost:9000/shop/reg', this.signForm)
+            .post('http://localhost:9000/commodity/reg', this.signForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功
@@ -352,12 +351,16 @@ export default {
     gotoStoreInfo() {
       this.$router.push('/home/vendor/storeinfo')
     },
-    fetchData: async function () {
+    async fetchData() {
       try {
-        const response = await axios.get('http://localhost:9000/admin/display')
-        this.storesData = response.data
-        this.storesData = this.removeZerosInObjectArray(this.storesData)
-        this.state.tableData = response.data.map((row) => {
+        console.log(localStorage.getItem('shopId'))
+        const response = await axios.get('http://localhost:9000/commodity/displayAll', {
+          params: {
+            shopId: localStorage.getItem('shopId') //获取cookie中的id
+          }
+        })
+        this.commoditiesData = response.data.data
+        this.state.tableData = response.data.data.map((row) => {
           // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
           console.log(row)
           // row = this.removeZerosInObjectArray(row)
@@ -369,68 +372,8 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-    approveShop: async function (row) {
-      try {
-        this.ifApprove = 1
-        console.log(row.userName)
-        const response = await axios.get('http://localhost:9000/admin/handleRequest', {
-          params: {
-            // userName: 'penny',
-            userName: row.userName,
-            ifApprove: this.ifApprove
-          }
-        })
-        if (response.data.code == 200) {
-          ElMessage.success('已同意开店')
-          this.fetchData()
-        } else if (response.data.code == 400) {
-          ElMessage.error('同意开店失败，请重新尝试')
-          this.fetchData()
-        }
-      } catch (error) {
-        ElMessage.error('Sorry,好像有什么地方出错了')
-        this.fetchData()
-        console.log(error)
-      }
-    },
-    rejectShop: async function (row) {
-      try {
-        this.ifApprove = 2
-        this.userName = row.userName
-        await axios.get('http://localhost:9000/admin/handleRequest', {
-          params: {
-            userName: row.userName,
-            ifApprove: this.ifApprove
-          }
-        })
-        ElMessage.success('已拒绝开店')
-        this.fetchData()
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    // NOTE: 去掉数组末尾多余的零
-    removeTrailingZeros(arr) {
-      if (arr == null) {
-        console.log('这个店没有选商品类别')
-        return arr
-      } else {
-        // NOTE: 用===的时候小心
-        // TODO：后期优化可以确定类型之后用===，现在先用==
-        while (arr[arr.length - 1] == 0) {
-          arr.pop()
-        }
-        return arr
-        // return arr.map((item) => item.toString().replace(/0+$/, '') || item);
-      }
-    },
-    removeZerosInObjectArray(arr) {
-      let i
-      for (i = 0; i < arr.length; i++) {
-        arr[i].categories = this.removeTrailingZeros(arr[i].categories)
-      }
     }
+    // NOTE: 去掉数组末尾多余的零
   },
   // NOTE: 用computed来实现按钮的disabled属性，如果不是待审核状态，就禁用按钮
   // NOTE: 需要注意的是，这里的row是一个参数，要在调用的时候传入
