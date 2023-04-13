@@ -71,11 +71,17 @@ export default {
       }
     }
   },
+  // This function is called when the component is mounted
   async mounted() {
+    // Call the getShopInfo function to fetch data from the backend
     await this.getShopInfo()
+    // Log a message to indicate that the component has been mounted and the data has been fetched
     console.log('Out: 2. After this.getShopInfo, mounted')
+    // Log the name of the shop to the console
     console.log(this.shopInfoForm.shopName)
   },
+
+
   methods: {
     async getShopInfo() {
       // 发送请求获取商店信息
@@ -142,12 +148,16 @@ export default {
     //     shopName: '属根际'
     //   }
     // },
+    // 跳转到商家中心
     gotoMCenter() {
       this.$router.push('/home/vendor/mcenter')
     },
+    // 跳转到商品管理
     gotoCommodity() {
       this.$router.push('/home/vendor/commodity')
     }
+
+
   }
 }
 </script>
@@ -169,7 +179,7 @@ export default {
   /*transition: transform 0.7s ease, box-shadow 0.7s ease;*/
   /*padding: 20px;*/
   transform: scale(1.1);
-  transition: transform 0.2s ease;
+  transition: transform 0.4s ease;
 }
 .el-card:hover {
   box-shadow: 0 0 1em rgb(255, 255, 255);
