@@ -1,5 +1,4 @@
 <template>
-  <!--  TODO: 一条条记录的表单怎么写-->
     <div>
         <el-table :data="state.tableData" style="width: 100%">
             <el-table-column prop="commodityName" label="商品名称"></el-table-column>
@@ -23,11 +22,13 @@
             <el-table-column label="操作">
                 <template #default="{ row }">
                     <el-button
-                            type="normal"
+                            class="changeButton"
                             size="small"
-                            @click="changeCommodity(row)"
+                            text @click="changeFormVisible = true"
+
                             :disabled="isButtonDisabled(row)"
                     >修改
+                        <!--  @click="changeCommodity(row)"-->
                     </el-button>
                     <el-button
                             type="danger"
@@ -91,12 +92,33 @@
             </el-form>
         </el-dialog>
     </div>
+    <div class="el-form">
+        <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
+            <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
+                <el-form-item label="商品名称" prop="commodityName">
+                    <el-input v-model="changeForm.commodityName"></el-input>
+                </el-form-item>
+
+                <el-form-item label="商品简介" prop="intro">
+                    <el-input v-model="changeForm.intro"></el-input>
+                </el-form-item>
+                <el-form-item label="商品价格" prop="price">
+                    <el-input v-model="changeForm.price"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="changeIn">提交修改</el-button>
+                    <el-button type="default" @click="resetForm">重置</el-button>
+                    <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
 import {
-    ElTabs,
-    ElTabPane,
+    // ElTabs,
+    // ElTabPane,
     ElForm,
     ElFormItem,
     ElInput,
@@ -110,8 +132,8 @@ import axios from 'axios'
 export default {
     name: 'CommodityView',
     components: {
-        ElTabs,
-        ElTabPane,
+        // ElTabs,
+        // ElTabPane,
         ElForm,
         ElFormItem,
         ElInput,
@@ -128,6 +150,7 @@ export default {
             ifApprove: 0,
             userName: '',
             dialogFormVisible: false,
+            changeFormVisible: false,
             activeTab: 'signIn',
             categories: [],
             signForm: {
@@ -144,6 +167,7 @@ export default {
                 registrationTime: ''
                 // TODO: 如何在这个时候传递用户名给后端
             },
+            changeForm: {},
             validateUserName: (rule, value, callback) => {
                 if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
                     callback(new Error('请输入正确格式的用户名！'))
@@ -332,14 +356,60 @@ export default {
                 }
             })
         },
+        changeIn() {
+            // this.HandleCategories() //* 将多个单词用+拼起来
+            // NOTE: 前端检查是否符合规范
+            this.$refs.form.validate((valid) => {
+                console.log(valid)
+                if (valid) {
+                    // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
+                    //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
+                    // NOTE: 处理注册逻辑
+                    console.log('申请提交', this.changeForm) // 控制台输出信息
+                    this.loading = true // 开启 loading 动画
+                    axios
+                        .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
+                        .then((response) => {
+                            console.log(response.data)
+                            // NOTE: 只有当后端返回200时显示注册成功
+                            if (response.data.code == 200) {
+                                console.log('修改提交成功')
+                                ElMessage({
+                                    //用于弹出消息提示
+                                    showClose: true,
+                                    type: 'success', //如果成功
+                                    message: '修改提交成功'
+                                })
+                                this.dialogFormVisible = false
+                            } else {
+                                console.error('修改提交失败，请重试！')
+                                ElMessage({
+                                    showClose: true,
+                                    type: 'error', //如果失败输出状态码
+                                    message: '修改提交失败:' + response.data.msg
+                                })
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error)
+                            ElMessage({
+                                showClose: true,
+                                type: 'error', //如果失败，未连接上后端
+                                message: '修改提交失败: vue好像有什么地方出错了呢'
+                            })
+                            // this.$message.error('数据保存失败，' + error.toString())
+                        })
+                        .finally(() => {
+                            this.loading = false // 关闭 loading 动画
+                        })
+                    this.$refs.form.resetFields() // 重置表单
+                } else {
+                    return false
+                }
+            })
+        },
         // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
-        HandleCategories() {
-            this.signForm.categories = this.categories.join('+')
-            console.log(this.signForm.categories)
-        },
-        AddArray() {
-            this.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-        },
+
         gotoStoreInfo() {
             this.$router.push('/home/vendor/storeinfo')
         },
@@ -375,4 +445,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.changeButton:hover {
+    background-color: #4db8ff;
+    color: white;
+}
+#changeForm{
+    background-color: #2d2d2d;
+}
+</style>
