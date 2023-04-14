@@ -3,7 +3,7 @@
         <el-tabs>
             <el-tab-pane label="已上架商品" name="displayQualified">
                 <div>
-                    <el-table :data="qualifiedState.tableData" style="width: 100%">
+                    <el-table :data="stateQualified.tableData" style="width: 100%">
                         <el-table-column prop="commodityName" label="商品名称"></el-table-column>
                         <el-table-column prop="intro" label="商品简介"></el-table-column>
                         <el-table-column prop="price" label="商品价格"></el-table-column>
@@ -22,7 +22,7 @@
                             <template #default="{ row }">
                                 <el-button
                                         class="changeButton"
-                                        size="small"
+                                        size="normal"
                                         text @click="changeFormVisible = true"
                                         :disabled="isButtonDisabled(row)"
                                 >修改
@@ -30,7 +30,7 @@
                                 </el-button>
                                 <el-button
                                         type="danger"
-                                        size="larger"
+                                        size="normal"
                                         @click="deleteCommodity(row)"
                                         :disabled="isButtonDisabled(row)"
                                 >下架
@@ -84,9 +84,9 @@
                     </el-dialog>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="上架申请记录" name="displayUp">
+            <el-tab-pane label="上架申请记录" name="displayRegRecord">
                 <div>
-                    <el-table :data="state.tableData" style="width: 100%">
+                    <el-table :data="stateRegRecord.tableData" style="width: 100%">
                         <el-table-column prop="commodityName" label="商品名称"></el-table-column>
                         <el-table-column prop="intro" label="商品简介"></el-table-column>
                         <el-table-column prop="price" label="商品价格"></el-table-column>
@@ -94,7 +94,7 @@
                         <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
                         <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
                         <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
-                        <el-table-column prop="regStatus" label="状态">
+                        <el-table-column prop="regStatus" label="上架状态">
                             <template #default="{ row }">
                                 <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
                                 <el-tag
@@ -107,22 +107,21 @@
                     </el-table>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="修改申请记录" name="displayChange">
+            <el-tab-pane label="修改申请记录" name="displayChangeInfoRecord">
                 <div>
-                    <el-table :data="state.tableData" style="width: 100%">
+                    <el-table :data="stateRegRecord.tableData" style="width: 100%">
                         <el-table-column prop="commodityName" label="商品名称"></el-table-column>
                         <el-table-column prop="intro" label="商品简介"></el-table-column>
                         <el-table-column prop="price" label="商品价格"></el-table-column>
                         <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
-                        <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
                         <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
                         <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
-                        <el-table-column prop="regStatus" label="状态">
+                        <el-table-column prop="changeStatus" label="修改状态">
                             <template #default="{ row }">
                                 <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
                                 <el-tag
-                                        :type="row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
-                                        ">{{ row.regStatus }}
+                                        :type="row.changeStatus === '待审核' ? 'warning' : row.changeStatus === '已上架' ? 'success' : 'danger'
+                                        ">{{ row.changeStatus }}
                                 </el-tag>
                             </template>
                         </el-table-column>
@@ -162,10 +161,13 @@ export default {
     },
     data() {
         return {
-            qualifiedState: {
+            stateQualified: {
                 tableData: [],
             },
-            state: {
+            stateRegRecord: {
+                tableData: [],
+            },
+            stateChangeInfoRecord: {
                 tableData: [],
             },
             commoditiesData: [],
@@ -174,19 +176,19 @@ export default {
             dialogFormVisible: false,
             changeFormVisible: false,
             activeTab: 'signIn',
-            categories: [],
             signForm: {
                 // TODO: userName之后需要改掉, 用sessionStorage来存储
-                // userName: '',
-                commodityName: '',
-                // categories: '',
-                // NOTE: 用数组传成功！！
-                categories: [],
-                idNumber: '',
-                intro: '',
-                address: '',
-                fund: '',
-                registrationTime: ''
+                id: 0,
+                commodityName: null,
+                shopId: 0,
+                intro: null,
+                price: 0,
+                imagePath: null,
+                regStatus: null,
+                changeStatus: null,
+                createTime: null,
+                updateTime: null,
+                deleteTime: null,
                 // TODO: 如何在这个时候传递用户名给后端
             },
             changeForm: {
@@ -231,18 +233,11 @@ export default {
                     callback()
                 }
             },
-            validateAddress: (rule, value, callback) => {
-                if (value.length > 32) {
-                    callback(new Error('备案地址不能超过32个字符！'))
-                } else {
-                    callback()
-                }
-            },
             // NOTE: 先将value转换为浮点数 检查是否为之后检查大小
-            validateFund: (rule, value, callback) => {
+            validatePrice: (rule, value, callback) => {
                 const fund = parseFloat(value)
-                if (isNaN(fund) || fund <= 1000) {
-                    callback(new Error('资金需大于1000元！'))
+                if (isNaN(fund) || fund <= 0) {
+                    callback(new Error('价格需大于0元！'))
                 } else {
                     callback()
                 }
@@ -262,14 +257,6 @@ export default {
         },
         rules: function () {
             return {
-                userName: [
-                    {
-                        required: true,
-                        message: '用户名不能为空！',
-                        trigger: 'blur'
-                    },
-                    {validator: this.validateUserName, trigger: 'blur'}
-                ],
                 commodityName: [
                     {
                         required: true,
@@ -278,11 +265,6 @@ export default {
                     },
                     {validator: this.validateCommodityName, trigger: 'blur'}
                 ],
-                categories: [
-                    {type: 'array', required: true, message: '请选择至少一个商品类别', trigger: 'submit'} //* 点击提交时触发验证
-                ],
-
-                idNumber: [{required: true, validator: this.validateIdNumber, trigger: 'blur'}],
                 intro: [
                     {
                         required: true,
@@ -291,42 +273,14 @@ export default {
                     },
                     {validator: this.validateIntro, min: 1, max: 128, trigger: 'blur'}
                 ],
-                address: [
+                price: [
                     {
                         required: true,
-                        message: '备案地址不能为空！',
+                        message: '商品价格不能为空或小于0！',
                         trigger: 'blur'
                     },
-                    {validator: this.validateAddress, min: 1, max: 32, trigger: 'blur'}
+                    {validator: this.validatePrice, min: 1, max: 128, trigger: 'blur'}
                 ],
-                fund: [
-                    {
-                        required: true,
-                        message: '资金不能为空！',
-                        trigger: 'blur'
-                    },
-                    {validator: this.validateFund, message: '请输入足够的资金！', trigger: 'blur'}
-                ],
-                registrationTime: [
-                    {
-                        type: 'date',
-                        required: true,
-                        message: '注册时间不能为空',
-                        trigger: 'blur'
-                    },
-                    {
-                        validator: (rule, value, callback) => {
-                            const date = new Date(value)
-                            const cutoff = new Date('2023-03-19')
-                            if (date > cutoff) {
-                                callback(new Error('注册时间不得晚于2023年3月19日'))
-                            } else {
-                                callback()
-                            }
-                        },
-                        trigger: 'blur'
-                    }
-                ]
             }
         }
     },
@@ -339,6 +293,7 @@ export default {
         signIn() {
             // this.HandleCategories() //* 将多个单词用+拼起来
             // NOTE: 前端检查是否符合规范
+            this.signForm.shopId = localStorage.getItem("shopId")
             this.$refs.form.validate((valid) => {
                 console.log(valid)
                 if (valid) {
@@ -391,7 +346,7 @@ export default {
             })
         },
         changeIn() {
-            this.changeForm.id = localStorage.getItem("id")
+            // this.changeForm.id = localStorage.getItem("id")
             this.changeForm.shopId = localStorage.getItem("shopId")
             // this.HandleCategories() //* 将多个单词用+拼起来
             // NOTE: 前端检查是否符合规范
@@ -448,28 +403,6 @@ export default {
         gotoStoreInfo() {
             this.$router.push('/home/vendor/storeinfo')
         },
-        async fetchData() {
-            try {
-                console.log(localStorage.getItem('shopId'))
-                const response = await axios.get('http://localhost:9000/commodity/displayAll', {
-                    params: {
-                        shopId: localStorage.getItem('shopId') //获取cookie中的id
-                    }
-                })
-                this.commoditiesData = response.data.data
-                this.state.tableData = response.data.data.map((row) => {
-                    // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
-                    console.log(row)
-                    // row = this.removeZerosInObjectArray(row)
-                    return row
-                })
-                // console.log(this.state.tableData)
-                // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
-                console.log(this.state.tableData)
-            } catch (error) {
-                console.log(error)
-            }
-        },
         async fetchDataQualified() {
             try {
                 console.log(localStorage.getItem('shopId'))
@@ -479,23 +412,65 @@ export default {
                     }
                 })
                 this.commoditiesData = response.data.data
-                this.qualifiedState.tableData = response.data.data.map((row) => {
+                this.stateQualified.tableData = response.data.data.map((row) => {
                     // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
                     console.log(row)
                     // row = this.removeZerosInObjectArray(row)
                     return row
                 })
-                console.log(this.qualifiedState.tableData)
+                console.log(this.stateQualified.tableData)
             } catch (error) {
                 console.log(error)
             }
-        }
+        },
+        async fetchDataRegRecord() {
+            try {
+                console.log(localStorage.getItem('shopId'))
+                const response = await axios.get('http://localhost:9000/commodity/displayRegRecord', {
+                    params: {
+                        shopId: localStorage.getItem('shopId') //获取cookie中的id
+                    }
+                })
+                this.commoditiesData = response.data.data
+                this.stateRegRecord.tableData = response.data.data.map((row) => {
+                    console.log(row)
+                    return row
+                })
+                // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
+                console.log(this.stateRegRecord.tableData)
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async fetchDataChangeInfoRecord() {
+            try {
+                console.log(localStorage.getItem('shopId'))
+                const response = await axios.get('http://localhost:9000/commodity/displayChangeInfoRecord', {
+                    params: {
+                        shopId: localStorage.getItem('shopId') //获取cookie中的id
+                    }
+                })
+                this.commoditiesData = response.data.data
+                this.stateRegRecord.tableData = response.data.data.map((row) => {
+                    // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
+                    console.log(row)
+                    // row = this.removeZerosInObjectArray(row)
+                    return row
+                })
+                // console.log(this.state.tableData)
+                // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
+                console.log(this.stateRegRecord.tableData)
+            } catch (error) {
+                console.log(error)
+            }
+        },
         // NOTE: 去掉数组末尾多余的零
     },
     // NOTE: 用computed来实现按钮的disabled属性，如果不是待审核状态，就禁用按钮
     // NOTE: 需要注意的是，这里的row是一个参数，要在调用的时候传入
     mounted: function () {
-        this.fetchData()
+        this.fetchDataRegRecord()
+        this.fetchDataChangeInfoRecord()
         this.fetchDataQualified()
     }
 }
