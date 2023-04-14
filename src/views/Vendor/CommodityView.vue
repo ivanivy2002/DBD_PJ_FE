@@ -1,9 +1,9 @@
 <template>
     <div>
-        <el-tabs >
-            <el-tab-pane label="已上架商品" name="displayQualified" >
+        <el-tabs>
+            <el-tab-pane label="已上架商品" name="displayQualified">
                 <div>
-                    <el-table :data="state.tableData" style="width: 100%">
+                    <el-table :data="qualifiedState.tableData" style="width: 100%">
                         <el-table-column prop="commodityName" label="商品名称"></el-table-column>
                         <el-table-column prop="intro" label="商品简介"></el-table-column>
                         <el-table-column prop="price" label="商品价格"></el-table-column>
@@ -131,106 +131,13 @@
                             <template #default="{ row }">
                                 <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
                                 <el-tag
-                                        :type="
-              row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
-            "
-                                >{{ row.regStatus }}
+                                        :type="row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
+                                        ">{{ row.regStatus }}
                                 </el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column label="操作">
-                            <template #default="{ row }">
-                                <el-button
-                                        class="changeButton"
-                                        size="small"
-                                        text @click="changeFormVisible = true"
 
-                                        :disabled="isButtonDisabled(row)"
-                                >修改
-                                    <!--  @click="changeCommodity(row)"-->
-                                </el-button>
-                                <el-button
-                                        type="danger"
-                                        size="larger"
-                                        @click="deleteCommodity(row)"
-                                        :disabled="isButtonDisabled(row)"
-                                >下架
-                                </el-button>
-                            </template>
-                        </el-table-column>
                     </el-table>
-                </div>
-                <div>
-                    <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
-                </div>
-                <div class="el-form">
-                    <el-dialog v-model="dialogFormVisible" title="申请上架商品">
-                        <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
-                            <!--        <el-form-item label="用户名" prop="userName">-->
-                            <!--          <el-input-->
-                            <!--            v-model="signForm.userName"-->
-                            <!--            placeholder="请输入您的用户名以供确认"-->
-                            <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-                            <!--          ></el-input>-->
-                            <!--        </el-form-item>-->
-                            <el-form-item label="商品名称" prop="commodityName">
-                                <el-input v-model="signForm.commodityName"></el-input>
-                            </el-form-item>
-                            <!-- <el-form-item label="商品类别">
-                                      <el-input v-model="signForm.categories"></el-input>
-                                    </el-form-item> -->
-                            <el-form-item label="商品类别" prop="categories">
-                                <el-checkbox-group v-model="signForm.categories">
-                                    <el-checkbox label="food">食品</el-checkbox>
-                                    <el-checkbox label="clothing">服装</el-checkbox>
-                                    <el-checkbox label="electronics">电子产品</el-checkbox>
-                                    <el-checkbox label="GPT">GPT</el-checkbox>
-                                </el-checkbox-group>
-                            </el-form-item>
-
-                            <!--        <el-form-item label="身份证号" prop="idNumber">-->
-                            <!--          <el-input v-model="signForm.idNumber"></el-input>-->
-                            <!--        </el-form-item>-->
-                            <el-form-item label="商品简介" prop="intro">
-                                <el-input v-model="signForm.intro"></el-input>
-                            </el-form-item>
-                            <!--        <el-form-item label="备案地址" prop="address">-->
-                            <!--          <el-input v-model="signForm.address"></el-input>-->
-                            <!--        </el-form-item>-->
-                            <!--        <el-form-item label="注册资金" prop="fund">-->
-                            <!--          <el-input v-model="signForm.fund"></el-input>-->
-                            <!--        </el-form-item>-->
-                            <!--        <el-form-item label="注册时间" prop="registrationTime">-->
-                            <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
-                            <!--        </el-form-item>-->
-                            <el-form-item>
-                                <el-button type="primary" @click="signIn">申请</el-button>
-                                <el-button type="default" @click="resetForm">重置</el-button>
-                                <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
-                            </el-form-item>
-                        </el-form>
-                    </el-dialog>
-                </div>
-                <div class="el-form">
-                    <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
-                        <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
-                            <el-form-item label="商品名称" prop="commodityName">
-                                <el-input v-model="changeForm.commodityName"></el-input>
-                            </el-form-item>
-
-                            <el-form-item label="商品简介" prop="intro">
-                                <el-input v-model="changeForm.intro"></el-input>
-                            </el-form-item>
-                            <el-form-item label="商品价格" prop="price">
-                                <el-input v-model="changeForm.price"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="changeIn">提交修改</el-button>
-                                <el-button type="default" @click="resetForm">重置</el-button>
-                                <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
-                            </el-form-item>
-                        </el-form>
-                    </el-dialog>
                 </div>
             </el-tab-pane>
         </el-tabs>
@@ -265,11 +172,11 @@ export default {
     },
     data() {
         return {
-            qualifiedState:{
-
+            qualifiedState: {
+                tableData: [],
             },
             state: {
-                tableData: []
+                tableData: [],
             },
             commoditiesData: [],
             ifApprove: 0,
@@ -534,7 +441,6 @@ export default {
             })
         },
         // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
-
         gotoStoreInfo() {
             this.$router.push('/home/vendor/storeinfo')
         },
@@ -559,6 +465,26 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        async fetchDataQualified() {
+            try {
+                console.log(localStorage.getItem('shopId'))
+                const response = await axios.get('http://localhost:9000/commodity/displayQualified', {
+                    params: {
+                        shopId: localStorage.getItem('shopId') //获取cookie中的id
+                    }
+                })
+                this.commoditiesData = response.data.data
+                this.qualifiedState.tableData = response.data.data.map((row) => {
+                    // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
+                    console.log(row)
+                    // row = this.removeZerosInObjectArray(row)
+                    return row
+                })
+                console.log(this.qualifiedState.tableData)
+            } catch (error) {
+                console.log(error)
+            }
         }
         // NOTE: 去掉数组末尾多余的零
     },
@@ -566,6 +492,7 @@ export default {
     // NOTE: 需要注意的是，这里的row是一个参数，要在调用的时候传入
     mounted: function () {
         this.fetchData()
+        this.fetchDataQualified()
     }
 }
 </script>
