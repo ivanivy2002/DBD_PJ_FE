@@ -23,7 +23,8 @@
                                 <el-button
                                         class="changeButton"
                                         size="normal"
-                                        text @click="changeFormVisible = true"
+                                        text
+                                        @click="openChangeForm(row)"
                                         :disabled="isButtonDisabled(row)"
                                 >修改
                                     <!--  @click="changeCommodity(row)"-->
@@ -62,10 +63,11 @@
                         </el-form>
                     </el-dialog>
                 </div>
-                <div class="el-form">
+                <div class="el-form-change">
                     <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
                         <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
                             <input type="hidden" v-model="changeForm.id">
+                            <!--                            //TODO: -->
                             <el-form-item label="商品名称" prop="commodityName">
                                 <el-input v-model="changeForm.commodityName"></el-input>
                             </el-form-item>
@@ -219,13 +221,6 @@ export default {
                 }
             },
             //* 中国大陆身份证号：包括前两位的区间、出生年份、出生月份、出生日期、顺序码和校验码
-            validateIdNumber: (rule, value, callback) => {
-                if (!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
-                    callback(new Error('请输入正确的身份证号！'))
-                } else {
-                    callback()
-                }
-            },
             validateIntro: (rule, value, callback) => {
                 if (value.length > 128) {
                     callback(new Error('商品简介不能超过128个字符！'))
@@ -345,10 +340,16 @@ export default {
                 }
             })
         },
-        changeIn() {
+        openChangeForm(row) {
+            this.changeForm = row
+            this.changeForm.id = row.id
+            this.changeFormVisible = true
+        },
+        changeIn: async function (row) {
+            console.log(row)
             // this.changeForm.id = localStorage.getItem("id")
             this.changeForm.shopId = localStorage.getItem("shopId")
-            // this.HandleCategories() //* 将多个单词用+拼起来
+
             // NOTE: 前端检查是否符合规范
             this.$refs.form.validate((valid) => {
                 console.log(valid)
@@ -359,7 +360,8 @@ export default {
                     console.log('申请提交', this.changeForm) // 控制台输出信息
                     this.loading = true // 开启 loading 动画
                     axios
-                        .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
+                        // .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
+                        .put('http://localhost:9000/commodity/changeInfo', this.changeForm)
                         .then((response) => {
                             console.log(response.data)
                             // NOTE: 只有当后端返回200时显示注册成功
