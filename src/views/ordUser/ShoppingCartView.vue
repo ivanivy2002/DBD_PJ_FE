@@ -1,41 +1,55 @@
 <template>
   <div class="shopping-cart">
-    <el-table :data="cartItems" style="width: 100%" stripe>
-      <el-table-column prop="name" label="商品名称" width="180" />
-      <el-table-column prop="description" label="介绍" />
-      <el-table-column prop="price" label="价格" width="120">
-        <template slot-scope="{ row }">
-          <span>{{ row.price | currency }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="quantity" label="数量" width="120" />
-      <el-table-column label="失效" width="120">
-        <!-- BUG: _ctx.row is undefined -->
-        <!-- <template slot-scope="{ row }"> -->
-        <template #default="{ row }">
-          <el-tag v-if="row.invalid" type="danger">已失效</el-tag>
-          <el-tag v-else type="success">正常</el-tag>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-card>
+      <div slot="header" class="card-header">
+        <h2 class="card-title" style="width: 20%">我的购物车</h2>
+      </div>
+      <el-table :data="cartItems" style="width: 100%" stripe>
+        <el-table-column prop="name" label="商品名称" width="180" />
+        <el-table-column prop="commodityIntro" label="介绍" />
+        <el-table-column prop="commodityPrice" label="价格" width="120">
+          <template #default="{ row }">
+            <span>{{ row.commodityPrice | currency }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="commodityNum" label="数量" width="120" />
+        <el-table-column label="状态" width="120">
+          <template #default="{ row }">
+            <el-tag v-if="row.status == '有效'" type="success">正常</el-tag>
+            <el-tag v-else type="danger">已失效</el-tag>
+          </template>
+        </el-table-column>
+        <!-- NOTE: 多选框 -->
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="操作" width="120">
+          <template #default="{ row }">
+            <el-button type="danger" @click="removeCommodity(row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="footer">
+        <el-button type="danger" @click="removeSelected">批量删除</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
-
 <script>
-import { ElTable, ElTableColumn, ElTag } from 'element-plus'
-// import { method } from 'lodash'
+import { ElTable, ElTableColumn, ElTag, ElButton, ElCard, ElMessage } from 'element-plus'
 import axios from 'axios'
 
 export default {
   components: {
     ElTable,
     ElTableColumn,
-    ElTag
+    ElTag,
+    ElButton,
+    ElCard
   },
   data() {
     return {
       userId: 0,
-      cartItems: []
+      cartItems: [],
+      selectedItems: []
     }
   },
   filters: {
@@ -45,31 +59,57 @@ export default {
   },
   mounted() {
     this.userId = localStorage.getItem('userId')
-    // console.log(this.cartItems)
     this.fetchData()
   },
   methods: {
     fetchData() {
       const response = axios
         .get('http://localhost:9000/shoppingCart/displayShoppingCart', {
-          params: { userId: this.userId }
+          // TODO: 注意测试完之后改成this.id
+          params: { userId: 25 }
         })
         .then((response) => {
-          console.log(response.data)
           this.cartItems = response.data.data.map((row) => {
-            console.log(row)
             return row
           })
         })
     },
+    // NOTE: 删除单个商品
     removeCommodity(commodityId) {
-      const response = axios.delete('http://localhost:9000/shoppingCart/removeCommodity/', {
-        params: {
-          userId: this.userId,
-          // TODO: 数组考虑如何传数据
-          commodityIdArray: ''
-        }
-      })
+      const response = axios
+        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+          params: {
+            userId: 25,
+            commodityIdArray: [commodityId] // 这是一个array
+          }
+        })
+        .then((response) => {
+          this.fetchData()
+        })
+    },
+    // NOTE: 删除选中的商品
+    removeSelected() {
+      if (this.selectedItems.length === 0) {
+        console.log('你没有选中商品，删除失败')
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败,未连接上后端
+          message: '请选择至少一个商品后删除'
+        })
+        return
+      }
+      const commodityIdArray = this.selectedItems.map((item) => item.id)
+      const response = axios
+        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+          params: {
+            userId: 25,
+            commodityIdArray: commodityIdArray
+          }
+        })
+        .then((response) => {
+          this.fetchData()
+          this.selectedItems = []
+        })
     }
   }
 }
@@ -78,19 +118,45 @@ export default {
 <style scoped>
 .shopping-cart {
   padding: 24px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #ebeef5;
   background-color: #f5f5f5;
 }
 
-.el-table {
-  animation: fadeIn 1s ease;
+.card-title {
+  margin: 0;
+  font-size: 24px;
 }
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.cart-card {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cart-item-enter-active,
+.cart-item-leave-active {
+  transition: all 0.3s ease;
+}
+
+.cart-item-enter,
+.cart-item-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 </style>
