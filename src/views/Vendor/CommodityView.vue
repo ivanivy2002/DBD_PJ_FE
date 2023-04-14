@@ -13,10 +13,7 @@
                         <el-table-column prop="regStatus" label="状态">
                             <template #default="{ row }">
                                 <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
-                                <el-tag
-                                        :type="
-              row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
-            "
+                                <el-tag :type="row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'"
                                 >{{ row.regStatus }}
                                 </el-tag>
                             </template>
@@ -27,7 +24,6 @@
                                         class="changeButton"
                                         size="small"
                                         text @click="changeFormVisible = true"
-
                                         :disabled="isButtonDisabled(row)"
                                 >修改
                                     <!--  @click="changeCommodity(row)"-->
@@ -49,43 +45,15 @@
                 <div class="el-form">
                     <el-dialog v-model="dialogFormVisible" title="申请上架商品">
                         <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
-                            <!--        <el-form-item label="用户名" prop="userName">-->
-                            <!--          <el-input-->
-                            <!--            v-model="signForm.userName"-->
-                            <!--            placeholder="请输入您的用户名以供确认"-->
-                            <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-                            <!--          ></el-input>-->
-                            <!--        </el-form-item>-->
                             <el-form-item label="商品名称" prop="commodityName">
                                 <el-input v-model="signForm.commodityName"></el-input>
                             </el-form-item>
-                            <!-- <el-form-item label="商品类别">
-                                      <el-input v-model="signForm.categories"></el-input>
-                                    </el-form-item> -->
-                            <el-form-item label="商品类别" prop="categories">
-                                <el-checkbox-group v-model="signForm.categories">
-                                    <el-checkbox label="food">食品</el-checkbox>
-                                    <el-checkbox label="clothing">服装</el-checkbox>
-                                    <el-checkbox label="electronics">电子产品</el-checkbox>
-                                    <el-checkbox label="GPT">GPT</el-checkbox>
-                                </el-checkbox-group>
-                            </el-form-item>
-
-                            <!--        <el-form-item label="身份证号" prop="idNumber">-->
-                            <!--          <el-input v-model="signForm.idNumber"></el-input>-->
-                            <!--        </el-form-item>-->
                             <el-form-item label="商品简介" prop="intro">
                                 <el-input v-model="signForm.intro"></el-input>
                             </el-form-item>
-                            <!--        <el-form-item label="备案地址" prop="address">-->
-                            <!--          <el-input v-model="signForm.address"></el-input>-->
-                            <!--        </el-form-item>-->
-                            <!--        <el-form-item label="注册资金" prop="fund">-->
-                            <!--          <el-input v-model="signForm.fund"></el-input>-->
-                            <!--        </el-form-item>-->
-                            <!--        <el-form-item label="注册时间" prop="registrationTime">-->
-                            <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
-                            <!--        </el-form-item>-->
+                            <el-form-item label="商品价格" prop="price">
+                                <el-input v-model="signForm.price"></el-input>
+                            </el-form-item>
                             <el-form-item>
                                 <el-button type="primary" @click="signIn">申请</el-button>
                                 <el-button type="default" @click="resetForm">重置</el-button>
@@ -97,10 +65,10 @@
                 <div class="el-form">
                     <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
                         <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
+                            <input type="hidden" v-model="changeForm.id">
                             <el-form-item label="商品名称" prop="commodityName">
                                 <el-input v-model="changeForm.commodityName"></el-input>
                             </el-form-item>
-
                             <el-form-item label="商品简介" prop="intro">
                                 <el-input v-model="changeForm.intro"></el-input>
                             </el-form-item>
@@ -116,7 +84,30 @@
                     </el-dialog>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="所有记录" name="displayAll">
+            <el-tab-pane label="上架申请记录" name="displayUp">
+                <div>
+                    <el-table :data="state.tableData" style="width: 100%">
+                        <el-table-column prop="commodityName" label="商品名称"></el-table-column>
+                        <el-table-column prop="intro" label="商品简介"></el-table-column>
+                        <el-table-column prop="price" label="商品价格"></el-table-column>
+                        <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
+                        <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
+                        <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
+                        <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
+                        <el-table-column prop="regStatus" label="状态">
+                            <template #default="{ row }">
+                                <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
+                                <el-tag
+                                        :type="row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
+                                        ">{{ row.regStatus }}
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+
+                    </el-table>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="修改申请记录" name="displayChange">
                 <div>
                     <el-table :data="state.tableData" style="width: 100%">
                         <el-table-column prop="commodityName" label="商品名称"></el-table-column>
@@ -152,8 +143,8 @@ import {
     ElInput,
     ElButton,
     ElMessage,
-    ElCheckbox,
-    ElCheckboxGroup
+    // ElCheckbox,
+    // ElCheckboxGroup
 } from 'element-plus'
 import axios from 'axios'
 
@@ -166,8 +157,8 @@ export default {
         ElFormItem,
         ElInput,
         ElButton,
-        ElCheckbox,
-        ElCheckboxGroup,
+        // ElCheckbox,
+        // ElCheckboxGroup,
     },
     data() {
         return {
@@ -198,7 +189,19 @@ export default {
                 registrationTime: ''
                 // TODO: 如何在这个时候传递用户名给后端
             },
-            changeForm: {},
+            changeForm: {
+                id: 0,
+                commodityName: null,
+                shopId: 0,
+                intro: null,
+                price: 0,
+                imagePath: null,
+                regStatus: null,
+                changeStatus: null,
+                createTime: null,
+                updateTime: null,
+                deleteTime: null,
+            },
             validateUserName: (rule, value, callback) => {
                 if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
                     callback(new Error('请输入正确格式的用户名！'))
@@ -340,7 +343,7 @@ export default {
                 console.log(valid)
                 if (valid) {
                     // this.AddArray() //* 将categories数组增加10个空元素
-                    this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                    // this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                     // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
                     //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
                     // NOTE: 处理注册逻辑
@@ -388,6 +391,8 @@ export default {
             })
         },
         changeIn() {
+            this.changeForm.id = localStorage.getItem("id")
+            this.changeForm.shopId = localStorage.getItem("shopId")
             // this.HandleCategories() //* 将多个单词用+拼起来
             // NOTE: 前端检查是否符合规范
             this.$refs.form.validate((valid) => {
