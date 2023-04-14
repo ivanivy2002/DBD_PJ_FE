@@ -7,7 +7,6 @@
                         <el-table-column prop="commodityName" label="商品名称"></el-table-column>
                         <el-table-column prop="intro" label="商品简介"></el-table-column>
                         <el-table-column prop="price" label="商品价格"></el-table-column>
-                        <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
                         <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
                         <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
                         <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
@@ -168,7 +167,7 @@ export default {
         ElInput,
         ElButton,
         ElCheckbox,
-        ElCheckboxGroup
+        ElCheckboxGroup,
     },
     data() {
         return {
