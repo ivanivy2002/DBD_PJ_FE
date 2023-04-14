@@ -47,7 +47,7 @@
             :xs="24"
             :sm="12"
             :md="10"
-            :lg="6"
+            :lg="12"
           >
             <el-card class="animated-card" shadow="hover">
               <div class="card-header">
@@ -201,7 +201,6 @@ export default {
   margin-right: 35px;
   scale: 1.25;
 }
-
 .el-button:hover {
   /*cursor: pointer;*/
   cursor: pointer;
@@ -214,11 +213,10 @@ export default {
   transform: scale(1.1);
   transition: transform 0.4s ease;
 }
-
 .el-card {
   /*width:100%;*/
+  /*  padding:0px;*/
 }
-
 .el-card:hover {
   box-shadow: 0 0 1em rgb(255, 255, 255);
   /*box-shadow: 0 0 1em #07070767;*/
@@ -226,45 +224,37 @@ export default {
   transform: scale(1);
   transition: transform 0.7s ease, box-shadow 0.5s ease;
 }
-
 .store-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 50px;
 }
-
 .store-info-card {
   width: 600px;
   margin-bottom: 20px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
-
 .store-info-title {
   font-size: 20px;
   font-weight: bold;
 }
-
 .store-info-content {
   padding: 20px;
   /*font-size: xx-large;*/
 }
-
 .store-info-item {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-
 .store-info-label {
   font-size: 16px;
   font-weight: bold;
 }
-
 .store-info-value {
   font-size: 16px;
 }
-
 .category-item {
   margin-right: 5px;
   background-color: #19cde9;
@@ -273,22 +263,18 @@ export default {
   font-size: 14px;
   color: #333;
 }
-
 .store-info-btn,
 .commodity-btn {
   margin-top: 20px;
 }
-
 .commodity-card {
   width: 600px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
-
 .commodity-title {
   font-size: 20px;
   font-weight: bold;
 }
-
 .commodity-content {
   padding: 20px;
 }
@@ -296,7 +282,6 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
 .card-title {
   font-size: 18px;
   font-weight: bold;
@@ -311,7 +296,6 @@ export default {
   flex-wrap: wrap;
   align-items: center;
 }
-
 .animated-card {
   background-color: rgb(255, 255, 255);
   opacity: 100%;
@@ -321,7 +305,6 @@ export default {
   cursor: pointer; /* 鼠标悬停时显示手型 */
   transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .animated-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
