@@ -1,124 +1,246 @@
 <template>
     <div>
-        <el-table :data="state.tableData" style="width: 100%">
-            <el-table-column prop="commodityName" label="商品名称"></el-table-column>
-            <el-table-column prop="intro" label="商品简介"></el-table-column>
-            <el-table-column prop="price" label="商品价格"></el-table-column>
-            <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
-            <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
-            <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
-            <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
-            <el-table-column prop="regStatus" label="状态">
-                <template #default="{ row }">
-                    <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
-                    <el-tag
-                            :type="
+        <el-tabs >
+            <el-tab-pane label="已上架商品" name="displayQualified" >
+                <div>
+                    <el-table :data="state.tableData" style="width: 100%">
+                        <el-table-column prop="commodityName" label="商品名称"></el-table-column>
+                        <el-table-column prop="intro" label="商品简介"></el-table-column>
+                        <el-table-column prop="price" label="商品价格"></el-table-column>
+                        <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
+                        <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
+                        <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
+                        <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
+                        <el-table-column prop="regStatus" label="状态">
+                            <template #default="{ row }">
+                                <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
+                                <el-tag
+                                        :type="
               row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
             "
-                    >{{ row.regStatus }}
-                    </el-tag>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作">
-                <template #default="{ row }">
-                    <el-button
-                            class="changeButton"
-                            size="small"
-                            text @click="changeFormVisible = true"
+                                >{{ row.regStatus }}
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作">
+                            <template #default="{ row }">
+                                <el-button
+                                        class="changeButton"
+                                        size="small"
+                                        text @click="changeFormVisible = true"
 
-                            :disabled="isButtonDisabled(row)"
-                    >修改
-                        <!--  @click="changeCommodity(row)"-->
-                    </el-button>
-                    <el-button
-                            type="danger"
-                            size="small"
-                            @click="deleteCommodity(row)"
-                            :disabled="isButtonDisabled(row)"
-                    >删除
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
-    <div>
-        <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
-    </div>
-    <div class="el-form">
-        <el-dialog v-model="dialogFormVisible" title="申请上架商品">
-            <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
-                <!--        <el-form-item label="用户名" prop="userName">-->
-                <!--          <el-input-->
-                <!--            v-model="signForm.userName"-->
-                <!--            placeholder="请输入您的用户名以供确认"-->
-                <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-                <!--          ></el-input>-->
-                <!--        </el-form-item>-->
-                <el-form-item label="商品名称" prop="commodityName">
-                    <el-input v-model="signForm.commodityName"></el-input>
-                </el-form-item>
-                <!-- <el-form-item label="商品类别">
-                          <el-input v-model="signForm.categories"></el-input>
-                        </el-form-item> -->
-                <el-form-item label="商品类别" prop="categories">
-                    <el-checkbox-group v-model="signForm.categories">
-                        <el-checkbox label="food">食品</el-checkbox>
-                        <el-checkbox label="clothing">服装</el-checkbox>
-                        <el-checkbox label="electronics">电子产品</el-checkbox>
-                        <el-checkbox label="GPT">GPT</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
+                                        :disabled="isButtonDisabled(row)"
+                                >修改
+                                    <!--  @click="changeCommodity(row)"-->
+                                </el-button>
+                                <el-button
+                                        type="danger"
+                                        size="larger"
+                                        @click="deleteCommodity(row)"
+                                        :disabled="isButtonDisabled(row)"
+                                >下架
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div>
+                    <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
+                </div>
+                <div class="el-form">
+                    <el-dialog v-model="dialogFormVisible" title="申请上架商品">
+                        <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
+                            <!--        <el-form-item label="用户名" prop="userName">-->
+                            <!--          <el-input-->
+                            <!--            v-model="signForm.userName"-->
+                            <!--            placeholder="请输入您的用户名以供确认"-->
+                            <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+                            <!--          ></el-input>-->
+                            <!--        </el-form-item>-->
+                            <el-form-item label="商品名称" prop="commodityName">
+                                <el-input v-model="signForm.commodityName"></el-input>
+                            </el-form-item>
+                            <!-- <el-form-item label="商品类别">
+                                      <el-input v-model="signForm.categories"></el-input>
+                                    </el-form-item> -->
+                            <el-form-item label="商品类别" prop="categories">
+                                <el-checkbox-group v-model="signForm.categories">
+                                    <el-checkbox label="food">食品</el-checkbox>
+                                    <el-checkbox label="clothing">服装</el-checkbox>
+                                    <el-checkbox label="electronics">电子产品</el-checkbox>
+                                    <el-checkbox label="GPT">GPT</el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
 
-                <!--        <el-form-item label="身份证号" prop="idNumber">-->
-                <!--          <el-input v-model="signForm.idNumber"></el-input>-->
-                <!--        </el-form-item>-->
-                <el-form-item label="商品简介" prop="intro">
-                    <el-input v-model="signForm.intro"></el-input>
-                </el-form-item>
-                <!--        <el-form-item label="备案地址" prop="address">-->
-                <!--          <el-input v-model="signForm.address"></el-input>-->
-                <!--        </el-form-item>-->
-                <!--        <el-form-item label="注册资金" prop="fund">-->
-                <!--          <el-input v-model="signForm.fund"></el-input>-->
-                <!--        </el-form-item>-->
-                <!--        <el-form-item label="注册时间" prop="registrationTime">-->
-                <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
-                <!--        </el-form-item>-->
-                <el-form-item>
-                    <el-button type="primary" @click="signIn">申请</el-button>
-                    <el-button type="default" @click="resetForm">重置</el-button>
-                    <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
-                </el-form-item>
-            </el-form>
-        </el-dialog>
-    </div>
-    <div class="el-form">
-        <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
-            <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
-                <el-form-item label="商品名称" prop="commodityName">
-                    <el-input v-model="changeForm.commodityName"></el-input>
-                </el-form-item>
+                            <!--        <el-form-item label="身份证号" prop="idNumber">-->
+                            <!--          <el-input v-model="signForm.idNumber"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <el-form-item label="商品简介" prop="intro">
+                                <el-input v-model="signForm.intro"></el-input>
+                            </el-form-item>
+                            <!--        <el-form-item label="备案地址" prop="address">-->
+                            <!--          <el-input v-model="signForm.address"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <!--        <el-form-item label="注册资金" prop="fund">-->
+                            <!--          <el-input v-model="signForm.fund"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <!--        <el-form-item label="注册时间" prop="registrationTime">-->
+                            <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <el-form-item>
+                                <el-button type="primary" @click="signIn">申请</el-button>
+                                <el-button type="default" @click="resetForm">重置</el-button>
+                                <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+                </div>
+                <div class="el-form">
+                    <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
+                        <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
+                            <el-form-item label="商品名称" prop="commodityName">
+                                <el-input v-model="changeForm.commodityName"></el-input>
+                            </el-form-item>
 
-                <el-form-item label="商品简介" prop="intro">
-                    <el-input v-model="changeForm.intro"></el-input>
-                </el-form-item>
-                <el-form-item label="商品价格" prop="price">
-                    <el-input v-model="changeForm.price"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="changeIn">提交修改</el-button>
-                    <el-button type="default" @click="resetForm">重置</el-button>
-                    <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
-                </el-form-item>
-            </el-form>
-        </el-dialog>
+                            <el-form-item label="商品简介" prop="intro">
+                                <el-input v-model="changeForm.intro"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品价格" prop="price">
+                                <el-input v-model="changeForm.price"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="changeIn">提交修改</el-button>
+                                <el-button type="default" @click="resetForm">重置</el-button>
+                                <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="所有记录" name="displayAll">
+                <div>
+                    <el-table :data="state.tableData" style="width: 100%">
+                        <el-table-column prop="commodityName" label="商品名称"></el-table-column>
+                        <el-table-column prop="intro" label="商品简介"></el-table-column>
+                        <el-table-column prop="price" label="商品价格"></el-table-column>
+                        <!--        <el-table-column prop="categories" label="商品类别"></el-table-column>-->
+                        <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
+                        <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
+                        <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 regStatus 属性来决定 el-tag 标签的样式 -->
+                        <el-table-column prop="regStatus" label="状态">
+                            <template #default="{ row }">
+                                <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
+                                <el-tag
+                                        :type="
+              row.regStatus === '待审核' ? 'warning' : row.regStatus === '已上架' ? 'success' : 'danger'
+            "
+                                >{{ row.regStatus }}
+                                </el-tag>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作">
+                            <template #default="{ row }">
+                                <el-button
+                                        class="changeButton"
+                                        size="small"
+                                        text @click="changeFormVisible = true"
+
+                                        :disabled="isButtonDisabled(row)"
+                                >修改
+                                    <!--  @click="changeCommodity(row)"-->
+                                </el-button>
+                                <el-button
+                                        type="danger"
+                                        size="larger"
+                                        @click="deleteCommodity(row)"
+                                        :disabled="isButtonDisabled(row)"
+                                >下架
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+                <div>
+                    <el-button type="success" text @click="dialogFormVisible = true">+上架新商品</el-button>
+                </div>
+                <div class="el-form">
+                    <el-dialog v-model="dialogFormVisible" title="申请上架商品">
+                        <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
+                            <!--        <el-form-item label="用户名" prop="userName">-->
+                            <!--          <el-input-->
+                            <!--            v-model="signForm.userName"-->
+                            <!--            placeholder="请输入您的用户名以供确认"-->
+                            <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+                            <!--          ></el-input>-->
+                            <!--        </el-form-item>-->
+                            <el-form-item label="商品名称" prop="commodityName">
+                                <el-input v-model="signForm.commodityName"></el-input>
+                            </el-form-item>
+                            <!-- <el-form-item label="商品类别">
+                                      <el-input v-model="signForm.categories"></el-input>
+                                    </el-form-item> -->
+                            <el-form-item label="商品类别" prop="categories">
+                                <el-checkbox-group v-model="signForm.categories">
+                                    <el-checkbox label="food">食品</el-checkbox>
+                                    <el-checkbox label="clothing">服装</el-checkbox>
+                                    <el-checkbox label="electronics">电子产品</el-checkbox>
+                                    <el-checkbox label="GPT">GPT</el-checkbox>
+                                </el-checkbox-group>
+                            </el-form-item>
+
+                            <!--        <el-form-item label="身份证号" prop="idNumber">-->
+                            <!--          <el-input v-model="signForm.idNumber"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <el-form-item label="商品简介" prop="intro">
+                                <el-input v-model="signForm.intro"></el-input>
+                            </el-form-item>
+                            <!--        <el-form-item label="备案地址" prop="address">-->
+                            <!--          <el-input v-model="signForm.address"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <!--        <el-form-item label="注册资金" prop="fund">-->
+                            <!--          <el-input v-model="signForm.fund"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <!--        <el-form-item label="注册时间" prop="registrationTime">-->
+                            <!--          <el-input v-model="signForm.registrationTime" type="date"></el-input>-->
+                            <!--        </el-form-item>-->
+                            <el-form-item>
+                                <el-button type="primary" @click="signIn">申请</el-button>
+                                <el-button type="default" @click="resetForm">重置</el-button>
+                                <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+                </div>
+                <div class="el-form">
+                    <el-dialog v-model="changeFormVisible" title="修改商品信息" id="changeForm">
+                        <el-form ref="form" :model="changeForm" label-width="80px" :rules="rules" id="changeForm">
+                            <el-form-item label="商品名称" prop="commodityName">
+                                <el-input v-model="changeForm.commodityName"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="商品简介" prop="intro">
+                                <el-input v-model="changeForm.intro"></el-input>
+                            </el-form-item>
+                            <el-form-item label="商品价格" prop="price">
+                                <el-input v-model="changeForm.price"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="changeIn">提交修改</el-button>
+                                <el-button type="default" @click="resetForm">重置</el-button>
+                                <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </template>
 
 <script>
 import {
     // ElTabs,
-    // ElTabPane,
+    ElTabPane,
     ElForm,
     ElFormItem,
     ElInput,
@@ -133,7 +255,7 @@ export default {
     name: 'CommodityView',
     components: {
         // ElTabs,
-        // ElTabPane,
+        ElTabPane,
         ElForm,
         ElFormItem,
         ElInput,
@@ -143,6 +265,9 @@ export default {
     },
     data() {
         return {
+            qualifiedState:{
+
+            },
             state: {
                 tableData: []
             },
@@ -446,11 +571,16 @@ export default {
 </script>
 
 <style scoped>
+.el-tabs__header, .el-tabs__content {
+    color: white;
+}
+
 .changeButton:hover {
     background-color: #4db8ff;
     color: white;
 }
-#changeForm{
+
+#changeForm {
     background-color: #2d2d2d;
 }
 </style>
