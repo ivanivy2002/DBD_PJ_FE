@@ -381,10 +381,10 @@ export default {
           }
         })
         if (response.data.code == 200) {
-          ElMessage.success('已同意开店')
+          ElMessage.success('已同意上架')
           await this.fetchCommodityRegRecord()
         } else if (response.data.code == 400) {
-          ElMessage.error('同意开店失败，请重新尝试')
+          ElMessage.error('同意上架失败，请重新尝试')
           await this.fetchCommodityRegRecord()
         }
       } catch (error) {
@@ -403,7 +403,7 @@ export default {
             ifApprove: this.ifApprove
           }
         })
-        ElMessage.success('已拒绝开店')
+        ElMessage.success('已拒绝上架')
         await this.fetchCommodityRegRecord()
       } catch (error) {
         console.log(error)

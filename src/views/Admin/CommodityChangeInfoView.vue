@@ -379,10 +379,10 @@ export default {
           }
         )
         if (response.data.code == 200) {
-          ElMessage.success('已同意开店')
+          ElMessage.success('已同意修改')
           await this.fetchDataChangeInfoRecord()
         } else if (response.data.code == 400) {
-          ElMessage.error('同意开店失败，请重新尝试')
+          ElMessage.error('同意修改失败，请重新尝试')
           await this.fetchDataChangeInfoRecord()
         }
       } catch (error) {
@@ -401,7 +401,7 @@ export default {
             ifApprove: this.ifApprove
           }
         })
-        ElMessage.success('已拒绝开店')
+        ElMessage.success('已拒绝修改')
         await this.fetchDataChangeInfoRecord()
       } catch (error) {
         console.log(error)
