@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ordUserRoutes from './ordUser.js'
 import vendorRoutes from './vendor.js'
+import adminRoutes from './admin.js'
 
 // import HomeView from '../views/WelcomeView.vue'
 // import UserView from '../views/UserView.vue'
@@ -12,7 +13,7 @@ import AboutView from '@/views/AboutView'
 import OrdUser from '@/views/OrdUser'
 import Admin from '@/views/Admin'
 import Vendor from '@/views/Vendor'
-import ManageStoreView from '@/views/ManageStoreView'
+// import ManageStoreView from '@/views/ManageStoreView'
 import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
 import StoreInfoView from '@/views/Vendor/StoreInfoView'
@@ -39,26 +40,25 @@ const router = createRouter({
       // component: HomeView,
       component: NewHome,
       children: [
-        {
-          // path: '/admin',
-          path: '/home/admin',
-          component: Admin,
-          children: [
-            {
-              path: '/home/admin/manage',
-              component: ManageStoreView
-            },
-            {
-              path: '/home/admin/store',
-              component: StoreTableView
-            },
-            {
-              path: '/home/admin',
-              redirect: '/home/admin/manage'
-            }
-          ]
-        }
-
+        // {
+        //   // path: '/admin',
+        //   path: '/home/admin',
+        //   component: Admin,
+        //   children: [
+        //     {
+        //       path: '/home/admin/manage',
+        //       component: ManageStoreView
+        //     },
+        //     {
+        //       path: '/home/admin/store',
+        //       component: StoreTableView
+        //     },
+        //     {
+        //       path: '/home/admin',
+        //       redirect: '/home/admin/manage'
+        //     }
+        //   ]
+        // }
         // {
         //   path: '/home/vendor/storeinfo',
         //   component: StoreInfoView
@@ -92,7 +92,8 @@ const router = createRouter({
     },
     // 将 ordUser.js 中定义的路由添加到 routes 数组中
     ...ordUserRoutes,
-    ...vendorRoutes
+    ...vendorRoutes,
+    ...adminRoutes
   ]
 })
 

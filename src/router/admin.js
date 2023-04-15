@@ -2,7 +2,7 @@
 import Admin from '@/views/Admin'
 import StoreTableView from '@/views/StoreTableView'
 import ManageMoneyView from '@/views/Admin/ManageMoneyView'
-import ManageStoreView from '@/views/ManageStoreView'
+import ManageStoreView from '@/views/Admin/ManageStoreView'
 
 export default [
   {

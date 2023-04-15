@@ -167,3 +167,38 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-table__body {
+  background-color: #222;
+}
+.el-table__row:hover {
+  background-color: #333;
+}
+.el-tag--warning {
+  background-color: #f90;
+  color: #fff;
+}
+.el-tag--success {
+  background-color: #67c23a;
+  color: #fff;
+}
+.el-tag--danger {
+  background-color: #f56c6c;
+  color: #fff;
+}
+.el-button--success {
+  background-color: #67c23a;
+  color: #fff;
+}
+.el-button--success:hover {
+  background-color: #5a9e32;
+}
+.el-button--danger {
+  background-color: #f56c6c;
+  color: #fff;
+}
+.el-button--danger:hover {
+  background-color: #e74c3c;
+}
+</style>
