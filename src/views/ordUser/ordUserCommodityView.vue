@@ -9,22 +9,35 @@
         :md="8"
         :lg="6"
       >
-        <el-card class="commodity-card" shadow="hover">
+        <el-card
+          class="commodity-card animated-card"
+          shadow="hover"
+          :class="{
+            food: commodity.category === 'food',
+            clothes: commodity.category === 'clothes',
+            electronics: commodity.category === 'electronics'
+          }"
+        >
           <div slot="header" class="commodity-header">
             <div class="commodity-name">{{ commodity.commodityName }}</div>
           </div>
           <div class="commodity-content">介绍：{{ commodity.intro }}</div>
           <div class="commodity-content">价格：{{ commodity.price }}</div>
-          <el-input-number
-            v-model="commodityNum"
-            :min="1"
-            :max="10"
-            label="数量"
-            controls-position="right"
-          ></el-input-number>
-          <el-button type="primary" @click="addToCart(commodity.id, commodityNum, commodity.price)"
-            >添加到购物车</el-button
-          >
+          <div class="commodity-action">
+            <el-input-number
+              v-model="commodityNum"
+              :min="1"
+              :max="10"
+              label="数量"
+              controls-position="right"
+              style="width: 120px"
+            ></el-input-number>
+            <el-button
+              type="primary"
+              @click="addToCart(commodity.id, commodityNum, commodity.price)"
+              >添加到购物车</el-button
+            >
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -123,34 +136,66 @@ export default {
 
 <style scoped>
 .commodity-view {
+  margin: 24px;
+}
+
+.animated-card {
+  background-color: #3a3f58;
+  opacity: 100%;
+  border-radius: 4px;
   padding: 24px;
-  background-color: #f5f5f5;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.commodity-card {
-  transition: transform 0.3s;
-  border: 1px solid #d9d9d9;
-  background-color: #f9f9f9;
+.animated-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-.commodity-card:hover {
-  transform: scale(1.05);
+.commodity-card.food {
+  background-color: #a5d6a7;
+}
+
+.commodity-card.clothes {
+  background-color: #ffd54f;
+}
+
+.commodity-card.electronics {
+  background-color: #90caf9;
 }
 
 .commodity-header {
-  background-color: #a9d5ff;
-  padding: 8px;
-  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .commodity-name {
   font-size: 16px;
   font-weight: bold;
+  margin-bottom: 12px;
+  cursor: pointer;
   color: #fff;
 }
 
 .commodity-content {
   font-size: 14px;
-  margin-bottom: 12px;
+  color: #cfd8dc;
+  margin-bottom: 4px;
+}
+
+.commodity-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.el-input-number {
+  width: 80px;
+}
+
+.el-button {
+  margin-left: 10px;
 }
 </style>

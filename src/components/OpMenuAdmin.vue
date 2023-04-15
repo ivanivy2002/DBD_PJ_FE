@@ -30,11 +30,70 @@ export default {
   }
 }
 </script>
+
 <style scoped>
-.example-showcase .el-dropdown-link {
-  cursor: pointer;
-  color: var(--el-color-primary);
+.submenu-title {
   display: flex;
   align-items: center;
+}
+
+.submenu-title svg {
+  margin-right: 6px;
+}
+
+.submenu-title-text {
+  color: #fff;
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+.el-menu-demo .el-menu-item,
+.el-menu-demo .el-submenu__title {
+  color: #fff;
+  font-size: 14px;
+}
+
+.el-menu-demo .el-menu-item.is-active,
+.el-menu-demo .el-submenu.is-active > .el-submenu__title {
+  background-color: #4a5568;
+}
+
+.el-menu-demo .el-menu-item:hover,
+.el-submenu__title .btn:hover {
+  background-color: #4a5568;
+}
+
+.el-menu-demo .el-menu-item.is-disabled {
+  color: #ccc;
+}
+
+.btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  color: #fff;
+  background-color: #2c3e50;
+  border-color: #2c3e50;
+}
+
+.btn:hover {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+.btn:focus,
+.btn.focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.5);
+}
+.btn-outline-primary {
+  background-color: transparent;
+  color: #3498db;
+  border-color: #3498db;
+}
+.btn-outline-primary:hover {
+  background-color: #3498db;
+  color: #fff;
+  border-color: #3498;
 }
 </style>

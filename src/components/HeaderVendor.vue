@@ -21,7 +21,7 @@ import { ref } from 'vue'
 import OpMenuVendor from './OpMenuVendor.vue'
 
 export default {
-  name: 'HeaderOrdUser',
+  name: 'HeaderAdmin',
   components: { OpMenuVendor },
 
   setup() {
