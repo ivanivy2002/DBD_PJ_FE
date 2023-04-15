@@ -61,6 +61,10 @@
               <el-form-item label="商品价格" prop="price">
                 <el-input v-model="signForm.price"></el-input>
               </el-form-item>
+              <el-form-item label="上传图片" label-align="center">
+                <input type="file" ref="fileInput" multiple />
+                <button type="submit">上传</button>
+              </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="signIn">申请</el-button>
                 <el-button type="default" @click="resetForm">重置</el-button>
@@ -185,6 +189,7 @@ export default {
   },
   data() {
     return {
+      picUrls: [],
       stateQualified: {
         tableData: []
       },
@@ -423,6 +428,19 @@ export default {
       })
     },
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
+    getPicFormDatas() {
+      const fileInput = this.$refs.fileInput
+      const files = fileInput.files // 获取上传的多个文件
+      const allFormData = []
+
+      for (let i = 0; i < files.length; i++) {
+        const formData = new FormData()
+        const file = files[i]
+        formData.append('file', file) // 添加文件到 FormData 中
+        allFormData.push(formData)
+      }
+      return allFormData
+    },
     gotoStoreInfo() {
       this.$router.push('/home/vendor/storeinfo')
     },
