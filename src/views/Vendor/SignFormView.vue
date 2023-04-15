@@ -26,19 +26,23 @@
             ></el-input>
           </el-checkbox-group>
         </el-form-item> -->
-        <el-form-item label="商品类别" prop="shopCategory">
+        <el-form-item label="商品类别" prop="categories">
           <el-select
-            v-model="signForm.categories"
-            placeholder="请选择或输入商品类别"
+            v-model="categories"
             multiple
             filterable
-            :remote-method="remoteMethod"
-            :loading="loading"
-            :disabled="disabled"
-            :popper-append-to-body="false"
-            :collapse-tags="true"
-            tags
-          ></el-select>
+            allow-create
+            default-first-option
+            :reserve-keyword="false"
+            placeholder="Choose tags for your article"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
           <el-input v-model="signForm.idNumber"></el-input>
@@ -79,6 +83,12 @@ import {
   ElCheckboxGroup
 } from 'element-plus'
 import axios from 'axios'
+// TODO: 这个options还没用上
+const options = [
+  { value: 'HTML', label: 'HTML' },
+  { value: 'CSS', label: 'CSS' },
+  { value: 'JavaScript', label: 'JavaScript' }
+]
 
 export default {
   name: 'SignFormView',
@@ -103,7 +113,7 @@ export default {
         shopName: '',
         // categories: '',
         // NOTE: 用数组传成功！！
-        categories: [],
+        categories: '',
         idNumber: '',
         intro: '',
         address: '',
@@ -113,6 +123,7 @@ export default {
       },
       loading: false,
       disabled: false,
+      options: [],
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
           callback(new Error('请输入正确格式的用户名！'))
@@ -243,18 +254,18 @@ export default {
     },
     //TODO: 缺少异常处理；修改成PUT请求
     signIn() {
-      // this.HandleCategories() //* 将多个单词用+拼起来
       // NOTE: 前端检查是否符合规范
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
           // this.AddArray() //* 将categories数组增加10个空元素
-          this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+          // this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
           // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
+          this.signForm.categories = this.joinWithPlus(this.categories) //* 将多个单词用+拼起来
           axios
             .post('http://localhost:9000/shop/reg', this.signForm)
             .then((response) => {
@@ -296,43 +307,19 @@ export default {
         }
       })
     },
-    // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
-    HandleCategories() {
-      this.signForm.categories = this.categories.join('+')
-      console.log(this.signForm.categories)
-    },
-    AddArray() {
-      this.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    },
+
+    // AddArray() {
+    //   this.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    // },
     gotoStoreInfo() {
       this.$router.push('/home/vendor/storeinfo')
     },
-    remoteMethod(query) {
-      if (query !== '') {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-          this.options = [
-            '水果',
-            '蔬菜',
-            '肉类',
-            '海鲜',
-            '调料',
-            '日用品',
-            '家电',
-            '服装',
-            '鞋帽',
-            '箱包',
-            '化妆品',
-            '洗护用品',
-            '电脑',
-            '手机',
-            '数码产品'
-          ]
-        }, 200)
-      } else {
-        this.options = []
+    // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
+    joinWithPlus(categories) {
+      if (!Array.isArray(categories)) {
+        throw new Error('Argument must be an array')
       }
+      return categories.join('+')
     }
   }
 }
