@@ -1,16 +1,30 @@
 <template>
   <div class="commodity-view">
     <el-row gutter="24">
-      <el-col v-for="commodity in commodities" :key="commodity.id" :xs="24" :sm="12" :md="8" :lg="6">
+      <el-col
+        v-for="commodity in commodities"
+        :key="commodity.id"
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="6"
+      >
         <el-card class="commodity-card" shadow="hover">
           <div slot="header" class="commodity-header">
             <div class="commodity-name">{{ commodity.commodityName }}</div>
           </div>
           <div class="commodity-content">介绍：{{ commodity.intro }}</div>
           <div class="commodity-content">价格：{{ commodity.price }}</div>
-          <el-input-number v-model="commodityNum" :min="1" :max="10" label="数量"
-            controls-position="right"></el-input-number>
-          <el-button type="primary" @click="addToCart(commodity.id, commodityNum, commodity.price)">添加到购物车</el-button>
+          <el-input-number
+            v-model="commodityNum"
+            :min="1"
+            :max="10"
+            label="数量"
+            controls-position="right"
+          ></el-input-number>
+          <el-button type="primary" @click="addToCart(commodity.id, commodityNum, commodity.price)"
+            >添加到购物车</el-button
+          >
         </el-card>
       </el-col>
     </el-row>
@@ -32,7 +46,7 @@ export default {
   data() {
     return {
       shopId: '', // 假设shopId已经从localStorage中获取
-      commodities: [],
+      commodities: []
       // commodityNum: 0 // 购物车数量
     }
   },
@@ -77,7 +91,7 @@ export default {
             userId: localStorage.getItem('userId'),
             commodityId: commodityId,
             commodityNum: quantity,
-            commodityPrice: price,
+            commodityPrice: price
             // status: null
           })
           .then((response) => {

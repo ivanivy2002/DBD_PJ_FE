@@ -1,13 +1,7 @@
 <template>
-  <!-- Form -->
-  <!--  TODO:[feat SignForm to make full function]-->
-  <div class="DiaButton">
-    <el-menu-item text @click="dialogFormVisible = true"> 申请开店</el-menu-item>
-    <el-menu-item index="2-2" @click="gotoStoreInfo">查看商店</el-menu-item>
-    <el-menu-item index="2-3" @click="gotoPCenter">个人中心</el-menu-item>
-  </div>
-  <div class="el-form">
-    <el-dialog v-model="dialogFormVisible" title="申请开店">
+  <div class="sign-form">
+    <div class="form-header">申请开店</div>
+    <div class="form-container">
       <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
         <el-form-item label="用户名" prop="userName">
           <el-input
@@ -19,10 +13,7 @@
         <el-form-item label="店名" prop="shopName">
           <el-input v-model="signForm.shopName"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="商品类别">
-          <el-input v-model="signForm.categories"></el-input>
-        </el-form-item> -->
-        <el-form-item label="商品类别" prop="categories">
+        <!-- <el-form-item label="商品类别" prop="categories">
           <el-checkbox-group v-model="signForm.categories">
             <el-checkbox label="food">食品</el-checkbox>
             <el-checkbox label="clothing">服装</el-checkbox>
@@ -34,6 +25,20 @@
               onfocus="if (this.placeholder == this.value) this.value = ''"
             ></el-input>
           </el-checkbox-group>
+        </el-form-item> -->
+        <el-form-item label="商品类别" prop="shopCategory">
+          <el-select
+            v-model="signForm.categories"
+            placeholder="请选择或输入商品类别"
+            multiple
+            filterable
+            :remote-method="remoteMethod"
+            :loading="loading"
+            :disabled="disabled"
+            :popper-append-to-body="false"
+            :collapse-tags="true"
+            tags
+          ></el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
           <el-input v-model="signForm.idNumber"></el-input>
@@ -53,10 +58,9 @@
         <el-form-item>
           <el-button type="primary" @click="signIn">申请</el-button>
           <el-button type="default" @click="resetForm">重置</el-button>
-          <!-- <el-button type="default" @click="dialogFormVisible = false">取消</el-button> -->
         </el-form-item>
       </el-form>
-    </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -77,6 +81,7 @@ import {
 import axios from 'axios'
 
 export default {
+  name: 'SignFormView',
   components: {
     ElTabs,
     ElTabPane,
@@ -89,7 +94,7 @@ export default {
   },
   data() {
     return {
-      dialogFormVisible: false,
+      // dialogFormVisible: false,
       activeTab: 'signin',
       categories: [],
       signForm: {
@@ -106,6 +111,8 @@ export default {
         registrationTime: ''
         // TODO: 如何在这个时候传递用户名给后端
       },
+      loading: false,
+      disabled: false,
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
           callback(new Error('请输入正确格式的用户名！'))
@@ -261,7 +268,7 @@ export default {
                   type: 'success', //如果成功
                   message: '申请提交成功'
                 })
-                this.dialogFormVisible = false
+                // this.dialogFormVisible = false
               } else {
                 console.error('申请提交失败，请重试！')
                 ElMessage({
@@ -299,41 +306,77 @@ export default {
     },
     gotoStoreInfo() {
       this.$router.push('/home/vendor/storeinfo')
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true
+        setTimeout(() => {
+          this.loading = false
+          this.options = [
+            '水果',
+            '蔬菜',
+            '肉类',
+            '海鲜',
+            '调料',
+            '日用品',
+            '家电',
+            '服装',
+            '鞋帽',
+            '箱包',
+            '化妆品',
+            '洗护用品',
+            '电脑',
+            '手机',
+            '数码产品'
+          ]
+        }, 200)
+      } else {
+        this.options = []
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.el-form {
-  background-color: #1f2937;
-  padding: 20px;
+.sign-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #030c25;
+  padding: 30px;
   border-radius: 10px;
 }
 
+.sign-form__title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .el-form-item__label {
-  color: #fff;
+  color: #333;
 }
 
 .el-input__inner {
-  background-color: #333;
-  border-color: #555;
-  color: #fff;
+  background-color: rgb(46, 24, 109);
+  border-color: rgb(53, 4, 4);
+  color: #333;
 }
 
 .el-checkbox__inner {
-  border-color: #555;
-  background-color: #333;
+  border-color: rgb(32, 7, 7);
+  background-color: rgb(32, 5, 5);
 }
 
 .el-checkbox__label {
-  color: #fff;
+  color: #333;
 }
 
 .el-button {
-  background-color: #4f46e5;
-  border-color: #4f46e5;
+  background-color: #4ca9df;
+  border-color: #4ca9df;
   border-radius: 5px;
+  color: rgb(178, 218, 217);
 }
 
 .el-button:hover,

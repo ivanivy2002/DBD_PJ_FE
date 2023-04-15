@@ -4,7 +4,8 @@
       <img src="../assets/images/photo_intro/yty.jpg" alt="yty" class="intro-photo" />
       <h1 class="intro-name">叶天逸 21302010040</h1>
       <p class="intro-text">
-        来自浙江台州，台州是一个小城市，市区有三个部分。热爱语言，2022年秋季开始学习一些日语，俄语。有小部分语言学知识，语音学方面尤其喜欢。ENFP，虽然觉得这还不够定义我。还喜欢一点运动，音乐，BeatBox等，最近在参加 A Capella,哲学，最近不太运动。
+        来自浙江台州，台州是一个小城市，市区有三个部分。热爱语言，2022年秋季开始学习一些日语，俄语。有小部分语言学知识，语音学方面尤其喜欢。ENFP，虽然觉得这还不够定义我。还喜欢一点运动，音乐，BeatBox等，最近在参加
+        A Capella,哲学，最近不太运动。
       </p>
     </div>
     <div class="intro-section">
@@ -28,8 +29,7 @@
         我是2021级软件工程的洪淳宇，来自浙江金华；稳定的ISFJ型人格，善于比大拇指，担任班级信息委员以及参与学校的PCS服务队；平时比较喜欢羽毛球、网球等球类运动以及围棋等智力游戏。
       </p>
     </div>
-<!--      <Avatar/>-->
-
+    <!--      <Avatar/>-->
   </div>
 </template>
 <style>
@@ -69,8 +69,8 @@
 </style>
 <script>
 import axios from 'axios'
-import Avatar from "@/components/PicUpLoad/Avatar.vue";
-import PicUpLoad from "@/components/PicUpLoad/PicUpLoad.vue";
+import Avatar from '@/components/PicUpLoad/Avatar.vue'
+import PicUpLoad from '@/components/PicUpLoad/PicUpLoad.vue'
 export default {
   name: 'AboutView',
   created() {

@@ -4,6 +4,7 @@ import StoreInfoView from '@/views/Vendor/StoreInfoView'
 import MCenterView from '@/views/Vendor/MCenterView'
 import CommodityView from '@/views/Vendor/CommodityView'
 import PCenterVendorView from '@/views/Vendor/PCenterVendorView'
+import SignFormView from '@/views/Vendor/SignFormView'
 
 export default [
   {
@@ -26,6 +27,11 @@ export default [
         path: '/home/vendor/profile',
         name: 'PCenterVendorView',
         component: PCenterVendorView
+      },
+      {
+        path: '/home/vendor/signform',
+        name: 'SignFormView',
+        component: SignFormView
       }
     ]
   }

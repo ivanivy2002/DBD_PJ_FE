@@ -2,8 +2,12 @@
   <el-sub-menu index="2">
     <template #title>操作中心</template>
     <!--    <el-menu-item index="2-1" @click="applyform">申请开店</el-menu-item>-->
+    <el-menu-item index="2-1" @click="gotoSignForm"> 申请开店</el-menu-item>
+    <el-menu-item index="2-2" @click="gotoStoreInfo">查看商店</el-menu-item>
+    <el-menu-item index="2-3" @click="gotoPCenter">个人中心</el-menu-item>
     <!-- NOTE: 这个组件的按钮写在组件内部 -->
-    <SignForm />
+    <!-- NOTE: 但是现在注释掉了 -->
+    <!-- <SignForm /> -->
     <!--         <el-menu-item index="2-2" @click="gotoTargetPage">查看商店</el-menu-item>-->
   </el-sub-menu>
 </template>
@@ -23,8 +27,14 @@ export default {
     LoginForm
   },
   methods: {
-    gotoTargetPage() {
+    gotoStoreInfo() {
       this.$router.push('/home/vendor/storeinfo')
+    },
+    gotoPCenter() {
+      this.$router.push('/home/vendor/profile')
+    },
+    gotoSignForm() {
+      this.$router.push('/home/vendor/signform')
     }
   },
   data() {
