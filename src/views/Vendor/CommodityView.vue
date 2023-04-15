@@ -23,7 +23,7 @@
                                 <el-button
                                         class="changeButton"
                                         size="normal"
-                                        text
+
                                         @click="openChangeForm(row)"
                                         :disabled="isButtonDisabled(row)"
                                 >修改
@@ -32,6 +32,7 @@
                                 <el-button
                                         type="danger"
                                         size="normal"
+
                                         @click="deleteCommodity(row)"
                                         :disabled="isButtonDisabled(row)"
                                 >下架
@@ -349,7 +350,6 @@ export default {
             console.log(row)
             // this.changeForm.id = localStorage.getItem("id")
             this.changeForm.shopId = localStorage.getItem("shopId")
-
             // NOTE: 前端检查是否符合规范
             this.$refs.form.validate((valid) => {
                 console.log(valid)
@@ -404,6 +404,36 @@ export default {
         // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
         gotoStoreInfo() {
             this.$router.push('/home/vendor/storeinfo')
+        },
+        deleteCommodity: async function (row) {
+            console.log(row)
+            try {
+                // eslint-disable-next-line no-unused-vars
+                const response = axios
+                    .put('http://localhost:9000/commodity/remove', null, {
+                        params: {
+                            commodityId: row.id,
+                        }
+                    })
+                    // eslint-disable-next-line no-unused-vars
+                    .then((response) => {
+                        console.log('delReq' + row.id)
+                        // this.balance = response.data.balance
+                        ElMessage({
+                            showClose: true,
+                            type: 'success', //如果失败,未连接上后端
+                            message: '商品已下架'
+                        })
+                    })
+            } catch (error) {
+                console.log(error)
+                ElMessage({
+                    showClose: true,
+                    type: 'error', //如果失败,未连接上后端
+                    message: '下架失败'
+                })
+            }
+            await this.fetchDataQualified()
         },
         async fetchDataQualified() {
             try {
