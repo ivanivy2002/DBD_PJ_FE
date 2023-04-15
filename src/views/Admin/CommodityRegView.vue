@@ -22,6 +22,24 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <el-button
+            type="success"
+            size="small"
+            @click="approveReg(row)"
+            :disabled="isButtonDisabled(row)"
+            >同意
+          </el-button>
+          <el-button
+            type="danger"
+            size="small"
+            @click="rejectReg(row)"
+            :disabled="isButtonDisabled(row)"
+            >拒绝
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -29,11 +47,11 @@
 <script>
 import {
   // ElTabs,
-  ElTabPane,
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElButton,
+  // ElTabPane,
+  // ElForm,
+  // ElFormItem,
+  // ElInput,
+  // ElButton,
   ElMessage
   // ElCheckbox,
   // ElCheckboxGroup
@@ -65,12 +83,12 @@ export default {
       },
       commoditiesData: [],
       ifApprove: 0,
-      userName: '',
+      commodityId: '',
       dialogFormVisible: false,
       changeFormVisible: false,
       activeTab: 'signIn',
       signForm: {
-        // TODO: userName之后需要改掉, 用sessionStorage来存储
+        // TODO: commodityId之后需要改掉, 用sessionStorage来存储
         id: 0,
         commodityName: null,
         shopId: 0,
@@ -134,7 +152,7 @@ export default {
   computed: {
     isButtonDisabled() {
       return (row) => {
-        if (row.regStatus !== '已上架') {
+        if (row.regStatus !== '待审核') {
           return true
         } else {
           return false
@@ -348,6 +366,46 @@ export default {
         // console.log(this.state.tableData)
         // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
         console.log(this.stateRegRecord.tableData)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    approveReg: async function (row) {
+      try {
+        this.ifApprove = 1
+        console.log(row.commodityId)
+        const response = await axios.put('http://localhost:9000/admin/handleCommodityReg', {
+          params: {
+            // commodityId: 'penny',
+            commodityId: row.commodityId,
+            ifApprove: this.ifApprove
+          }
+        })
+        if (response.data.code == 200) {
+          ElMessage.success('已同意开店')
+          await this.fetchCommodityRegRecord()
+        } else if (response.data.code == 400) {
+          ElMessage.error('同意开店失败，请重新尝试')
+          await this.fetchCommodityRegRecord()
+        }
+      } catch (error) {
+        ElMessage.error('Sorry,好像有什么地方出错了')
+        this.fetchData()
+        console.log(error)
+      }
+    },
+    rejectReg: async function (row) {
+      try {
+        this.ifApprove = 2
+        this.commodityId = row.commodityId
+        await axios.put('http://localhost:9000/admin/handleCommodityReg', {
+          params: {
+            commodityId: row.commodityId,
+            ifApprove: this.ifApprove
+          }
+        })
+        ElMessage.success('已拒绝开店')
+        await this.fetchCommodityRegRecord()
       } catch (error) {
         console.log(error)
       }
