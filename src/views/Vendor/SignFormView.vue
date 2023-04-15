@@ -265,7 +265,7 @@ export default {
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
-          this.signForm.categories = this.joinWithComma(this.categories) //* 将多个单词用+拼起来
+          this.signForm.categories = this.joinWithPlus(this.categories) //* 将多个单词用+拼起来
           axios
             .post('http://localhost:9000/shop/reg', this.signForm)
             .then((response) => {
@@ -315,11 +315,11 @@ export default {
       this.$router.push('/home/vendor/storeinfo')
     },
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
-    joinWithComma(categories) {
+    joinWithPlus(categories) {
       if (!Array.isArray(categories)) {
         throw new Error('Argument must be an array')
       }
-      return categories.join(',')
+      return categories.join('+')
     }
   }
 }

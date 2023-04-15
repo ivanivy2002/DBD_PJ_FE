@@ -2,11 +2,11 @@
   <el-sub-menu index="2">
     <template #title>操作中心</template>
     <el-menu-item index="2-1" @click="gotoStoreManagePage">管理店面</el-menu-item>
-    <el-menu-item index="2-2" @click="gotoStorePage">查看首页</el-menu-item>
-    <el-menu-item index="2-3" @click="gotoCommodityRegManagePage">管理商品上架</el-menu-item>
-    <el-menu-item index="2-4" @click="gotoCommodityChangeInfoManagePage"
+    <el-menu-item index="2-2" @click="gotoCommodityRegManagePage">管理商品上架</el-menu-item>
+    <el-menu-item index="2-3" @click="gotoCommodityChangeInfoManagePage"
       >管理商品信息修改</el-menu-item
     >
+    <el-menu-item index="2-4" @click="gotoStorePage">查看首页</el-menu-item>
   </el-sub-menu>
 </template>
 
