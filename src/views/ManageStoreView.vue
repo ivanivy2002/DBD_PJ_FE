@@ -83,11 +83,11 @@ export default {
   methods: {
     fetchData: async function () {
       try {
-        const response = await axios.get('http://localhost:9000/admin/display')
-        this.storesData = response.data
+        const response = await axios.get('http://localhost:9000/admin/displayShop')
+        this.storesData = response.data.data
         // TODO: 下面的函数需要修改（字符串解析）
         this.storesData = this.removeZerosInObjectArray(this.storesData)
-        this.state.tableData = response.data.map((row) => {
+        this.state.tableData = response.data.data.map((row) => {
           // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
           console.log(row)
           // row = this.removeZerosInObjectArray(row)
