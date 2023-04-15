@@ -12,24 +12,25 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column prop="commodityName" label="商品名称" width="180" />
-        <el-table-column prop="intro" label="介绍" />
+        <!-- <el-table-column prop="intro" label="介绍" /> -->
         <el-table-column prop="commodityPrice" label="价格" width="120">
           <template #default="{ row }">
-            <span>{{ row.commodityPrice | currency }}</span>
+            <span>{{ row.commodityPrice }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="commodityNum" label="数量" width="120" />
         <el-table-column label="状态" width="120">
           <template #default="{ row }">
-            <el-tag v-if="row.regStatus == '有效'" type="success">正常</el-tag>
-            <el-tag v-else type="danger">已失效</el-tag>
+            <!-- <el-tag v-if="row.regStatus == '有效'" type="success">正常</el-tag>
+            <el-tag v-else type="danger">已失效</el-tag> -->
+            <el-tag :type="row.status === '有效' ? 'success' : 'danger'">{{ row.status }}</el-tag>
           </template>
         </el-table-column>
         <!-- NOTE: 多选框 -->
         <el-table-column type="selection" width="55" />
         <el-table-column label="操作" width="120">
           <template #default="{ row }">
-            <el-button type="danger" @click="removeCommodity(row.id)">删除</el-button>
+            <el-button type="danger" @click="removeCommodity(row.commodityId)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,11 +78,11 @@ export default {
         })
         .then((response) => {
           console.log(response.data.data)
-          console.log(Object.values(response.data.data))
+          // console.log(Object.values(response.data.data))
           // const cartObjects = Object.fromEntries(Object.values(response.data.data))
           // console.log(cartObjects)
-          const shoppingCarts = Object.keys(response.data.data)[0]
-          console.log(shoppingCarts)
+          // const shoppingCarts = Object.keys(response.data.data)[0]
+          // console.log(shoppingCarts)
           // const cartItems = Object.values(shoppingCarts).flat().map(item => {
           //   return {
           //     name: item.commodityName,
@@ -104,7 +105,7 @@ export default {
           // const cartArray = eval(shoppingCarts)
           // console.log(cartArray)
           // NOTE: 用Objects.values()方法将对象转换为数组
-          this.cartItems = Object.values(response.data.data)[0].map((row) => {
+          this.cartItems = response.data.data.map((row) => {
             // console.log(row)
             return row
           })
@@ -113,11 +114,12 @@ export default {
     // NOTE: 删除单个商品
     removeCommodity(commodityId) {
       const response = axios
-        .post('http://localhost:9000/shoppingCart/removeCommodity/', null, {
+        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
           params: {
+            // userId: localStorage.getItem('userId')
             userId: 21,
-            commodityIdArray: [commodityId] // 这是一个array
-            // commodityIdArray: [1]
+            // commodityIdArray: [commodityId] // 这是一个array
+            commodityIdArray: commodityId.toString()
           }
         })
         .then((response) => {
@@ -127,7 +129,7 @@ export default {
     // NOTE: 删除选中的商品
     async removeSelected() {
       // TODO：检查是否选中商品
-      // console.log(this.selectedItems)
+      console.log(this.selectedItems)
       // if (this.selectedItems.length === 0) {
       //   console.log('你没有选中商品，删除失败')
       //   ElMessage({
@@ -137,13 +139,13 @@ export default {
       //   })
       //   return
       // }
-      const commodityIdArray = this.selectedItems.map((item) => item.id)
+      const commodityIdArray = this.selectedItems.map((item) => item.commodityId)
       console.log(commodityIdArray)
       const response = axios
-        .post('http://localhost:9000/shoppingCart/removeCommodity/', null, {
+        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
           params: {
             userId: 21,
-            // commodityIdArray: commodityIdArray
+            commodityIdArray: this.joinWithComma(commodityIdArray)
           }
         })
         .then((response) => {
@@ -154,6 +156,12 @@ export default {
     // NOTE: 多选框即时更新（监听）
     handleSelectionChange(selection) {
       this.selectedItems = selection
+    },
+    joinWithComma(categories) {
+      if (!Array.isArray(categories)) {
+        throw new Error('Argument must be an array')
+      }
+      return categories.join(',')
     }
   }
 }

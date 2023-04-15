@@ -34,7 +34,9 @@
             ></el-input-number>
             <el-button
               type="primary"
-              @click="addToCart(commodity.id, commodityNum, commodity.price)"
+              @click="
+                addToCart(commodity.id, commodity.commodityName, commodityNum, commodity.price)
+              "
               >添加到购物车</el-button
             >
           </div>
@@ -95,7 +97,7 @@ export default {
       }
     },
     // NOTE: 添加商品到购物车
-    addToCart(commodityId, quantity, price) {
+    addToCart(commodityId, name, quantity, price) {
       try {
         const response = axios
           .post('http://localhost:9000/shoppingCart/addCommodity/', {
@@ -103,6 +105,7 @@ export default {
             // id: null,
             userId: localStorage.getItem('userId'),
             commodityId: commodityId,
+            commodityName: name,
             commodityNum: quantity,
             commodityPrice: price
             // status: null

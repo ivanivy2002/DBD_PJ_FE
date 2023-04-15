@@ -2,9 +2,9 @@
 import Admin from '@/views/Admin'
 import StoreTableView from '@/views/StoreTableView'
 import ManageMoneyView from '@/views/Admin/ManageMoneyView'
-import ManageStoreView from '@/views/ManageStoreView'
-import CommodityRegView from "@/views/Admin/CommodityRegView.vue";
-import CommodityChangeInfoView from "@/views/Admin/CommodityChangeInfoView.vue";
+import ManageStoreView from '@/views/Admin/ManageStoreView'
+import CommodityRegView from '@/views/Admin/CommodityRegView.vue'
+import CommodityChangeInfoView from '@/views/Admin/CommodityChangeInfoView.vue'
 
 export default [
   {

@@ -1,13 +1,9 @@
-<template>
-
-</template>
+<template></template>
 
 <script>
 export default {
-    name: "CommodityChangeInfoView"
+  name: 'CommodityChangeInfoView'
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
