@@ -303,7 +303,7 @@ export default {
             console.log(localStorage)
             // HACK: sleep 50ms 未进行测试
             await this.sleep(50) //* 等待50ms
-            if (response.role == 1) {
+            if (role == 1) {
               this.backUrl = '/home/orduser' //* 跳转到普通用户主页
             } else {
               this.backUrl = '/home/vendor' //* 跳转到商户主页
