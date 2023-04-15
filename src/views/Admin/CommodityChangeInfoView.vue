@@ -366,14 +366,18 @@ export default {
     approveReg: async function (row) {
       try {
         this.ifApprove = 1
-        console.log(row.commodityId)
-        const response = await axios.put('http://localhost:9000/admin/handleCommodityChangeInfo', {
-          params: {
-            // commodityId: 'penny',
-            commodityId: row.commodityId,
-            ifApprove: this.ifApprove
+        console.log(row.id)
+        const response = await axios.put(
+          'http://localhost:9000/admin/handleCommodityChangeInfo',
+          null,
+          {
+            params: {
+              // commodityId: 'penny',
+              commodityId: row.id,
+              ifApprove: this.ifApprove
+            }
           }
-        })
+        )
         if (response.data.code == 200) {
           ElMessage.success('已同意开店')
           await this.fetchDataChangeInfoRecord()
@@ -390,10 +394,10 @@ export default {
     rejectReg: async function (row) {
       try {
         this.ifApprove = 2
-        this.commodityId = row.commodityId
-        await axios.put('http://localhost:9000/admin/handleCommodityChangeInfo', {
+        this.commodityId = row.id
+        await axios.put('http://localhost:9000/admin/handleCommodityChangeInfo', null, {
           params: {
-            commodityId: row.commodityId,
+            commodityId: row.id,
             ifApprove: this.ifApprove
           }
         })

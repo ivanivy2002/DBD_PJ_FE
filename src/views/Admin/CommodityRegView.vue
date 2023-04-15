@@ -373,11 +373,10 @@ export default {
     approveReg: async function (row) {
       try {
         this.ifApprove = 1
-        console.log(row.commodityId)
-        const response = await axios.put('http://localhost:9000/admin/handleCommodityReg', {
+        console.log(row.id)
+        const response = await axios.put('http://localhost:9000/admin/handleCommodityReg', null, {
           params: {
-            // commodityId: 'penny',
-            commodityId: row.commodityId,
+            commodityId: row.id,
             ifApprove: this.ifApprove
           }
         })
@@ -390,17 +389,17 @@ export default {
         }
       } catch (error) {
         ElMessage.error('Sorry,好像有什么地方出错了')
-        this.fetchData()
+        await this.fetchCommodityRegRecord()
         console.log(error)
       }
     },
     rejectReg: async function (row) {
       try {
         this.ifApprove = 2
-        this.commodityId = row.commodityId
-        await axios.put('http://localhost:9000/admin/handleCommodityReg', {
+        this.commodityId = row.id
+        await axios.put('http://localhost:9000/admin/handleCommodityReg', null, {
           params: {
-            commodityId: row.commodityId,
+            commodityId: row.id,
             ifApprove: this.ifApprove
           }
         })
