@@ -15,7 +15,7 @@
         <el-table-column prop="commodityNum" label="数量" width="120" />
         <el-table-column label="状态" width="120">
           <template #default="{ row }">
-            <el-tag v-if="row.status == '有效'" type="success">正常</el-tag>
+            <el-tag v-if="row.stats == '有效'" type="success">正常</el-tag>
             <el-tag v-else type="danger">已失效</el-tag>
           </template>
         </el-table-column>
@@ -66,7 +66,7 @@ export default {
       const response = axios
         .get('http://localhost:9000/shoppingCart/displayShoppingCart', {
           // TODO: 注意测试完之后改成this.id
-          params: { userId: 25 }
+          params: { userId: 21 }
         })
         .then((response) => {
           this.cartItems = response.data.data.map((row) => {
@@ -77,9 +77,9 @@ export default {
     // NOTE: 删除单个商品
     removeCommodity(commodityId) {
       const response = axios
-        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+        .post('http://localhost:9000/shoppingCart/removeCommodity/', {
           params: {
-            userId: 25,
+            userId: 21,
             commodityIdArray: [commodityId] // 这是一个array
           }
         })
@@ -100,9 +100,9 @@ export default {
       }
       const commodityIdArray = this.selectedItems.map((item) => item.id)
       const response = axios
-        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+        .post('http://localhost:9000/shoppingCart/removeCommodity/', {
           params: {
-            userId: 25,
+            userId: 21,
             commodityIdArray: commodityIdArray
           }
         })

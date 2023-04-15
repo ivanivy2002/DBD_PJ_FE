@@ -16,7 +16,13 @@ import './assets/css/light/css-vars-light.css'
 // import 'element-plus/theme-chalk/dark/css-vars.css'
 // import './assets/css/dark/css-vars-dark.css'
 
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const app = createApp(App)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
+
+
 
 app.use(ElementPlus)
 app.use(createPinia())
