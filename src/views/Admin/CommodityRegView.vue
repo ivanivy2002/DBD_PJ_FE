@@ -44,11 +44,11 @@ export default {
   name: 'CommodityView',
   components: {
     // ElTabs,
-    ElTabPane,
-    ElForm,
-    ElFormItem,
-    ElInput,
-    ElButton
+    // ElTabPane,
+    // ElForm,
+    // ElFormItem,
+    // ElInput,
+    // ElButton,
     // ElCheckbox,
     // ElCheckboxGroup,
   },
@@ -294,7 +294,7 @@ export default {
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
     async fetchCommodityRegRecord() {
       try {
-        const response = await axios.get('http://localhost:9000/admin/displayCommodity')
+        const response = await axios.get('http://localhost:9000/admin/displayCommodityReg')
         this.commoditiesData = response.data.data
         console.log(this.commoditiesData)
         this.stateCommodityRegRecord.tableData = response.data.data.map((row) => {
