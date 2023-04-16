@@ -21,24 +21,31 @@
           <div slot="header" class="commodity-header">
             <div class="commodity-name">{{ commodity.commodityName }}</div>
           </div>
-          <div class="commodity-content">介绍：{{ commodity.intro }}</div>
-          <div class="commodity-content">价格：{{ commodity.price }}</div>
-          <div class="commodity-action">
-            <el-input-number
-              v-model="commodityNum"
-              :min="1"
-              :max="10"
-              label="数量"
-              controls-position="right"
-              style="width: 120px"
-            ></el-input-number>
-            <el-button
-              type="primary"
-              @click="
-                addToCart(commodity.id, commodity.commodityName, commodityNum, commodity.price)
-              "
-              >添加到购物车</el-button
-            >
+          <div class="commodity-info">
+            <div class="commodity-content">介绍：{{ commodity.intro }}</div>
+            <div class="commodity-content">价格：{{ commodity.price }}</div>
+            <div class="commodity-image">
+              <img
+                v-for="imageUrl in getImageUrls(commodity.imagePath)"
+                :key="imageUrl"
+                :src="imageUrl"
+              />
+            </div>
+            <div class="commodity-action">
+              <el-input-number
+                v-model="commodityNum"
+                :min="1"
+                :max="10"
+                label="数量"
+                controls-position="right"
+                style="width: 120px"
+              ></el-input-number>
+              <el-button
+                type="primary"
+                @click="addToCart(commodity.id, commodityNum, commodity.price)"
+                >添加到购物车</el-button
+              >
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -74,8 +81,10 @@ export default {
         commodityName: commodity.commodityName,
         intro: commodity.intro,
         price: commodity.price,
+        imagePath: commodity.imagePath,
         commodityNum: 1 // 初始商品数量为1
       }))
+      console.log(this.commodities)
       // TODO: 选择哪一种？
       // `http://localhost:9000/home/displayCommodity/${this.shopId}`
       // `http://localhost:9000/commodity/displayQualified/`
@@ -97,17 +106,14 @@ export default {
       }
     },
     // NOTE: 添加商品到购物车
-    addToCart(commodityId, name, quantity, price) {
+    addToCart(commodityId, quantity, price) {
       try {
-        console.log('111111')
-        console.log(name)
         const response = axios
           .post('http://localhost:9000/shoppingCart/addCommodity/', {
             // NOTE: 传一个body
             // id: null,
             userId: localStorage.getItem('userId'),
             commodityId: commodityId,
-            commodityName: name,
             commodityNum: quantity,
             commodityPrice: price
             // status: null
@@ -134,12 +140,26 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    getImageUrls(imagePaths) {
+      // NOTE: 从后端获取图片的url(特殊URL)
+      if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
+        console.log('图片路径为空')
+        return []
+      }
+      const baseUrl = 'http://localhost:9000/display/commodity/'
+      return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     }
   }
 }
 </script>
 
 <style scoped>
+img {
+  width: 50px;
+  height: 50px;
+}
+
 .commodity-view {
   margin: 24px;
 }
@@ -202,5 +222,11 @@ export default {
 
 .el-button {
   margin-left: 10px;
+}
+
+.commodity-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 </style>
