@@ -6,6 +6,7 @@
     <el-menu-item index="2-3" @click="gotoCommodityChangeInfoManagePage"
       >管理商品信息修改</el-menu-item
     >
+    <el-menu-item index="2-3" @click="gotoManageMoneyPage">查看流水</el-menu-item>
     <el-menu-item index="2-4" @click="gotoStorePage">查看首页</el-menu-item>
   </el-sub-menu>
 </template>
@@ -23,11 +24,17 @@ export default {
     gotoStorePage() {
       this.$router.push('/home/admin/store')
     },
+    gotoCommodityTablePage() {
+      this.$router.push('/home/admin/commodityTable')
+    },
     gotoCommodityRegManagePage() {
       this.$router.push('/home/admin/commodityReg')
     },
     gotoCommodityChangeInfoManagePage() {
       this.$router.push('/home/admin/commodityChangeInfo')
+    },
+    gotoManageMoneyPage() {
+      this.$router.push('/home/admin/manageMoney')
     }
   },
   setup() {
