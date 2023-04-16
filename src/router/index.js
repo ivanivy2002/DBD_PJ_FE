@@ -105,32 +105,32 @@ const router = createRouter({
 // })
 
 // NOTE: 根据不同的角色，跳转到不同的页面，并且有查看限制
-// router.beforeEach((to, from, next) => {
-//   //* 在每次路由切换前执行这个函数
-//   const token = localStorage.getItem('token')
-//   const role = sessionStorage.getItem('role')
-//   if (!token && to.path !== '/login') {
-//     //* 未登录用户重定向到登录页面
-//     // next('/login')
-//     next({
-//       path: '/login',
-//       query: { redirect: to.fullPath, error: '请先登录' }
-//     })
-//   } else if (to.path.startsWith('/home')) {
-//     //* 已登录用户根据角色重定向到不同的页面：1: orduser, 2: vendor, 3: admin
-//     if (role == 1 && !to.path.startsWith('/home/orduser')) {
-//       //* 普通用户只能访问orduser页面
-//       next('/home/orduser')
-//     } else if (role == 2 && !to.path.startsWith('/home/vendor')) {
-//       next('/home/vendor')
-//     } else if (role == 3 && !to.path.startsWith('/home/admin')) {
-//       next('/home/admin')
-//     } else {
-//       next()
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  //* 在每次路由切换前执行这个函数
+  const token = localStorage.getItem('token')
+  const role = sessionStorage.getItem('role')
+  if (!token && to.path !== '/login') {
+    //* 未登录用户重定向到登录页面
+    // next('/login')
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath, error: '请先登录' }
+    })
+  } else if (to.path.startsWith('/home')) {
+    //* 已登录用户根据角色重定向到不同的页面：1: orduser, 2: vendor, 3: admin
+    if (role == 1 && !to.path.startsWith('/home/orduser')) {
+      //* 普通用户只能访问orduser页面
+      next('/home/orduser')
+    } else if (role == 2 && !to.path.startsWith('/home/vendor')) {
+      next('/home/vendor')
+    } else if (role == 3 && !to.path.startsWith('/home/admin')) {
+      next('/home/admin')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 export default router

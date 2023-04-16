@@ -300,11 +300,6 @@ export default {
   transition: transform 0.4s ease;
 }
 
-.el-card {
-  /*width:100%;*/
-  /*  padding:0px;*/
-}
-
 .el-card:hover {
   box-shadow: 0 0 1em rgb(255, 255, 255);
   /*box-shadow: 0 0 1em #07070767;*/
