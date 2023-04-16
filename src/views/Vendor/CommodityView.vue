@@ -233,6 +233,9 @@ export default {
         updateTime: null,
         deleteTime: null
       },
+      picUrls: [], // 存储上传成功后返回的图片 URL
+      imgdialogVisible: false, // 控制图片预览对话框是否显示
+      dialogImageUrl: '', // 图片预览对话框中显示的图片 URL
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
           callback(new Error('请输入正确格式的用户名！'))
@@ -313,14 +316,12 @@ export default {
     },
     //TODO: 缺少异常处理；修改成PUT请求
     signIn() {
-      // this.HandleCategories() //* 将多个单词用+拼起来
+      //* 申请上架商品
       // NOTE: 前端检查是否符合规范
       this.signForm.shopId = localStorage.getItem('shopId')
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
-          // this.AddArray() //* 将categories数组增加10个空元素
-          // this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
           // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑
@@ -329,14 +330,10 @@ export default {
           axios
             .post('http://localhost:9000/commodity/reg', this.signForm)
             .then((response) => {
-              console.log(response.data)
-              // NOTE: 只有当后端返回200时显示注册成功
               if (response.data.code == 200) {
-                console.log('申请提交成功')
                 ElMessage({
-                  //用于弹出消息提示
                   showClose: true,
-                  type: 'success', //如果成功
+                  type: 'success',
                   message: '申请提交成功'
                 })
                 this.dialogFormVisible = false
@@ -366,6 +363,31 @@ export default {
           return false
         }
       })
+    },
+    async getAllPicUrls(formDatas) {
+      for (let i = 0; i < formDatas.length; ++i) {
+        await this.getPicUrl(formDatas[i])
+      }
+    },
+    // NOTE: 上传图片并获取上传成功后的图片 URL
+    async getPicUrl(picFormData) {
+      const formData = new FormData()
+      formData.append('file', formData)
+      const response = await axios.post('http://localhost:9000/commodity/upload', picFormData, {
+        'Content-Type': 'multipart/form-data'
+      })
+      console.log(response)
+      if (response.data.code === 200) {
+        this.picUrl = response.data.data
+        console.log(this.picUrl)
+      } else {
+        console.error('图片上传失败，请重试！')
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败输出状态码
+          message: '图片上传失败:' + response.data.msg
+        })
+      }
     },
     openChangeForm(row) {
       this.changeForm = row
