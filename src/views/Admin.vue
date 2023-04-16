@@ -7,7 +7,7 @@
 
 <script>
 // import PCenterAdmin from "@/components/PCenterAdmin";
-import HeaderAdmin from '@/components/HeaderAdmin'
+import HeaderAdmin from '@/components/AdminComponents/HeaderAdmin.vue'
 
 export default {
   name: 'Admin',
