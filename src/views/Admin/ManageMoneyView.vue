@@ -5,7 +5,15 @@
       <h3 class="section-title">商城利润账户</h3>
       <div class="account-info">
         <div class="balance">余额：{{ profitAccount.balance }}</div>
-        <el-button type="primary" @click="showRechargeDialog = true">充值</el-button>
+        <el-form ref="balanceForm" label-width="120px" class="balance-form">
+          <el-form-item label="充值金额" prop="balance">
+            <el-input v-model="rechargeAmount" type="number"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="recharge(rechargeAmount)">充值</el-button>
+          </el-form-item>
+        </el-form>
+        <!--                <el-button type="primary" @click="showRechargeDialog = true">充值</el-button>-->
       </div>
     </div>
     <div class="merchant-accounts">
@@ -15,7 +23,7 @@
         <el-table-column prop="balance" label="余额"></el-table-column>
       </el-table>
     </div>
-    <el-dialog title="充值商城利润账户" :visible.sync="showRechargeDialog">
+    <el-dialog title="充值商城利润账户" v-model="showRechargeDialog">
       <el-form :model="rechargeForm" label-width="80px">
         <el-form-item label="充值金额">
           <el-input v-model.number="rechargeForm.amount"></el-input>
@@ -30,6 +38,9 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
+
 export default {
   data() {
     return {
@@ -44,19 +55,54 @@ export default {
       showRechargeDialog: false,
       rechargeForm: {
         amount: 0
-      }
+      },
+      rechargeAmount: 0
     }
   },
   methods: {
-    recharge() {
-      this.profitAccount.balance += this.rechargeForm.amount
-      this.profitAccount.transactions.push({
-        date: new Date().toISOString().substr(0, 10),
-        type: '充值',
-        amount: this.rechargeForm.amount
-      })
-      this.rechargeForm.amount = 0
-      this.showRechargeDialog
+    // recharge() {
+    //   this.profitAccount.balance += this.rechargeForm.amount
+    //
+    //   this.profitAccount.transactions.push({
+    //     date: new Date().toISOString().substr(0, 10),
+    //     type: '充值',
+    //     amount: this.rechargeForm.amount
+    //   })
+    //   this.rechargeForm.amount = 0
+    //   // this.showRechargeDialog
+    // },
+    recharge(rechargeAmount) {
+      console.log('rechargeAmount before try ' + this.rechargeAmount)
+      try {
+        // this.shopId = localStorage.getItem('shopId')
+        // eslint-disable-next-line no-unused-vars
+        const response = axios
+          .post('http://localhost:9000/admin/recharge', null, {
+            params: {
+              amount: rechargeAmount
+              // TODO: 这里amount和balance的命名和关系
+            }
+          })
+          // eslint-disable-next-line no-unused-vars
+          .then((response) => {
+            // console.log(response)
+            console.log('rechargeAmount after post' + this.rechargeAmount)
+            // this.balance = response.data.balance
+            ElMessage({
+              showClose: true,
+              type: 'success', //如果失败,未连接上后端
+              message: '充值成功'
+            })
+            this.getBalance() //刷新余额
+          })
+      } catch (error) {
+        console.log(error)
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败,未连接上后端
+          message: '充值失败, 开发问题'
+        })
+      }
     }
   }
 }

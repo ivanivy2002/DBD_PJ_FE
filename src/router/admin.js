@@ -5,6 +5,8 @@ import ManageMoneyView from '@/views/Admin/ManageMoneyView'
 import ManageStoreView from '@/views/Admin/ManageStoreView.vue'
 import CommodityRegView from '@/views/Admin/CommodityRegView.vue'
 import CommodityChangeInfoView from '@/views/Admin/CommodityChangeInfoView.vue'
+import CommodityTableView from '@/views/CommodityTableView.vue'
+import AdminCommodityView from '@/views/Admin/adminCommodityView.vue'
 
 export default [
   {
@@ -24,6 +26,10 @@ export default [
       {
         path: '/home/admin/store',
         component: StoreTableView
+      },
+      {
+        path: '/home/admin/commodityTable',
+        component: AdminCommodityView
       },
       {
         path: '/home/admin/commodityReg',
