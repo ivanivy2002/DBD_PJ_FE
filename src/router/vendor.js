@@ -6,7 +6,7 @@ import CommodityView from '@/views/Vendor/CommodityView'
 import PCenterVendorView from '@/views/Vendor/PCenterVendorView'
 import SignFormView from '@/views/Vendor/SignFormView'
 import PicUploadTest from '@/views/Vendor/PicUploadTest'
-import CommodityTableView from '@/views/CommodityTableView.vue'
+// import CommodityTableView from '@/views/CommodityTableView.vue'
 import VendorCommodityView from '@/views/Vendor/vendorCommodityView.vue'
 import StoreTableView from '@/views/StoreTableView.vue'
 

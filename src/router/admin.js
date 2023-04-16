@@ -5,7 +5,7 @@ import ManageMoneyView from '@/views/Admin/ManageMoneyView'
 import ManageStoreView from '@/views/Admin/ManageStoreView.vue'
 import CommodityRegView from '@/views/Admin/CommodityRegView.vue'
 import CommodityChangeInfoView from '@/views/Admin/CommodityChangeInfoView.vue'
-import CommodityTableView from '@/views/CommodityTableView.vue'
+// import CommodityTableView from '@/views/CommodityTableView.vue'
 import AdminCommodityView from '@/views/Admin/adminCommodityView.vue'
 import CashFlowRecordView from '@/views/Admin/CashFlowRecordView.vue'
 
