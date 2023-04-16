@@ -5,6 +5,7 @@
     <el-menu-item index="2-1" @click="gotoSignForm"> 申请开店</el-menu-item>
     <el-menu-item index="2-2" @click="gotoStoreInfo">查看商店</el-menu-item>
     <el-menu-item index="2-3" @click="gotoPCenter">个人中心</el-menu-item>
+    <el-menu-item index="2-4" @click="gotoStorePage">查看首页</el-menu-item>
     <!-- NOTE: 这个组件的按钮写在组件内部 -->
     <!-- NOTE: 但是现在注释掉了 -->
     <!-- <SignForm /> -->
@@ -32,6 +33,9 @@ export default {
     },
     gotoPCenter() {
       this.$router.push('/home/vendor/profile')
+    },
+    gotoStorePage() {
+      this.$router.push('/home/vendor/store')
     },
     gotoSignForm() {
       this.$router.push('/home/vendor/signform')
