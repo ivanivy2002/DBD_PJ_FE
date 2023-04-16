@@ -1,13 +1,18 @@
 <template>
-  <el-sub-menu index="2">
-    <template #title>操作中心</template>
+  <el-sub-menu index="2" class="OpMenuButton">
+    <template #title>
+      <div class="OpMenuButton">
+        <span class="OpMenuButton">操作中心</span>
+      </div>
+    </template>
+    <el-menu-item index="2-4" @click="gotoStorePage">查看首页</el-menu-item>
     <el-menu-item index="2-1" @click="gotoStoreManagePage">管理店面</el-menu-item>
     <el-menu-item index="2-2" @click="gotoCommodityRegManagePage">管理商品上架</el-menu-item>
     <el-menu-item index="2-3" @click="gotoCommodityChangeInfoManagePage"
       >管理商品信息修改</el-menu-item
     >
-    <el-menu-item index="2-3" @click="gotoManageMoneyPage">查看流水</el-menu-item>
-    <el-menu-item index="2-4" @click="gotoStorePage">查看首页</el-menu-item>
+    <el-menu-item index="2-3" @click="gotoManageMoneyPage">查看商城账户</el-menu-item>
+    <el-menu-item index="2-3" @click="gotoCashFlowRecordPage">查看流水</el-menu-item>
   </el-sub-menu>
 </template>
 
@@ -35,6 +40,9 @@ export default {
     },
     gotoManageMoneyPage() {
       this.$router.push('/home/admin/manageMoney')
+    },
+    gotoCashFlowRecordPage() {
+      this.$router.push('/home/admin/cashFlowRecord')
     }
   },
   setup() {
@@ -115,5 +123,17 @@ export default {
   background-color: #3498db;
   color: #fff;
   border-color: #3498;
+}
+
+.OpMenuButton {
+  color: rgba(255, 255, 255, 0.71);
+  font-size: 16px;
+  margin-left: 6px;
+}
+
+.OpMenuButton:hover {
+  color: rgba(1, 0, 73, 0.75);
+  font-size: 16px;
+  margin-left: 6px;
 }
 </style>

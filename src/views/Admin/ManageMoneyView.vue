@@ -1,27 +1,29 @@
 <template>
+  <!--    <AdminAside/>-->
   <div class="account-management">
     <h2 class="page-title">账户管理</h2>
     <div class="profit-account">
       <h3 class="section-title">商城利润账户</h3>
       <div class="account-info">
         <div class="balance">余额：{{ profitAccount.balance }}</div>
-        <el-form ref="balanceForm" label-width="120px" class="balance-form">
-          <el-form-item label="充值金额" prop="balance">
-            <el-input v-model="rechargeAmount" type="number"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="recharge(rechargeAmount)">充值</el-button>
-          </el-form-item>
-        </el-form>
+        <div>
+          <el-form ref="balanceForm" label-width="120px" class="balance-form">
+            <el-form-item label="充值金额" prop="balance">
+              <el-input v-model="rechargeAmount" type="number"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="recharge(rechargeAmount)">充值</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
         <!--                <el-button type="primary" @click="showRechargeDialog = true">充值</el-button>-->
       </div>
     </div>
-    <div class="merchant-accounts">
+    <div class="middle-account">
       <h3 class="section-title">商城中间账户</h3>
-      <el-table :data="merchantAccounts">
-        <el-table-column prop="name" label="名称"></el-table-column>
-        <el-table-column prop="balance" label="余额"></el-table-column>
-      </el-table>
+      <div class="account-info">
+        <div class="balance">余额：{{ middleAccount.balance }}</div>
+      </div>
     </div>
     <el-dialog title="充值商城利润账户" v-model="showRechargeDialog">
       <el-form :model="rechargeForm" label-width="80px">
@@ -29,7 +31,7 @@
           <el-input v-model.number="rechargeForm.amount"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div class="dialog-footer">
         <el-button @click="showRechargeDialog = false">取消</el-button>
         <el-button type="primary" @click="recharge">确认充值</el-button>
       </div>
@@ -40,12 +42,18 @@
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-
+import AdminAside from '@/components/AdminComponents/AdminAside.vue'
 export default {
+  components: {
+    AdminAside
+  },
   data() {
     return {
       profitAccount: {
         balance: 10000
+      },
+      middleAccount: {
+        balance: 99999
       },
       merchantAccounts: [
         { name: '商户1', balance: 5000 },
@@ -103,7 +111,49 @@ export default {
           message: '充值失败, 开发问题'
         })
       }
+    },
+    async getBalance() {
+      // 发送请求获取余额
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axios
+          .get('http://localhost:9000/admin/displayProfitAccount')
+          .then((response) => {
+            this.profitAccount.balance = response.data.data.balance
+            console.log('profitAccount.balance ' + this.profitAccount.balance)
+          })
+      } catch (error) {
+        console.log(error)
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败,未连接上后端
+          message: '修改信息失败, 开发问题'
+        })
+      }
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const response = await axios
+          .get('http://localhost:9000/admin/displayMiddleAccount')
+          .then((response) => {
+            this.middleAccount.balance = response.data.data.balance
+            console.log('middleAccount.balance ' + this.middleAccount.balance)
+          })
+      } catch (error) {
+        console.log(error)
+        ElMessage({
+          showClose: true,
+          type: 'error', //如果失败,未连接上后端
+          message: '修改信息失败, 开发问题'
+        })
+      }
+
+      // // 前端写死的假数据
+      // this.balance = 100.0
     }
+  },
+  mounted() {
+    // 获取信息和余额
+    this.getBalance()
   }
 }
 </script>
@@ -127,13 +177,20 @@ export default {
 }
 
 .account-info {
-  display: flex;
+  /*display: flex;*/
   align-items: center;
   margin-bottom: 10px;
+  width: 30%;
 }
 
 .balance {
-  margin-right: 20px;
+  /*border-color: #2d2d2d;*/
+  margin-left: 0px;
+  /*margin-right: 20px;*/
+}
+
+.balance-form {
+  margin-top: 20px;
 }
 
 .transaction-list {

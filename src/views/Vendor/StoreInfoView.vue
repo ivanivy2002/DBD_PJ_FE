@@ -174,7 +174,7 @@ export default {
               userName: response.data.data.userName,
               idNumber: response.data.data.idNumber,
               categories: response.data.data.categories
-                .split('+')
+                .split(',')
                 .map((category) => category.trim()),
               intro: response.data.data.intro,
               address: response.data.data.address,

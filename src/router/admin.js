@@ -7,6 +7,7 @@ import CommodityRegView from '@/views/Admin/CommodityRegView.vue'
 import CommodityChangeInfoView from '@/views/Admin/CommodityChangeInfoView.vue'
 import CommodityTableView from '@/views/CommodityTableView.vue'
 import AdminCommodityView from '@/views/Admin/adminCommodityView.vue'
+import CashFlowRecordView from '@/views/Admin/CashFlowRecordView.vue'
 
 export default [
   {
@@ -42,6 +43,10 @@ export default [
       {
         path: '/home/admin/manageMoney',
         component: ManageMoneyView
+      },
+      {
+        path: '/home/admin/cashFlowRecord',
+        component: CashFlowRecordView
       },
       {
         path: '/home/admin',

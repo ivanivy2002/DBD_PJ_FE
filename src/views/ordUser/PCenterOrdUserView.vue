@@ -252,11 +252,10 @@ export default {
           .get('http://localhost:9000/user/displayAccount', {
             params: {
               userId: localStorage.getItem('userId') //获取cookie中的id
-              // userId: 20
             }
           })
           .then((response) => {
-            this.balance = response.data.balance
+            this.balance = response.data.data.balance
           })
       } catch (error) {
         console.log(error)

@@ -21,8 +21,43 @@
     <div class="sidebar-content">
       <transition name="fade" mode="out-in">
         <div v-if="activeTab === 'account'" key="account" class="account-tab">
-          <p class="account-balance">当前账户余额: {{ accountBalance }}</p>
-          <button class="account-btn">充值</button>
+          <div class="account-management">
+            <h2 class="page-title">账户管理</h2>
+            <div class="profit-account">
+              <h3 class="section-title">商城利润账户</h3>
+              <div class="account-info">
+                <div class="balance">余额：{{ profitAccount.balance }}</div>
+                <div>
+                  <el-form ref="balanceForm" label-width="120px" class="balance-form">
+                    <el-form-item label="充值金额" prop="balance">
+                      <el-input v-model="rechargeAmount" type="number"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="primary" @click="recharge(rechargeAmount)">充值</el-button>
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <!--                <el-button type="primary" @click="showRechargeDialog = true">充值</el-button>-->
+              </div>
+            </div>
+            <div class="middle-account">
+              <h3 class="section-title">商城中间账户</h3>
+              <div class="account-info">
+                <div class="balance">余额：{{ middleAccount.balance }}</div>
+              </div>
+            </div>
+            <el-dialog title="充值商城利润账户" v-model="showRechargeDialog">
+              <el-form :model="rechargeForm" label-width="80px">
+                <el-form-item label="充值金额">
+                  <el-input v-model.number="rechargeForm.amount"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="showRechargeDialog = false">取消</el-button>
+                <el-button type="primary" @click="recharge">确认充值</el-button>
+              </div>
+            </el-dialog>
+          </div>
         </div>
         <div v-else-if="activeTab === 'transfer'" key="transfer" class="transfer-tab">
           <ul class="transfer-list">
@@ -42,7 +77,6 @@
 <script>
 export default {
   name: 'AdminAside',
-  // components: { AdminAside },
   data() {
     return {
       activeTab: 'account',
@@ -51,7 +85,23 @@ export default {
         { date: '2023-04-01', description: '购买商品', amount: '-100' },
         { date: '2023-03-31', description: '转账', amount: '+200' },
         { date: '2023-03-30', description: '充值', amount: '+500' }
-      ]
+      ],
+      profitAccount: {
+        balance: 10000
+      },
+      middleAccount: {
+        balance: 99999
+      },
+      merchantAccounts: [
+        { name: '商户1', balance: 5000 },
+        { name: '商户2', balance: 3000 },
+        { name: '商户3', balance: 2000 }
+      ],
+      showRechargeDialog: false,
+      rechargeForm: {
+        amount: 0
+      },
+      rechargeAmount: 0
     }
   },
   methods: {
