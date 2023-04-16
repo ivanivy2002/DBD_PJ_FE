@@ -22,6 +22,24 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <el-button
+            type="success"
+            size="small"
+            @click="approveReg(row)"
+            :disabled="isButtonDisabled(row)"
+            >同意
+          </el-button>
+          <el-button
+            type="danger"
+            size="small"
+            @click="rejectReg(row)"
+            :disabled="isButtonDisabled(row)"
+            >拒绝
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -29,11 +47,11 @@
 <script>
 import {
   // ElTabs,
-  ElTabPane,
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElButton,
+  // ElTabPane,
+  // ElForm,
+  // ElFormItem,
+  // ElInput,
+  // ElButton,
   ElMessage
   // ElCheckbox,
   // ElCheckboxGroup
@@ -44,11 +62,11 @@ export default {
   name: 'CommodityView',
   components: {
     // ElTabs,
-    ElTabPane,
-    ElForm,
-    ElFormItem,
-    ElInput,
-    ElButton
+    // ElTabPane,
+    // ElForm,
+    // ElFormItem,
+    // ElInput,
+    // ElButton,
     // ElCheckbox,
     // ElCheckboxGroup,
   },
@@ -65,12 +83,12 @@ export default {
       },
       commoditiesData: [],
       ifApprove: 0,
-      userName: '',
+      commodityId: '',
       dialogFormVisible: false,
       changeFormVisible: false,
       activeTab: 'signIn',
       signForm: {
-        // TODO: userName之后需要改掉, 用sessionStorage来存储
+        // TODO: commodityId之后需要改掉, 用sessionStorage来存储
         id: 0,
         commodityName: null,
         shopId: 0,
@@ -134,7 +152,7 @@ export default {
   computed: {
     isButtonDisabled() {
       return (row) => {
-        if (row.regStatus !== '已上架') {
+        if (row.regStatus !== '待审核') {
           return true
         } else {
           return false
@@ -294,7 +312,7 @@ export default {
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
     async fetchCommodityRegRecord() {
       try {
-        const response = await axios.get('http://localhost:9000/admin/displayCommodity')
+        const response = await axios.get('http://localhost:9000/admin/displayCommodityReg')
         this.commoditiesData = response.data.data
         console.log(this.commoditiesData)
         this.stateCommodityRegRecord.tableData = response.data.data.map((row) => {
@@ -348,6 +366,45 @@ export default {
         // console.log(this.state.tableData)
         // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
         console.log(this.stateRegRecord.tableData)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    approveReg: async function (row) {
+      try {
+        this.ifApprove = 1
+        console.log(row.id)
+        const response = await axios.put('http://localhost:9000/admin/handleCommodityReg', null, {
+          params: {
+            commodityId: row.id,
+            ifApprove: this.ifApprove
+          }
+        })
+        if (response.data.code == 200) {
+          ElMessage.success('已同意上架')
+          await this.fetchCommodityRegRecord()
+        } else if (response.data.code == 400) {
+          ElMessage.error('同意上架失败，请重新尝试')
+          await this.fetchCommodityRegRecord()
+        }
+      } catch (error) {
+        ElMessage.error('Sorry,好像有什么地方出错了')
+        await this.fetchCommodityRegRecord()
+        console.log(error)
+      }
+    },
+    rejectReg: async function (row) {
+      try {
+        this.ifApprove = 2
+        this.commodityId = row.id
+        await axios.put('http://localhost:9000/admin/handleCommodityReg', null, {
+          params: {
+            commodityId: row.id,
+            ifApprove: this.ifApprove
+          }
+        })
+        ElMessage.success('已拒绝上架')
+        await this.fetchCommodityRegRecord()
       } catch (error) {
         console.log(error)
       }

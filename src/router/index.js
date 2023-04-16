@@ -12,7 +12,7 @@ import WelcomeView from '@/views/WelcomeView'
 import AboutView from '@/views/AboutView'
 import Admin from '@/views/Admin'
 import Vendor from '@/views/Vendor'
-import ManageStoreView from '@/views/ManageStoreView'
+import ManageStoreView from '@/views/Admin/ManageStoreView.vue'
 import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
 
