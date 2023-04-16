@@ -62,8 +62,9 @@
                 <el-input v-model="signForm.price"></el-input>
               </el-form-item>
               <el-form-item label="上传图片" label-align="center">
-                <input type="file" ref="fileInput" multiple />
-                <button type="submit">上传</button>
+                <!-- ref="fileInput"  -->
+                <input type="file" multiple @change="onFileChange" />
+                <!-- <button type="submit">上传</button> -->
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="signIn">申请</el-button>
@@ -189,6 +190,7 @@ export default {
   },
   data() {
     return {
+      files: [],
       picUrls: [],
       stateQualified: {
         tableData: []
@@ -207,7 +209,7 @@ export default {
       activeTab: 'signIn',
       signForm: {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
-        id: 0,
+        id: null,
         commodityName: null,
         shopId: 0,
         intro: null,
@@ -221,7 +223,7 @@ export default {
         // TODO: 如何在这个时候传递用户名给后端
       },
       changeForm: {
-        id: 0,
+        id: null,
         commodityName: null,
         shopId: 0,
         intro: null,
@@ -310,12 +312,19 @@ export default {
     }
   },
   methods: {
+    onFileChange(event) {
+      // 选中文件时的回调
+      this.files = event.target.files
+    },
     //NOTE: 重置表单
     resetForm() {
       this.$refs.form.resetFields()
+      // 重置上传文件的input元素
+      this.$refs.fileInput.value = ''
     },
     //TODO: 缺少异常处理；修改成PUT请求
-    signIn() {
+    // NOTE: 申请上架商品
+    async signIn() {
       //* 申请上架商品
       // NOTE: 前端检查是否符合规范
       this.signForm.shopId = localStorage.getItem('shopId')
@@ -327,10 +336,14 @@ export default {
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
-          axios
-            .post('http://localhost:9000/commodity/reg', this.signForm)
-            .then((response) => {
-              if (response.data.code == 200) {
+          const res = fetch('http://localhost:9000/commodity/reg', {
+            method: 'POST',
+            body: this.organizeFormData()
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              console.log(res)
+              if (res.data.code == 200) {
                 ElMessage({
                   showClose: true,
                   type: 'success',
@@ -342,52 +355,55 @@ export default {
                 ElMessage({
                   showClose: true,
                   type: 'error', //如果失败输出状态码
-                  message: '申请提交失败:' + response.data.msg
+                  message: '申请提交失败:' + res.msg
                 })
               }
             })
-            .catch((error) => {
-              console.error(error)
-              ElMessage({
-                showClose: true,
-                type: 'error', //如果失败，未连接上后端
-                message: '申请提交失败:vue好像有什么地方错了呢'
-              })
-              // this.$message.error('数据保存失败，' + error.toString())
-            })
-            .finally(() => {
-              this.loading = false // 关闭 loading 动画
-            })
+          // axios
+          //   .post('http://localhost:9000/commodity/reg', this.signForm)
+          //   .then((response) => {
+          //     if (response.data.code == 200) {
+          //       ElMessage({
+          //         showClose: true,
+          //         type: 'success',
+          //         message: '申请提交成功'
+          //       })
+          //       this.dialogFormVisible = false
+          //     } else {
+          //       console.error('申请提交失败，请重试！')
+          //       ElMessage({
+          //         showClose: true,
+          //         type: 'error', //如果失败输出状态码
+          //         message: '申请提交失败:' + response.data.msg
+          //       })
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.error(error)
+          //     ElMessage({
+          //       showClose: true,
+          //       type: 'error', //如果失败，未连接上后端
+          //       message: '申请提交失败:vue好像有什么地方错了呢'
+          //     })
+          //     // this.$message.error('数据保存失败，' + error.toString())
+          //   })
+          //   .finally(() => {
+          //     this.loading = false // 关闭 loading 动画
+          //   })
           this.$refs.form.resetFields() // 重置表单
         } else {
           return false
         }
       })
     },
-    async getAllPicUrls(formDatas) {
-      for (let i = 0; i < formDatas.length; ++i) {
-        await this.getPicUrl(formDatas[i])
-      }
-    },
-    // NOTE: 上传图片并获取上传成功后的图片 URL
-    async getPicUrl(picFormData) {
+    // NOTE: 将表单和图片数据组合成一个 FormData 对象
+    organizeFormData() {
       const formData = new FormData()
-      formData.append('file', formData)
-      const response = await axios.post('http://localhost:9000/commodity/upload', picFormData, {
-        'Content-Type': 'multipart/form-data'
-      })
-      console.log(response)
-      if (response.data.code === 200) {
-        this.picUrl = response.data.data
-        console.log(this.picUrl)
-      } else {
-        console.error('图片上传失败，请重试！')
-        ElMessage({
-          showClose: true,
-          type: 'error', //如果失败输出状态码
-          message: '图片上传失败:' + response.data.msg
-        })
+      formData.append('commodity', JSON.stringify(this.signForm))
+      for (let i = 0; i < this.files.length; i++) {
+        formData.append('files', this.files[i])
       }
+      return formData
     },
     openChangeForm(row) {
       this.changeForm = row

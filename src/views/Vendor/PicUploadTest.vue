@@ -51,7 +51,6 @@ export default {
       console.log(JSON.stringify(formData.get('commodity')))
       const res = await fetch('http://localhost:9000/commodity/reg', {
         method: 'POST',
-        // body: this.commodity
         body: formData
       })
       //   .then(res => res.json()).then(res => {
