@@ -3,13 +3,13 @@
     <div class="form-header">申请开店</div>
     <div class="form-container">
       <el-form ref="form" :model="signForm" label-width="80px" :rules="rules">
-        <el-form-item label="用户名" prop="userName">
+        <!-- <el-form-item label="用户名" prop="userName">
           <el-input
             v-model="signForm.userName"
             placeholder="请输入您的用户名以供确认"
             onfocus="if (this.placeholder == this.value) this.value = ''"
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="店名" prop="shopName">
           <el-input v-model="signForm.shopName"></el-input>
         </el-form-item>
@@ -34,7 +34,7 @@
             allow-create
             default-first-option
             :reserve-keyword="false"
-            placeholder="Choose tags for your article"
+            placeholder="Choose tags for your shop"
           >
             <el-option
               v-for="item in options"
@@ -109,7 +109,8 @@ export default {
       categories: [],
       signForm: {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
-        userName: '',
+        // userName: '',
+        vendorId: '',
         shopName: '',
         // categories: '',
         // NOTE: 用数组传成功！！
@@ -192,9 +193,10 @@ export default {
           },
           { validator: this.validateShopName, trigger: 'blur' }
         ],
-        categories: [
-          { type: 'array', required: true, message: '请选择至少一个商品类别', trigger: 'submit' } //* 点击提交时触发验证
-        ],
+        // BUG: 这里有值但是会检查：请选择至少一个商品类别
+        // categories: [
+        //   { type: 'array', message: '请选择至少一个商品类别', trigger: 'submit' } //* 点击提交时触发验证
+        // ],
 
         idNumber: [{ required: true, validator: this.validateIdNumber, trigger: 'blur' }],
         intro: [
@@ -255,6 +257,7 @@ export default {
     //TODO: 缺少异常处理；修改成PUT请求
     signIn() {
       // NOTE: 前端检查是否符合规范
+      this.signForm.vendorId = localStorage.getItem('userId')
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
@@ -279,6 +282,7 @@ export default {
                   type: 'success', //如果成功
                   message: '申请提交成功'
                 })
+                this.$refs.form.resetFields() // 重置表单
                 // this.dialogFormVisible = false
               } else {
                 console.error('申请提交失败，请重试！')
@@ -301,7 +305,6 @@ export default {
             .finally(() => {
               this.loading = false // 关闭 loading 动画
             })
-          this.$refs.form.resetFields() // 重置表单
         } else {
           return false
         }

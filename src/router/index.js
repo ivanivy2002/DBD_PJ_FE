@@ -108,7 +108,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   //* 在每次路由切换前执行这个函数
   const token = localStorage.getItem('token')
-  const role = sessionStorage.getItem('role')
+  const role = localStorage.getItem('role')
   if (!token && to.path !== '/login') {
     //* 未登录用户重定向到登录页面
     // next('/login')

@@ -37,7 +37,7 @@
         :type="ButtonRemove"
         class="store-info-btn"
         @click="gotoMCenter"
-        :disabled="disabled"
+        :disabled="isRemoved()"
         >{{ gotoMCenterText }}
         <!--     修改商店信息/充值-->
       </el-button>
@@ -72,7 +72,7 @@
         :type="ButtonRemove"
         class="commodity-btn"
         @click="gotoCommodity"
-        :disabled="disabled"
+        :disabled="isRemoved()"
         >{{ gotoCommodityText }}
       </el-button>
     </el-card>
@@ -108,9 +108,9 @@ export default {
         removeStatus: '未申请',
         fund: 0,
         // removeStatus: '未申请',
-        createTime: '202022',
-        deleteTime: '202022',
-        updateTime: '202022'
+        createTime: null,
+        deleteTime: null,
+        updateTime: null
       },
       commodities: [],
       gotoMCenterText: '修改商店信息/充值',
@@ -121,22 +121,20 @@ export default {
   computed: {
     isRemoved() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.shopInfoForm.id = localStorage.getItem('shopId')
-      console.log('isRemoved id ' + this.shopInfoForm.id)
+      // this.shopInfoForm.id = localStorage.getItem('shopId')
+      // console.log('isRemoved id ' + this.shopInfoForm.id)
       return () => {
-        if (this.shopInfoForm.removeStatus == '已通过') {
-          this.gotoMCenterText = '您的商店已注销'
-          this.gotoCommodityText = '您的商店已注销'
+        if (
+          this.shopInfoForm.removeStatus == '待审核' ||
+          this.shopInfoForm.removeStatus == '未申请'
+        ) {
+          return false
+        } else {
+          this.gotoMCenterText = '您的商店无效'
+          this.gotoCommodityText = '您的商店无效'
           this.ButtonRemove = 'danger'
           return true
         }
-        if (this.shopInfoForm.id == null) {
-          this.gotoMCenterText = '您未开店'
-          this.gotoCommodityText = '您未开店'
-          this.ButtonRemove = 'warning'
-          return true
-        }
-        return false
       }
     }
   },
@@ -149,7 +147,7 @@ export default {
       ElMessage({
         showClose: true,
         type: 'error',
-        message: '您尚未申请开店'
+        message: '您尚未开店'
       })
       this.disabled = true
       console.log(1111)
@@ -162,7 +160,7 @@ export default {
     //     ElMessage({
     //         showClose: true,
     //         type: 'error',
-    //         message: '您尚未申请开店',
+    //         message: '您尚未开店',
     //     })
     //     return null
     // }
@@ -181,9 +179,10 @@ export default {
       ElMessage({
         showClose: true,
         type: 'error',
-        message: '您尚未申请开店'
+        message: '您尚未开店'
       })
-      this.disabled = true
+      // this.disabled = true
+      this.isRemoved()
       console.log(1111)
     }
   },
@@ -194,7 +193,7 @@ export default {
       //     ElMessage({
       //         showClose: true,
       //         type: 'error',
-      //         message: '您尚未申请开店',
+      //         message: '您尚未开店',
       //     })
       //     return null;
       // }
@@ -247,7 +246,7 @@ export default {
         ElMessage({
           showClose: true,
           type: 'error',
-          message: '您尚未申请开店'
+          message: '您尚未开店'
         })
       }
     },
