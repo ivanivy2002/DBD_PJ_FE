@@ -23,7 +23,14 @@
           </div>
           <div class="commodity-content">介绍：{{ commodity.intro }}</div>
           <div class="commodity-content">价格：{{ commodity.price }}</div>
-          <div class="commodity-action">
+          <div class="commodity-image">
+            <img
+              v-for="imageUrl in getImageUrls(commodity.imagePath)"
+              :key="imageUrl"
+              :src="imageUrl"
+            />
+          </div>
+          <!-- <div class="commodity-action">
             <el-input-number
               v-model="commodityNum"
               :min="1"
@@ -37,7 +44,7 @@
               @click="addToCart(commodity.id, commodityNum, commodity.price)"
               >添加到购物车</el-button
             >
-          </div>
+          </div> -->
         </el-card>
       </el-col>
     </el-row>
@@ -130,6 +137,15 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    getImageUrls(imagePaths) {
+      // NOTE: 从后端获取图片的url(特殊URL)
+      if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
+        console.log('图片路径为空')
+        return []
+      }
+      const baseUrl = 'http://localhost:9000/display/commodity/'
+      return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     }
   }
 }

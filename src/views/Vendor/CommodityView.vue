@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs>
+    <el-tabs type="border-card">
       <el-tab-pane label="已上架商品" name="displayQualified">
         <div>
           <el-table :data="stateQualified.tableData" style="width: 100%">
@@ -216,7 +216,7 @@ export default {
       userName: '',
       dialogFormVisible: false,
       changeFormVisible: false,
-      activeTab: 'signIn',
+      activeTab: 'displayQualified',
       signForm: {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
         id: null,
@@ -606,7 +606,7 @@ export default {
 
 .changeButton:hover {
   background-color: #4db8ff;
-  color: white;
+  color: rgb(19, 93, 230);
 }
 
 img {
@@ -615,6 +615,10 @@ img {
 }
 
 #changeForm {
-  background-color: #2d2d2d;
+  background-color: #0b053c;
+}
+.el-tabs__item.is-active,
+.el-tabs__item:hover {
+  background-color: red;
 }
 </style>
