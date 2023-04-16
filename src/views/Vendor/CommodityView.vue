@@ -71,9 +71,7 @@
                 <el-input v-model="signForm.price"></el-input>
               </el-form-item>
               <el-form-item label="上传图片" label-align="center">
-                <!-- ref="fileInput"  -->
                 <input type="file" multiple @change="onFileChange" />
-                <!-- <button type="submit">上传</button> -->
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="signIn">申请</el-button>
@@ -102,6 +100,9 @@
               </el-form-item>
               <el-form-item label="商品价格" prop="price">
                 <el-input v-model="changeForm.price"></el-input>
+              </el-form-item>
+              <el-form-item label="上传图片" label-align="center">
+                <input type="file" multiple @change="onFileChange" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="changeIn">提交修改</el-button>
@@ -142,7 +143,7 @@
       </el-tab-pane>
       <el-tab-pane label="修改申请记录" name="displayChangeInfoRecord">
         <div>
-          <el-table :data="stateRegRecord.tableData" style="width: 100%">
+          <el-table :data="stateChangeInfoRecord.tableData" style="width: 100%">
             <el-table-column prop="commodityName" label="商品名称"></el-table-column>
             <el-table-column prop="intro" label="商品简介"></el-table-column>
             <el-table-column prop="price" label="商品价格"></el-table-column>
@@ -347,7 +348,7 @@ export default {
           this.loading = true // 开启 loading 动画
           const res = fetch('http://localhost:9000/commodity/reg', {
             method: 'POST',
-            body: this.organizeFormData()
+            body: this.organizeFormData(this.signForm)
           })
             .then((res) => res.json())
             .then((res) => {
@@ -375,9 +376,9 @@ export default {
       })
     },
     // NOTE: 将表单和图片数据组合成一个 FormData 对象
-    organizeFormData() {
+    organizeFormData(Form) {
       const formData = new FormData()
-      formData.append('commodity', JSON.stringify(this.signForm))
+      formData.append('commodity', JSON.stringify(Form))
       for (let i = 0; i < this.files.length; i++) {
         formData.append('files', this.files[i])
       }
@@ -410,42 +411,64 @@ export default {
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.changeForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
-          axios
-            // .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
-            .put('http://localhost:9000/commodity/changeInfo', this.changeForm)
-            .then((response) => {
-              console.log(response.data)
-              // NOTE: 只有当后端返回200时显示注册成功
-              if (response.data.code == 200) {
-                console.log('修改提交成功')
+          const res = fetch('http://localhost:9000/commodity/changeInfo', {
+            method: 'PUT',
+            body: this.organizeFormData(this.changeForm)
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              console.log(res)
+              if (res.code == 200) {
                 ElMessage({
-                  //用于弹出消息提示
                   showClose: true,
-                  type: 'success', //如果成功
-                  message: '修改提交成功'
+                  type: 'success',
+                  message: '修改申请提交成功'
                 })
                 this.dialogFormVisible = false
               } else {
-                console.error('修改提交失败，请重试！')
+                console.error('申请提交失败，请重试！')
                 ElMessage({
                   showClose: true,
                   type: 'error', //如果失败输出状态码
-                  message: '修改提交失败:' + response.data.msg
+                  message: '申请提交失败:' + res.msg
                 })
               }
             })
-            .catch((error) => {
-              console.error(error)
-              ElMessage({
-                showClose: true,
-                type: 'error', //如果失败，未连接上后端
-                message: '修改提交失败: vue好像有什么地方出错了呢'
-              })
-              // this.$message.error('数据保存失败，' + error.toString())
-            })
-            .finally(() => {
-              this.loading = false // 关闭 loading 动画
-            })
+          // axios
+          //   // .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
+          //   .put('http://localhost:9000/commodity/changeInfo', this.changeForm)
+          //   .then((response) => {
+          //     console.log(response.data)
+          //     if (response.data.code == 200) {
+          //       console.log('修改提交成功')
+          //       ElMessage({
+          //         //用于弹出消息提示
+          //         showClose: true,
+          //         type: 'success', //如果成功
+          //         message: '修改提交成功'
+          //       })
+          //       this.dialogFormVisible = false
+          //     } else {
+          //       console.error('修改提交失败，请重试！')
+          //       ElMessage({
+          //         showClose: true,
+          //         type: 'error', //如果失败输出状态码
+          //         message: '修改提交失败:' + response.data.msg
+          //       })
+          //     }
+          //   })
+          //   .catch((error) => {
+          //     console.error(error)
+          //     ElMessage({
+          //       showClose: true,
+          //       type: 'error', //如果失败，未连接上后端
+          //       message: '修改提交失败: vue好像有什么地方出错了呢'
+          //     })
+          //     // this.$message.error('数据保存失败，' + error.toString())
+          //   })
+          //   .finally(() => {
+          //     this.loading = false // 关闭 loading 动画
+          //   })
           this.$refs.form.resetFields() // 重置表单
         } else {
           return false
@@ -550,7 +573,7 @@ export default {
           }
         )
         this.commoditiesData = response.data.data
-        this.stateRegRecord.tableData = response.data.data.map((row) => {
+        this.stateChangeInfoRecord.tableData = response.data.data.map((row) => {
           // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
           console.log(row)
           // row = this.removeZerosInObjectArray(row)
@@ -558,7 +581,7 @@ export default {
         })
         // console.log(this.state.tableData)
         // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
-        console.log(this.stateRegRecord.tableData)
+        console.log(this.stateChangeInfoRecord.tableData)
       } catch (error) {
         console.log(error)
       }

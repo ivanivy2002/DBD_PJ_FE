@@ -111,7 +111,7 @@ export default {
       },
       commodities: [],
       gotoMCenterText: '修改商店信息/充值',
-      gotoCommodityText: '修改商品',
+      gotoCommodityText: '商品管理',
       ButtonRemove: 'primary'
     }
   },
