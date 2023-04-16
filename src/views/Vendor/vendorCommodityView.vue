@@ -80,6 +80,7 @@ export default {
         commodityName: commodity.commodityName,
         intro: commodity.intro,
         price: commodity.price,
+        imagePath: commodity.imagePath,
         commodityNum: 1 // 初始商品数量为1
       }))
       // TODO: 选择哪一种？
@@ -152,6 +153,11 @@ export default {
 </script>
 
 <style scoped>
+img {
+  width: 50px;
+  height: 50px;
+}
+
 .commodity-view {
   margin: 24px;
 }
@@ -214,5 +220,11 @@ export default {
 
 .el-button {
   margin-left: 10px;
+}
+
+.commodity-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 </style>
