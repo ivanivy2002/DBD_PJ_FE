@@ -32,7 +32,7 @@
                     <span class="store-info-value">{{ shopInfoForm.fund }}</span>
                 </div>
             </div>
-            <el-button type="primary" class="store-info-btn" @click="gotoMCenter" :disabled="isRemoved()"
+            <el-button :type=ButtonRemove class="store-info-btn" @click="gotoMCenter" :disabled="isRemoved()"
             >{{ gotoMCenterText }}
                 <!--                修改商店信息/充值-->
             </el-button>
@@ -62,7 +62,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-button type="primary" class="commodity-btn" @click="gotoCommodity" :disabled="isRemoved()">{{gotoCommodityText}}
+            <el-button :type=ButtonRemove class="commodity-btn" @click="gotoCommodity" :disabled="isRemoved()">{{gotoCommodityText}}
             </el-button>
         </el-card>
     </div>
@@ -103,6 +103,7 @@ export default {
             commodities: [],
             gotoMCenterText: "修改商店信息/充值",
             gotoCommodityText: "修改商品",
+            ButtonRemove: "primary",
         }
     },
     computed: {
@@ -111,6 +112,7 @@ export default {
                 if (this.shopInfoForm.removeStatus == '已通过') {
                     this.gotoMCenterText = "您的商店已注销";
                     this.gotoCommodityText = "您的商店已注销";
+                    this.ButtonRemove="danger"
                     return true
                 } else {
                     return false
