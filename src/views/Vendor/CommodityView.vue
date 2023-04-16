@@ -6,6 +6,15 @@
           <el-table :data="stateQualified.tableData" style="width: 100%">
             <el-table-column prop="commodityName" label="商品名称"></el-table-column>
             <el-table-column prop="intro" label="商品简介"></el-table-column>
+            <el-table-column prop="imagePath" label="商品图片">
+              <template #default="{ row }">
+                <img
+                  v-for="imageUrl in getImageUrls(row.imagePath)"
+                  :key="imageUrl"
+                  :src="imageUrl"
+                />
+              </template>
+            </el-table-column>
             <el-table-column prop="price" label="商品价格"></el-table-column>
             <!--      <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
             <!--      <el-table-column prop="imagePath" label="图片"></el-table-column>-->
@@ -343,7 +352,7 @@ export default {
             .then((res) => res.json())
             .then((res) => {
               console.log(res)
-              if (res.data.code == 200) {
+              if (res.code == 200) {
                 ElMessage({
                   showClose: true,
                   type: 'success',
@@ -359,37 +368,6 @@ export default {
                 })
               }
             })
-          // axios
-          //   .post('http://localhost:9000/commodity/reg', this.signForm)
-          //   .then((response) => {
-          //     if (response.data.code == 200) {
-          //       ElMessage({
-          //         showClose: true,
-          //         type: 'success',
-          //         message: '申请提交成功'
-          //       })
-          //       this.dialogFormVisible = false
-          //     } else {
-          //       console.error('申请提交失败，请重试！')
-          //       ElMessage({
-          //         showClose: true,
-          //         type: 'error', //如果失败输出状态码
-          //         message: '申请提交失败:' + response.data.msg
-          //       })
-          //     }
-          //   })
-          //   .catch((error) => {
-          //     console.error(error)
-          //     ElMessage({
-          //       showClose: true,
-          //       type: 'error', //如果失败，未连接上后端
-          //       message: '申请提交失败:vue好像有什么地方错了呢'
-          //     })
-          //     // this.$message.error('数据保存失败，' + error.toString())
-          //   })
-          //   .finally(() => {
-          //     this.loading = false // 关闭 loading 动画
-          //   })
           this.$refs.form.resetFields() // 重置表单
         } else {
           return false
@@ -404,6 +382,15 @@ export default {
         formData.append('files', this.files[i])
       }
       return formData
+    },
+    getImageUrls(imagePaths) {
+      // NOTE: 从后端获取图片的url(特殊URL)
+      if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
+        console.log('图片路径为空')
+        return []
+      }
+      const baseUrl = 'http://localhost:9000/display/commodity/'
+      return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
     openChangeForm(row) {
       this.changeForm = row
@@ -597,6 +584,11 @@ export default {
 .changeButton:hover {
   background-color: #4db8ff;
   color: white;
+}
+
+img {
+  width: 50px;
+  height: 50px;
 }
 
 #changeForm {
