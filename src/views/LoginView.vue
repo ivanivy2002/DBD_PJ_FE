@@ -410,6 +410,7 @@ export default {
                   type: 'success', //如果成功
                   message: '注册成功'
                 })
+                this.resetForm() //* 如果注册成功则重置表单
               } else {
                 console.error('注册失败')
                 ElMessage({
