@@ -5,6 +5,7 @@ import MCenterView from '@/views/Vendor/MCenterView'
 import CommodityView from '@/views/Vendor/CommodityView'
 import PCenterVendorView from '@/views/Vendor/PCenterVendorView'
 import SignFormView from '@/views/Vendor/SignFormView'
+import PicUploadTest from '@/views/Vendor/PicUploadTest'
 
 export default [
   {
@@ -32,6 +33,11 @@ export default [
         path: '/home/vendor/signform',
         name: 'SignFormView',
         component: SignFormView
+      },
+      {
+        path: '/home/vendor/pic',
+        name: 'PicUploadTest',
+        component: PicUploadTest
       }
     ]
   }
