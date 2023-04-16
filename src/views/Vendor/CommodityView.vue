@@ -201,7 +201,7 @@ export default {
   data() {
     return {
       files: [],
-      picUrls: [],
+      // picUrls: [],
       stateQualified: {
         tableData: []
       },
