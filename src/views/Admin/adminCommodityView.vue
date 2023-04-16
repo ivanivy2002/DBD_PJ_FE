@@ -141,7 +141,8 @@ export default {
     },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
-      if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
+      //  || imagePaths == undefined || imagePaths == ''
+      if (!imagePaths) {
         console.log('图片路径为空')
         return []
       }
