@@ -49,7 +49,8 @@ export default {
         shopName: store.shopName,
         // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
         // TODO: 目前categories字段的值不能为NULL，否则会报错
-        categories: store.categories.split('+').map((category) => category.trim()),
+        // categories: store.categories.split(',').map((category) => category.trim()),
+        categories: this.splitByComma(store.categories),
         intro: store.intro
       }))
       // console.log(store.categories)
@@ -58,6 +59,9 @@ export default {
     }
   },
   methods: {
+    splitByComma(str) {
+      return str.split(',').map((category) => category.trim())
+    },
     async fetchData() {
       try {
         // TODO: 相对路径（'api/home/display'）访问出错，这个问题应该和路由相关

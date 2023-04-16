@@ -291,7 +291,7 @@ export default {
     },
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
     HandleCategories() {
-      this.signForm.categories = this.categories.join('+')
+      this.signForm.categories = this.categories.join(',')
       console.log(this.signForm.categories)
     },
     AddArray() {

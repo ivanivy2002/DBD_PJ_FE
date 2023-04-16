@@ -3,6 +3,7 @@
     <input type="file" multiple @change="onFileChange" />
     <button @click="submitForm">提交</button>
   </div>
+  <img v-for="imageUrl in getImageUrls(commodity.imagePath)" :key="imageUrl" :src="imageUrl" />
 </template>
 <script>
 export default {
@@ -16,7 +17,8 @@ export default {
         shopId: 20,
         intro: 'Test111',
         price: 0,
-        imagePath: null,
+        imagePath:
+          '0185fa30-0e27-4a25-97e8-a61d7b15e7a8-numpy.png,1f0fdb29-fdcd-4c07-afa1-f919540e12a0-TensorFlow.png',
         regStatus: null,
         changeStatus: null,
         createTime: null,
@@ -59,7 +61,25 @@ export default {
       // console.log(formData.entries())
       const result = await res.json()
       console.log(result)
+    },
+    getImageUrls(imagePaths) {
+      const baseUrl = 'http://localhost:9000/display/commodity/'
+      return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     }
+    // getImageUrl(imagePath) {
+    //   const baseUrl = 'http://localhost:9000/display/commodity/';
+    //   return `${baseUrl}${imagePath}`;
+    // },
+    // splitByComma(str) {
+    //   return str.split(',').map((imagePath) => imagePath.trim())
+    // }
   }
 }
 </script>
+
+<style scoped>
+img {
+  width: 20px;
+  height: 20px;
+}
+</style>
