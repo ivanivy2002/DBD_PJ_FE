@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="merchant-accounts">
-      <h3 class="section-title">商城中间商户</h3>
+      <h3 class="section-title">商城中间账户</h3>
       <el-table :data="merchantAccounts">
         <el-table-column prop="name" label="名称"></el-table-column>
         <el-table-column prop="balance" label="余额"></el-table-column>

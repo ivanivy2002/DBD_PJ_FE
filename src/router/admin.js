@@ -34,6 +34,10 @@ export default [
         component: CommodityChangeInfoView
       },
       {
+        path: '/home/admin/manageMoney',
+        component: ManageMoneyView
+      },
+      {
         path: '/home/admin',
         redirect: '/home/admin/manage'
       }
