@@ -13,8 +13,8 @@
 
 <script>
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import AdminAside from '@/components/AdminComponents/AdminAside.vue'
+// import { ElMessage } from 'element-plus'
+// import AdminAside from '@/components/AdminComponents/AdminAside.vue'
 
 export default {
   name: 'CashFlowRecord',

@@ -68,9 +68,9 @@
 }
 </style>
 <script>
-import axios from 'axios'
-import Avatar from '@/components/PicUpLoad/Avatar.vue'
-import PicUpLoad from '@/components/PicUpLoad/PicUpLoad.vue'
+// import axios from 'axios'
+// import Avatar from '@/components/PicUpLoad/Avatar.vue'
+// import PicUpLoad from '@/components/PicUpLoad/PicUpLoad.vue'
 export default {
   name: 'AboutView',
   created() {
