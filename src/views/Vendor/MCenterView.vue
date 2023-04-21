@@ -80,20 +80,16 @@ export default {
       // },
       shopId: null,
       balance: 100,
-      rechargeAmount: 0
-      // password: {
-      //   oldPassword: '',
-      //   newPassword: '',
-      //   confirmPassword: ''
-      // },
-      // NOTE: 以下为前端输入格式检查
-      // validateShopName: (rule, value, callback) => {
-      //   if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
-      //     callback(new Error('商店名称仅能出现英⽂字符、数字与下划线，⻓度为3-10个字符！'))
-      //   } else {
-      //     callback()
-      //   }
-      // }
+      rechargeAmount: 0,
+      validatePrice: (rule, value, callback) => {
+        const fund = parseFloat(value)
+        if (isNaN(fund) || fund <= 0) {
+          callback(new Error('价格需大于0元！'))
+        } else {
+          callback()
+        }
+      },
+      $message: this.message
     }
   },
   mounted() {
@@ -106,13 +102,13 @@ export default {
     //* 使用 trigger: 'blur' 规定在用户离开输入框时进行验证
     rules: function () {
       return {
-        shopName: [
+        price: [
           {
             required: true,
-            message: '商店名称不能为空',
+            message: '商品价格不能为空或小于0！',
             trigger: 'blur'
           },
-          { validator: this.validateshopName, trigger: 'blur' }
+          { validator: this.validatePrice, min: 1, max: 128, trigger: 'blur' }
         ]
       }
     }
