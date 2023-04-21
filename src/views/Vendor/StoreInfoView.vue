@@ -142,6 +142,16 @@ export default {
   async mounted() {
     console.log('Out: 2. After this.getShopInfo, mounted')
     console.log(localStorage.getItem('shopId'))
+    const response = axios
+      .get('http://localhost:9000/shop/displayShopInfo', {
+        params: {
+          userId: localStorage.getItem('userId')
+        }
+      })
+      .then((res) => {
+        console.log(res.data)
+        localStorage.setItem('shopId', res.data.shopId)
+      })
     // NOTE: 这里的if里面语句不会被执行
     if (!localStorage.getItem('shopId')) {
       ElMessage({

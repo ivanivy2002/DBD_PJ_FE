@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { ElTable, ElTableColumn, ElTag, ElButton, ElCard,  } from 'element-plus'
+import { ElTable, ElTableColumn, ElTag, ElButton, ElCard } from 'element-plus'
 // ElMessage
 import axios from 'axios'
 
@@ -75,7 +75,8 @@ export default {
       const response = axios
         .get('http://localhost:9000/shoppingCart/displayInfo', {
           // TODO: 注意测试完之后改成this.id
-          params: { userId: 21 }
+          // params: { userId: 21 }
+          params: { userId: localStorage.getItem('userId') }
         })
         .then((response) => {
           console.log(response.data.data)
@@ -117,8 +118,8 @@ export default {
       const response = axios
         .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
           params: {
-            // userId: localStorage.getItem('userId')
-            userId: 21,
+            userId: localStorage.getItem('userId'),
+            // userId: 21,
             // commodityIdArray: [commodityId] // 这是一个array
             commodityIdArray: commodityId.toString()
           }
@@ -145,7 +146,8 @@ export default {
       const response = axios
         .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
           params: {
-            userId: 21,
+            // userId: 21,
+            userId: localStorage.getItem('userId'),
             commodityIdArray: this.joinWithComma(commodityIdArray)
           }
         })

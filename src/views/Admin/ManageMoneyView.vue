@@ -84,6 +84,14 @@ export default {
       try {
         // this.shopId = localStorage.getItem('shopId')
         // eslint-disable-next-line no-unused-vars
+        if (rechargeAmount <= 0) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: '充值金额有误'
+          })
+          return
+        }
         const response = axios
           .post('http://localhost:9000/admin/recharge', null, {
             params: {

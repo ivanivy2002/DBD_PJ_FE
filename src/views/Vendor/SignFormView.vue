@@ -233,9 +233,9 @@ export default {
           {
             validator: (rule, value, callback) => {
               const date = new Date(value)
-              const cutoff = new Date('2023-03-19')
+              const cutoff = new Date('2023-04-16')
               if (date > cutoff) {
-                callback(new Error('注册时间不得晚于2023年3月19日'))
+                callback(new Error('注册时间不得晚于2023年4月16日'))
               } else {
                 callback()
               }
@@ -263,6 +263,13 @@ export default {
         if (valid) {
           // this.AddArray() //* 将categories数组增加10个空元素
           // this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+          if (this.categories.length === 0) {
+            this.$message({
+              message: '请选择至少一个商品类别',
+              type: 'warning'
+            })
+            return
+          }
           // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑

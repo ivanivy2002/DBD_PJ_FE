@@ -272,6 +272,14 @@ export default {
     recharge(rechargeAmount) {
       try {
         // NOTE: 下面第二个参数是null很有意思
+        if (rechargeAmount <= 0) {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: '充值金额有误'
+          })
+          return
+        }
         const response = axios
           .post('http://localhost:9000/user/recharge', null, {
             params: {
