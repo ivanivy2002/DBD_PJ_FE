@@ -16,7 +16,7 @@
 import { ElMessage } from 'element-plus'
 import { ArrowDown } from '@element-plus/icons-vue'
 import SignForm from './SignForm.vue'
-import LoginForm from './LoginForm.vue'
+import LoginForm from '../LoginForm.vue'
 import { reactive, ref, onMounted } from 'vue'
 import axios from 'axios'
 

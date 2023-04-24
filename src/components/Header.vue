@@ -1,7 +1,7 @@
 <script>
 import { ref } from 'vue'
 import LoginForm from './LoginForm.vue'
-import LoginFormFix from '@/components/SignForm'
+import LoginFormFix from '@/components/Vendor/SignForm.vue'
 
 const activeIndex = ref('1')
 const activeIndex2 = ref('1')
