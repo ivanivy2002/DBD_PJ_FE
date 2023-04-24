@@ -13,7 +13,10 @@
     <el-menu-item index="2-3" @click="gotoPCenter">
       <button class="btn btn-outline-primary">个人中心</button>
     </el-menu-item>
-    <el-menu-item index="2-4" @click="gotoShoppingCart">
+    <el-menu-item index="2-4" @click="gotoAddressCenter">
+      <button class="btn btn-outline-primary">收货地址管理</button>
+    </el-menu-item>
+    <el-menu-item index="2-5" @click="gotoShoppingCart">
       <button class="btn btn-outline-primary">查看购物车</button>
     </el-menu-item>
   </el-sub-menu>
@@ -31,6 +34,9 @@ export default {
     },
     gotoPCenter() {
       this.$router.push('/home/orduser/profile')
+    },
+    gotoAddressCenter() {
+      this.$router.push('/home/orduser/address')
     },
     gotoShoppingCart() {
       this.$router.push('/home/orduser/cart')

@@ -7,7 +7,7 @@ import PCenterVendorView from '@/views/Vendor/PCenterVendorView'
 import SignFormView from '@/views/Vendor/SignFormView'
 import PicUploadTest from '@/views/Vendor/PicUploadTest'
 // import CommodityTableView from '@/views/CommodityTableView.vue'
-import VendorCommodityView from '@/views/Vendor/vendorCommodityView.vue'
+import VendorCommodityView from '@/views/Vendor/VendorCommodityView.vue'
 import StoreTableView from '@/views/StoreTableView.vue'
 
 export default [

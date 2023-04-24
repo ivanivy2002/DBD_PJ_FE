@@ -1,7 +1,7 @@
 <script>
 import { ref } from 'vue'
-import LoginForm from './LoginForm.vue'
-import LoginFormFix from '@/components/Vendor/SignForm.vue'
+// import LoginForm from './LoginForm.vue'
+// import LoginFormFix from '@/components/Vendor/SignForm.vue'
 
 const activeIndex = ref('1')
 const activeIndex2 = ref('1')
@@ -11,8 +11,8 @@ const handleSelect = (key, keyPath) => {
 export default {
   name: 'Header',
   components: {
-    LoginFormFix,
-    LoginForm
+    // LoginFormFix,
+    // LoginForm
   }
 }
 </script>

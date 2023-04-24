@@ -1,9 +1,9 @@
 // import { createRouter, createWebHistory } from 'vue-router'
-import PCenterOrdUserView from '../views/ordUser/PCenterOrdUserView.vue'
+import PCenterOrdUserView from '../views/OrdUser/PCenterOrdUserView.vue'
 import OrdUser from '@/views/OrdUser'
 import StoreTableView from '@/views/StoreTableView'
-import OrdUserCommodityView from '@/views/ordUser/OrdUserCommodityView'
-import ShoppingCartView from '@/views/ordUser/ShoppingCartView'
+import OrdUserCommodityView from '@/views/OrdUser/OrdUserCommodityView.vue'
+import ShoppingCartView from '@/views/OrdUser/ShoppingCartView'
 
 export default [
   {
