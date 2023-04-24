@@ -7,7 +7,7 @@
 
 <script>
 // import PCenterOrdUser from "@/components/PCenterOrdUser";
-import HeaderOrdUser from '@/components/HeaderOrdUser'
+import HeaderOrdUser from '@/components/HeaderOrdUser.vue'
 
 export default {
   name: 'OrdUser',

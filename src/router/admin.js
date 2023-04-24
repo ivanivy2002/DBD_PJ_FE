@@ -1,5 +1,5 @@
 // import { createRouter, createWebHistory } from 'vue-router'
-import Admin from '@/views/Admin'
+import Admin from '@/views/Admin/Admin.vue'
 import StoreTableView from '@/views/StoreTableView'
 import ManageMoneyView from '@/views/Admin/ManageMoneyView'
 import ManageStoreView from '@/views/Admin/ManageStoreView.vue'

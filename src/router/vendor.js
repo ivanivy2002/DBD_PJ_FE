@@ -1,5 +1,5 @@
 // import { createRouter, createWebHistory } from 'vue-router'
-import Vendor from '@/views/Vendor'
+import Vendor from '@/views/Vendor/Vendor.vue'
 import StoreInfoView from '@/views/Vendor/StoreInfoView'
 import MCenterView from '@/views/Vendor/MCenterView'
 import CommodityView from '@/views/Vendor/CommodityView'
