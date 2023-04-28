@@ -7,7 +7,7 @@
 
 <script>
 // import OpMenuVendor from "@/components/OpMenuVendor";
-import HeaderVendor from '@/components/Vendor/HeaderVendor.vue'
+import HeaderVendor from '@/components/VendorComponents/HeaderVendor.vue'
 
 export default {
   name: 'Vendor',

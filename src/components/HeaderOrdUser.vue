@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import OpMenuOrdUser from './OrdUser/OpMenuOrdUser.vue'
+import OpMenuOrdUser from './OrdUserComponents/OpMenuOrdUser.vue'
 
 export default {
   name: 'HeaderOrdUser',
