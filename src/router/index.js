@@ -11,9 +11,9 @@ import NewHome from '@/views/NewHome'
 import WelcomeView from '@/views/WelcomeView'
 import AboutView from '@/views/AboutView'
 import Admin from '@/views/Admin/Admin.vue'
-import Vendor from '@/views/Vendor/Vendor.vue'
+// import Vendor from '@/views/Vendor/Vendor.vue'
 import ManageStoreView from '@/views/Admin/ManageStoreView.vue'
-import StoreMessage from '@/views/StoreMessage'
+// import StoreMessage from '@/views/StoreMessage'
 import StoreTableView from '@/views/StoreTableView'
 
 const router = createRouter({
