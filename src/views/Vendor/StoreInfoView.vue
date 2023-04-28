@@ -142,7 +142,7 @@ export default {
   async mounted() {
     console.log('Out: 2. After this.getShopInfo, mounted')
     console.log(localStorage.getItem('shopId'))
-    const response = axios
+    const response = await axios  // 在这里加上await等待
       .get('http://localhost:9000/shop/displayShopInfo', {
         params: {
           userId: localStorage.getItem('userId')
