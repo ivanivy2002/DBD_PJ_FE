@@ -36,7 +36,7 @@ export default {
   <!--  <TestRouterHomeExtend />-->
 
   <div>
-    <router-view></router-view>
+    <router-view />
   </div>
   <!--  <Lorem />-->
   <!--  <RouterView/>-->
