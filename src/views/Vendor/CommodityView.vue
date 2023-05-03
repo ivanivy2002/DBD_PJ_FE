@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-tabs type="border-card">
+    <el-tabs type="border-card" v-model="activeTab">
       <el-tab-pane label="已上架商品" name="displayQualified">
         <div>
-          <el-table :data="stateQualified.tableData" style="width: 100%">
+          <el-table :data="stateQualified.tableData" style="width: 100%" stripe>
             <el-table-column prop="commodityName" label="商品名称"></el-table-column>
             <el-table-column prop="intro" label="商品简介"></el-table-column>
             <el-table-column prop="imagePath" label="商品图片">
@@ -115,7 +115,7 @@
       </el-tab-pane>
       <el-tab-pane label="上架申请记录" name="displayRegRecord">
         <div>
-          <el-table :data="stateRegRecord.tableData" style="width: 100%">
+          <el-table :data="stateRegRecord.tableData" style="width: 100%" stripe>
             <el-table-column prop="commodityName" label="商品名称"></el-table-column>
             <el-table-column prop="intro" label="商品简介"></el-table-column>
             <el-table-column prop="price" label="商品价格"></el-table-column>
@@ -143,7 +143,7 @@
       </el-tab-pane>
       <el-tab-pane label="修改申请记录" name="displayChangeInfoRecord">
         <div>
-          <el-table :data="stateChangeInfoRecord.tableData" style="width: 100%">
+          <el-table :data="stateChangeInfoRecord.tableData" style="width: 100%" stripe>
             <el-table-column prop="commodityName" label="商品名称"></el-table-column>
             <el-table-column prop="intro" label="商品简介"></el-table-column>
             <el-table-column prop="price" label="商品价格"></el-table-column>
@@ -600,9 +600,40 @@ export default {
 </script>
 
 <style scoped>
-.el-tabs__header,
-.el-tabs__content {
+.el-table {
+  color: #2c3e50;
+  border-collapse: separate;
+  border-spacing: 0 5px;
+  background-color: #ecf0f1;
+}
+
+.el-table th {
+  background-color: #a2d5c6;
   color: white;
+  font-weight: bold;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.el-table td {
+  background-color: white;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.el-tag.warning {
+  background-color: #f0e68c;
+  color: #2c3e50;
+}
+
+.el-tag.success {
+  background-color: #a2d5c6;
+  color: #2c3e50;
+}
+
+.el-tag.danger {
+  background-color: #ef9a9a;
+  color: #2c3e50;
 }
 
 .changeButton:hover {
@@ -616,7 +647,8 @@ img {
 }
 
 #changeForm {
-  background-color: #0b053c;
+  /* background-color: #0b053c; */
+  background-color: #ffffff;
 }
 .el-tabs__item.is-active,
 .el-tabs__item:hover {

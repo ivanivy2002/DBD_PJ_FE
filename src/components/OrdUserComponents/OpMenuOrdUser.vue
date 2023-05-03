@@ -1,12 +1,13 @@
 <template>
   <el-sub-menu index="2">
+    <!-- <div class="button-container" style="display: flex;"> -->
     <template #title>
       <div class="submenu-title">
         <ArrowDown size="18" />
         <span class="submenu-title-text">操作中心</span>
       </div>
     </template>
-    <el-menu-item index="2-1" disabled>申请开店</el-menu-item>
+    <!-- <el-menu-item index="2-1" disabled>申请开店</el-menu-item> -->
     <el-menu-item index="2-2" @click="gotoStorePage">
       <button class="btn btn-outline-primary">查看首页</button>
     </el-menu-item>
@@ -19,6 +20,7 @@
     <el-menu-item index="2-5" @click="gotoShoppingCart">
       <button class="btn btn-outline-primary">查看购物车</button>
     </el-menu-item>
+    <!-- </div> -->
   </el-sub-menu>
 </template>
 
@@ -64,14 +66,18 @@ export default {
 }
 
 .submenu-title-text {
-  color: #fff;
+  color: #ffffff;
   font-size: 16px;
   margin-left: 6px;
 }
 
+.submenu-title-text:hover {
+  color: #4befc3;
+}
+
 .el-menu-demo .el-menu-item,
 .el-menu-demo .el-submenu__title {
-  color: #fff;
+  color: #4befc3;
   font-size: 14px;
 }
 
@@ -93,16 +99,16 @@ export default {
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
-  border-radius: 0.25rem;
+  /* border-radius: 0.25rem; */
   cursor: pointer;
-  color: #fff;
+  color: #1ddbec;
   background-color: #2c3e50;
-  border-color: #2c3e50;
+  border-color: #ffffff;
 }
 
 .btn:hover {
-  background-color: #3498db;
-  border-color: #3498db;
+  background-color: #2de9ef;
+  border-color: #ffffff;
 }
 .btn:focus,
 .btn.focus {
@@ -110,12 +116,14 @@ export default {
 }
 .btn-outline-primary {
   background-color: transparent;
-  color: #3498db;
-  border-color: #3498db;
+  color: #2de9ef;
+  border-color: #13cbd1;
+  font-weight: bold;
 }
+
 .btn-outline-primary:hover {
-  background-color: #3498db;
-  color: #fff;
-  border-color: #3498;
+  background-color: #2de9ef;
+  color: #1dc8de;
+  border-color: #ffffff;
 }
 </style>

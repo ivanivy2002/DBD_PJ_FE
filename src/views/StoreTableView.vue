@@ -1,4 +1,7 @@
 <template>
+  <div class="info">
+    <h1>商店页面</h1>
+  </div>
   <div class="dashboard">
     <el-row gutter="24">
       <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
@@ -14,7 +17,7 @@
               <span v-for="(category, index) in store.categories" :key="index">{{ category }}</span>
             </div>
           </div>
-          <div class="card-content">商店简介：{{ store.intro }}</div>
+          <div class="card-content card-intro">商店简介：{{ store.intro }}</div>
         </el-card>
       </el-col>
     </el-row>
@@ -93,20 +96,38 @@ export default {
 </script>
 
 <style scoped>
+.info {
+  width: 100%;
+}
+
+.info h1 {
+  font-size: 40px;
+  color: #4befc3;
+  /* 蓝绿色 */
+  text-transform: uppercase;
+  /* 全部大写 */
+  text-align: center;
+  /* 居中 */
+}
+
 .dashboard {
   padding: 24px;
-  background-color: #232836;
+  background-color: #ffffff;
   min-height: 100vh;
 }
 
 .animated-card {
-  background-color: #2c3b4d;
+  background-color: #26d6cd;
   opacity: 100%;
   border-radius: 4px;
   padding: 24px;
   margin-bottom: 24px;
-  cursor: pointer; /* 鼠标悬停时显示手型 */
-  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+
+  /* 添加渐变动画和阴影效果 */
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .animated-card:hover {
@@ -120,16 +141,18 @@ export default {
 }
 
 .card-title {
-  font-size: 16px;
+  font-size: 28px;
   font-weight: bold;
+  font-family: 'Microsoft YaHei', Arial, Helvetica, sans-serif;
   margin-bottom: 12px;
-  cursor: pointer; /* 鼠标悬停时显示手型 */
-  color: #19cde9;
+  cursor: pointer;
+  /* 鼠标悬停时显示手型 */
+  color: #e3f0f0;
 }
 
 .card-content {
   font-size: 24px;
-  color: #cfd8dc;
+  color: #ffffff;
 }
 
 .card-content {
@@ -140,8 +163,8 @@ export default {
 
 .category-title {
   margin-right: 5px;
-  font-weight: bold;
-  color: #cfd8dc;
+  font-family: '宋体';
+  color: #ffffff;
 }
 
 .category-list {
@@ -157,5 +180,12 @@ export default {
   padding: 5px 10px;
   font-size: 14px;
   color: #333;
+}
+
+.card-intro {
+  font-size: 24px;
+  color: #ffffff;
+  margin-top: 12px;
+  font-family: 'songti';
 }
 </style>

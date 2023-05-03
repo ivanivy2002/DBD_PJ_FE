@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <el-defaults :style="{ color: '#409EFF', theme: 'light' }"></el-defaults>
+  <!-- <el-defaults :style="{ color: '#409EFF', theme: 'light' }"></el-defaults> -->
   <!--  This is a test sentence.-->
   <!--  <TrueHeader />-->
   <router-view style="flex: 1" />
@@ -21,4 +21,8 @@ export default {
 /*#AppHeader {*/
 /*  float: right;*/
 /*}*/
+body {
+  /* 去掉浏览器四周的白边 */
+  margin: auto;
+}
 </style>

@@ -1,11 +1,16 @@
 <template>
-  <div class="background"></div>
+  <div id="background"></div>
   <div class="center">
     <!-- TODO: 通过修改URL造成错误的消息提示 -->
     <!-- <div class="errorInfo">
       <h2>{{ error }}</h2>
     </div> -->
-    <el-tabs>
+    <div class="title">
+      <div class="title-text">
+        <h1>Welcome to GanSui Mall!</h1>
+      </div>
+    </div>
+    <el-tabs type="card" v-model="activeTab">
       <el-tab-pane label="登录" name="login">
         <el-form :model="loginForm" :label-width="label_width">
           <!--          wrapper-width="200"-->
@@ -450,48 +455,90 @@ export default {
 </script>
 
 <style scoped>
-.el-form-item {
-  margin-bottom: 30px;
+#background {
+  height: 100vh;
+  background: linear-gradient(to bottom right, #177f7f, #32c8b2);
+  /* background: url("https://images.unsplash.com/photo-1523875969136-392c28a97f81?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80") no-repeat center center fixed; */
+  /* -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; */
 }
 
-/* ::v-deep .input-reader-name {
-  width: 100%;
-} */
+.title {
+  overflow: hidden;
+  font-size: 1em;
+}
 
-.background {
-  background: url('../assets/images/background.jpg') no-repeat center center fixed;
+.title-text h1 {
+  background: linear-gradient(to right, #20d5b7, #17c063);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: scroll 10s linear infinite;
+  white-space: nowrap;
+}
 
-  width: 100%;
-  /* 大小设置成100% */
-  height: 100%;
-  opacity: 35%;
-  position: fixed;
-  background-size: 100% 100%;
-  z-index: -1;
-  /*background-size: cover;*/
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .center {
-  /*width: 60%;*/
-  padding-top: 2em;
-  display: flex;
-  /*justify-content: center;*/
-  align-items: center;
-  /*height: 100vh;*/
-  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 45vw;
+  height: fit-content;
+  padding: 20px;
+  background-color: #ffffff;
+  /* background: linear-gradient(to bottom right, #177f7f, #32c8b2); */
+  border-radius: 15px;
 }
 
-.center el-form {
-  min-width: 400px;
-  flex-grow: 2;
+.el-tabs__header {
+  padding: 0;
+  margin-bottom: 0;
 }
 
-.center el-input {
-  min-width: 400px;
-  flex-grow: 2;
+.el-tabs__nav {
+  border-bottom: none;
+  margin-top: 0;
 }
 
-/*el-input{*/
-/*  width: 30px;*/
-/*}*/
+.el-tabs__item {
+  color: #606266;
+  font-size: 16px;
+  height: 50px;
+  line-height: 50px;
+}
+
+.el-tabs__active-bar {
+  background-color: #409eff;
+  height: 2px;
+}
+
+.el-form-item__label {
+  text-align: left;
+  color: #606266;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.el-input__inner {
+  border-radius: 5px;
+  padding: 0 15px;
+  height: 40px;
+  border: 1px solid #dcdfe6;
+}
+
+.el-button {
+  padding: 9px 20px;
+  border-radius: 5px;
+}
 </style>

@@ -430,6 +430,6 @@ export default {
 }
 
 #changeForm {
-  background-color: #2d2d2d;
+  /* background-color: #2d2d2d; */
 }
 </style>

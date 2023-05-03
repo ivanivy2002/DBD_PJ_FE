@@ -1,4 +1,8 @@
 <template>
+  <div class="info">
+    <!-- TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
+    <h1>商品页面</h1>
+  </div>
   <div class="commodity-view">
     <el-row gutter="24">
       <el-col
@@ -25,11 +29,30 @@
             <div class="commodity-content">介绍：{{ commodity.intro }}</div>
             <div class="commodity-content">价格：{{ commodity.price }}</div>
             <div class="commodity-image">
-              <img
-                v-for="imageUrl in getImageUrls(commodity.imagePath)"
-                :key="imageUrl"
-                :src="imageUrl"
-              />
+              <!-- BUG: 图片轮播失败 -->
+              <swiper
+                :slides-per-view="1"
+                :space-between="8"
+                navigation
+                :pagination="{ clickable: true }"
+                :autoplay="{ delay: 3000 }"
+                effect="fade"
+                observer
+                observeParents
+                class="swiper-container"
+              >
+                <swiper-wrapper>
+                  <swiper-slide
+                    v-for="imageUrl in getImageUrls(commodity.imagePath)"
+                    :key="imageUrl"
+                  >
+                    <img :src="imageUrl" />
+                  </swiper-slide>
+                </swiper-wrapper>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+              </swiper>
             </div>
             <div class="commodity-action">
               <el-input-number
@@ -58,6 +81,9 @@
 <script>
 import { ElRow, ElCol, ElCard, ElButton, ElInputNumber, ElMessage } from 'element-plus'
 import axios from 'axios'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/swiper-bundle.min.css'
+import CommoditySwiper from '../../components/CommoditySwiper.vue'
 
 export default {
   components: {
@@ -65,7 +91,10 @@ export default {
     ElCol,
     ElCard,
     ElButton,
-    ElInputNumber
+    ElInputNumber,
+    Swiper,
+    SwiperSlide,
+    CommoditySwiper
   },
   data() {
     return {
@@ -158,9 +187,15 @@ export default {
 </script>
 
 <style scoped>
-img {
-  width: 50px;
-  height: 50px;
+.info {
+  width: 100%;
+}
+
+.info h1 {
+  font-size: 40px;
+  color: #4befc3;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .commodity-view {
@@ -168,13 +203,14 @@ img {
 }
 
 .animated-card {
-  background-color: #3a3f58;
-  opacity: 100%;
+  background-color: #26d6cd;
   border-radius: 4px;
   padding: 24px;
   margin-bottom: 24px;
-  cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: default;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .animated-card:hover {
@@ -203,7 +239,7 @@ img {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 12px;
-  cursor: pointer;
+  cursor: default;
   color: #fff;
 }
 
@@ -231,5 +267,48 @@ img {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.commodity-image {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.commodity-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Swiper styles */
+.swiper-slide {
+  text-align: center;
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  opacity: 0.5;
+  border-radius: 50%;
+  margin: 0 8px;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
 }
 </style>

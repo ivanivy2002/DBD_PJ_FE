@@ -1,18 +1,28 @@
 <template>
   <el-sub-menu index="2" class="OpMenuButton">
     <template #title>
-      <div class="OpMenuButton">
-        <span class="OpMenuButton">操作中心</span>
+      <div class="submenu-title">
+        <span class="submenu-title-text">操作中心</span>
       </div>
     </template>
-    <el-menu-item index="2-4" @click="gotoStorePage">查看首页</el-menu-item>
-    <el-menu-item index="2-1" @click="gotoStoreManagePage">管理店面</el-menu-item>
-    <el-menu-item index="2-2" @click="gotoCommodityRegManagePage">管理商品上架</el-menu-item>
-    <el-menu-item index="2-3" @click="gotoCommodityChangeInfoManagePage"
-      >管理商品信息修改</el-menu-item
-    >
-    <el-menu-item index="2-3" @click="gotoManageMoneyPage">查看商城账户</el-menu-item>
-    <el-menu-item index="2-3" @click="gotoCashFlowRecordPage">查看流水</el-menu-item>
+    <el-menu-item index="2-4" @click="gotoStorePage">
+      <button class="btn btn-outline-primary">查看首页</button>
+    </el-menu-item>
+    <el-menu-item index="2-1" @click="gotoStoreManagePage">
+      <button class="btn btn-outline-primary">管理店铺</button>
+    </el-menu-item>
+    <el-menu-item index="2-2" @click="gotoCommodityRegManagePage">
+      <button class="btn btn-outline-primary">管理商品上架</button>
+    </el-menu-item>
+    <el-menu-item index="2-3" @click="gotoCommodityChangeInfoManagePage">
+      <button class="btn btn-outline-primary">管理商品信息修改</button>
+    </el-menu-item>
+    <el-menu-item index="2-3" @click="gotoManageMoneyPage">
+      <button class="btn btn-outline-primary">管理账户</button>
+    </el-menu-item>
+    <el-menu-item index="2-3" @click="gotoCashFlowRecordPage">
+      <button class="btn btn-outline-primary">查看流水</button>
+    </el-menu-item>
   </el-sub-menu>
 </template>
 
@@ -67,14 +77,18 @@ export default {
 }
 
 .submenu-title-text {
-  color: #fff;
+  color: #ffffff;
   font-size: 16px;
   margin-left: 6px;
 }
 
+.submenu-title-text:hover {
+  color: #4befc3;
+}
+
 .el-menu-demo .el-menu-item,
 .el-menu-demo .el-submenu__title {
-  color: #fff;
+  color: #4befc3;
   font-size: 14px;
 }
 
@@ -96,44 +110,31 @@ export default {
   padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
-  border-radius: 0.25rem;
+  /* border-radius: 0.25rem; */
   cursor: pointer;
-  color: #fff;
+  color: #1ddbec;
   background-color: #2c3e50;
-  border-color: #2c3e50;
+  border-color: #ffffff;
 }
 
 .btn:hover {
-  background-color: #3498db;
-  border-color: #3498db;
+  background-color: #2de9ef;
+  border-color: #ffffff;
 }
-
 .btn:focus,
 .btn.focus {
   box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.5);
 }
-
 .btn-outline-primary {
   background-color: transparent;
-  color: #3498db;
-  border-color: #3498db;
+  color: #2de9ef;
+  border-color: #13cbd1;
+  font-weight: bold;
 }
 
 .btn-outline-primary:hover {
-  background-color: #3498db;
-  color: #fff;
-  border-color: #3498;
-}
-
-.OpMenuButton {
-  color: rgba(255, 255, 255, 0.71);
-  font-size: 16px;
-  margin-left: 6px;
-}
-
-.OpMenuButton:hover {
-  color: rgba(1, 0, 73, 0.75);
-  font-size: 16px;
-  margin-left: 6px;
+  background-color: #2de9ef;
+  color: #1dc8de;
+  border-color: #ffffff;
 }
 </style>

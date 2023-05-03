@@ -170,7 +170,9 @@ export default {
 .account-management {
   margin: 20px;
   padding: 20px;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 

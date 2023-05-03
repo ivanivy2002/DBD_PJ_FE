@@ -93,7 +93,7 @@ export default {
       activeTab: 'signin',
       categories: [],
       signForm: {
-        // TODO: userName之后需要改掉, 用sessionStorage来存储
+        // TODO: userName之后需要改掉, 用sessionStorage来存储；之后估计用真正的session（？
         userName: '',
         shopName: '',
         // categories: '',
@@ -104,7 +104,6 @@ export default {
         address: '',
         fund: '',
         registrationTime: ''
-        // TODO: 如何在这个时候传递用户名给后端
       },
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {

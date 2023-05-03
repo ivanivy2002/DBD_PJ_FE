@@ -1,6 +1,6 @@
 <template>
-  <button class="btn-76">
-    Button
+  <button class="btn-76" @click="Logout">
+    LOGOUT
     <span class="top"></span>
     <span class="right"></span>
     <span class="bottom"></span>
@@ -15,6 +15,15 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    }
+  },
+  methods: {
+    // TODO: 这个还没写完
+    Logout() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('shopId')
+      this.$router.push('/login')
     }
   }
 }
@@ -33,14 +42,14 @@ export default {
 .btn-76 {
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: button;
-  background-color: #000;
+  background-color: #31d1bd;
   background-image: none;
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
     Noto Color Emoji;
-  font-size: 100%;
+  font-size: 25px;
   line-height: 1.5;
   margin: 0;
   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
@@ -60,12 +69,12 @@ export default {
   display: none;
 }
 .btn-76 {
-  --neon: #0ea5e9;
+  --neon: #1bedca;
   box-sizing: border-box;
   display: block;
   font-weight: 900;
   -webkit-mask-image: none;
-  outline: 4px solid #fff;
+  outline: 4px solid #31d1bd;
   outline-offset: -4px;
   overflow: hidden;
   padding: 1.2rem 3rem;

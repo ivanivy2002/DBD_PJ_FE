@@ -1,104 +1,109 @@
 <template>
-  <div class="header">
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      :ellipsis="false"
-      @select="handleSelect"
-    >
-      <el-menu-item index="0">
-        <span class="header-logo">GansuiMall</span>
-      </el-menu-item>
-      <div class="flex-grow"></div>
-      <OpMenuOrdUser />
-    </el-menu>
+  <div class="container">
+    <div class="header">
+      <el-menu
+        :default-active="activeIndex"
+        class="el-menu-demo"
+        mode="horizontal"
+        :ellipsis="false"
+        @select="handleSelect"
+      >
+        <Btn87 />
+
+        <div class="flex-grow"></div>
+        <!-- TODO: logout函数逻辑还没写，这个要配合session -->
+        <div class="logout" style="display: flex">
+          <Btn76 />
+        </div>
+        <OpMenuOrdUser />
+      </el-menu>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import OpMenuOrdUser from './OpMenuOrdUser.vue'
+import Btn76 from '../ui-buttons/Neon.vue'
+import Btn87 from '../ui-buttons/CircularCharge.vue'
 
 export default {
   name: 'HeaderOrdUser',
-  components: { OpMenuOrdUser },
+  components: { OpMenuOrdUser, Btn76, Btn87 },
 
   setup() {
     const activeIndex = ref('1')
+    const router = useRouter()
+
     const handleSelect = (key: string, keyPath: string[]) => {
       console.log(key, keyPath)
     }
+
+    const gotoWelcome = () => {
+      router.push('/welcome')
+    }
+
     return {
       activeIndex,
-      handleSelect
+      handleSelect,
+      gotoWelcome
     }
   }
 }
 </script>
 
 <style scoped>
+/* General styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+/* Header styles */
 .header {
-  background-color: #1f2d3d;
-  padding: 20px;
+  width: 100%;
+  position: fixed; /* 新增的代码 */
+  top: 0; /* 新增的代码 */
+  left: 0; /* 新增的代码 */
 }
 
-.el-menu-demo {
-  background-color: #1f2d3d;
+.header .el-menu {
+  background-image: linear-gradient(to right, #32c8b2, #30d4c0);
   border: none;
+  min-height: 100%;
 }
 
-.el-menu-demo .el-menu-item,
-.el-menu-demo .el-submenu__title {
-  color: #fff;
-  font-size: 16px;
-}
-
-.el-menu-demo .el-menu-item.is-active,
-.el-menu-demo .el-submenu.is-active > .el-submenu__title {
-  background-color: #4a5568;
-}
-
-.el-menu-demo .el-menu-item:hover,
-.el-menu-demo .el-submenu__title:hover {
-  background-color: #4a5568;
+.el-menu-item {
+  display: flex;
+  align-items: center;
 }
 
 .header-logo {
-  color: #fff;
-  font-size: 24px;
+  font-size: 40px;
   font-weight: bold;
+  color: #2bbb9e;
+  margin-right: 15px;
 }
 
-.btn {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  color: #fff;
-  border-color: #4a5568;
+/* Menu styles */
+.header .el-menu-item.is-active {
+  background-color: rgba(128, 255, 242, 0.1);
 }
 
-.btn:hover {
-  background-color: #4a5568;
-  border-color: #4a5568;
+.header .el-menu-item:hover {
+  background-color: rgba(128, 255, 242, 0.2);
 }
 
-.btn:focus,
-.btn.focus {
-  box-shadow: 0 0 0 0.2rem rgba(74, 85, 104, 0.5);
-}
-
-.btn-outline-primary {
-  background-color: transparent;
-  color: #4a5568;
-  border-color: #4a5568;
-}
-
-.btn-outline-primary:hover {
-  background-color: #4a5568;
-  color: #fff;
-  border-color: #4a5568;
+.header .el-menu-item span {
+  color: #2795d9;
+  font-weight: 500;
 }
 </style>

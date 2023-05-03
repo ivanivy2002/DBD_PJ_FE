@@ -143,7 +143,7 @@ export default {
     console.log('Out: 2. After this.getShopInfo, mounted')
     console.log(localStorage.getItem('shopId'))
     // NOTE: 在这里加上await等待，表示主进程会先等待子进程结束
-    const response = await axios 
+    const response = await axios
       .get('http://localhost:9000/shop/displayShopInfo', {
         params: {
           userId: localStorage.getItem('userId')

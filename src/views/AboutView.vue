@@ -29,16 +29,31 @@
         我是2021级软件工程的洪淳宇，来自浙江金华；稳定的ISFJ型人格，善于比大拇指，担任班级信息委员以及参与学校的PCS服务队；平时比较喜欢羽毛球、网球等球类运动以及围棋等智力游戏。
       </p>
     </div>
-    <!--      <Avatar/>-->
   </div>
 </template>
 <style>
 .about {
+  /* 视口高度的100%*/
+  min-height: 100vh;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  background: linear-gradient(to bottom right, #177f7f, #32c8b2);
+  color: white;
+  /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
+  transition: background 0.5s ease-in-out;
+}
+
+/* .about {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 2rem;
-}
+} */
 
 .intro-section {
   flex-basis: calc(25% - 1rem);

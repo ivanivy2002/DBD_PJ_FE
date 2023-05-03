@@ -60,8 +60,8 @@
           <el-input v-model="signForm.registrationTime" type="date"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="signIn">申请</el-button>
-          <el-button type="default" @click="resetForm">重置</el-button>
+          <el-button type="primary" @click="signIn" style="color: #fff">申请</el-button>
+          <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -336,10 +336,22 @@ export default {
 </script>
 
 <style scoped>
+.form-header {
+  font-family: '黑体';
+  font-size: 30px;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-container {
+  font-weight: 500;
+  color: #ffffff;
+}
 .sign-form {
   max-width: 600px;
   margin: 0 auto;
-  background-color: #030c25;
+  background-color: #1cd5c9;
   padding: 30px;
   border-radius: 10px;
 }
@@ -378,8 +390,8 @@ export default {
 
 .el-button:hover,
 .el-button:focus {
-  background-color: #3730b3;
-  border-color: #3730b3;
+  background-color: #105494;
+  border-color: #105494;
 }
 
 .el-button:active {

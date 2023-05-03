@@ -413,12 +413,13 @@ export default {
 </script>
 
 <style>
-body {
+/* body {
   background-color: #2d2d2d;
   font-family: Arial, sans-serif;
-}
+} */
 
 .personal-center {
+  margin-top: 50px; /* 顶栏的高度 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -429,7 +430,8 @@ body {
 .personal-info,
 .personal-balance,
 .change-password {
-  background-color: #444444;
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
@@ -441,7 +443,7 @@ body {
 h2 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #66ccff;
+  color: #fcfcfc;
 }
 
 .user-form,

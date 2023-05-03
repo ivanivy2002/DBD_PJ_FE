@@ -47,11 +47,12 @@ export default [
       {
         path: '/home/admin/cashFlowRecord',
         component: CashFlowRecordView
-      },
-      {
-        path: '/home/admin',
-        redirect: '/home/admin/manage'
       }
+      // TODO: 这里和vendor保持一致
+      // {
+      //   path: '/home/admin',
+      //   redirect: '/home/admin/manage'
+      // }
     ]
   }
 ]

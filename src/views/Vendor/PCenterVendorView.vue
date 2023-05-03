@@ -415,7 +415,7 @@ export default {
 
 <style>
 body {
-  background-color: #2d2d2d;
+  /* background-color: #2d2d2d; */
   font-family: Arial, sans-serif;
 }
 
@@ -430,7 +430,9 @@ body {
 .personal-info,
 .personal-balance,
 .change-password {
-  background-color: #444444;
+  /* background-color: #444444; */
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);

@@ -141,13 +141,17 @@ export default {
 }
 
 .animated-card {
-  background-color: #3a3f58;
+  background-color: #26d6cd;
   opacity: 100%;
   border-radius: 4px;
   padding: 24px;
   margin-bottom: 24px;
   cursor: pointer;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+
+  /* 添加渐变动画和阴影效果 */
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .animated-card:hover {

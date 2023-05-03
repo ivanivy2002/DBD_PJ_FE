@@ -173,7 +173,7 @@ export default {
 <style scoped>
 .shopping-cart {
   padding: 24px;
-  background-color: #2c3b4d;
+  background-color: #ffffff;
 }
 
 .card-header {
@@ -182,7 +182,8 @@ export default {
   align-items: center;
   padding: 24px;
   border-bottom: 1px solid #ebeef5;
-  background-color: #4b5a6b;
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .card-title {
@@ -198,7 +199,8 @@ export default {
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
-  background-color: #3e4b5a;
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cart-item-enter-active,
@@ -213,12 +215,14 @@ export default {
 }
 
 .el-table__row {
-  background-color: #2c3b4d;
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   color: #cfd8dc;
 }
 
 .el-table__header {
-  background-color: #4b5a6b;
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   color: #fff;
 }
 
