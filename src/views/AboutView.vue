@@ -26,7 +26,7 @@
       <img src="../assets/images/photo_intro/hcy.jpg" alt="hcy" class="intro-photo" />
       <h1 class="intro-name">洪淳宇 21302010035</h1>
       <p class="intro-text">
-        我是2021级软件工程的洪淳宇，来自浙江金华；稳定的ISFJ型人格，善于比大拇指，担任班级信息委员以及参与学校的PCS服务队；平时比较喜欢羽毛球、网球等球类运动以及围棋等智力游戏。
+        我是2021级软件工程的洪淳宇，来自浙江金华；ESFJ型人格，善于比大拇指，担任班级信息委员以及参与学校的PCS服务队；平时比较喜欢羽毛球、网球等球类运动以及围棋等智力游戏。
       </p>
     </div>
   </div>

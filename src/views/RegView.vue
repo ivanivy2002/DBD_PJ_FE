@@ -207,7 +207,7 @@ export default {
       // 异步发送post请求
       try {
         // TODO: URL需要修改成统一的格式（不要写localhost）
-        const response = await axios.post('http://localhost:9000/api/login', this.loginForm)
+        const response = await axios.post('/api/api/login', this.loginForm)
         // NOTE: 不需要在前端转换成JSON
         const { token, user } = response.data // 验证返回值
         // 处理登录逻辑，例如将token和用户信息保存到本地缓存
@@ -251,7 +251,7 @@ export default {
           console.log('注册', this.registerForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-            .post('http://localhost:9000/user', this.registerForm)
+            .post('/api/user', this.registerForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功

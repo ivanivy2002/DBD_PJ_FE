@@ -61,7 +61,7 @@ export default {
     async fetchData() {
       try {
         // TODO: 相对路径（'api/home/display'）访问出错，这个问题应该和路由相关
-        const response = await axios.get('http://localhost:9000/home/displayShop')
+        const response = await axios.get('/api/home/displayShop')
         // const response = await axios.get('api/home/display')
         console.log(response.data)
         return response.data

@@ -94,7 +94,7 @@ export default {
   methods: {
     fetchData: async function () {
       try {
-        const response = await axios.get('http://localhost:9000/admin/displayShop')
+        const response = await axios.get('/api/admin/displayShop')
         this.storesData = response.data.data
         // TODO: 下面的函数需要修改（字符串解析）
         this.storesData = this.removeZerosInObjectArray(this.storesData)
@@ -116,7 +116,7 @@ export default {
         this.ifApprove = 1
         console.log(row.id)
         if (row.regStatus == '待审核') {
-          const response = await axios.put('http://localhost:9000/admin/handleStoreOpen', null, {
+          const response = await axios.put('/api/admin/handleStoreOpen', null, {
             params: {
               // userName: 'penny',
               shopId: row.id,
@@ -132,7 +132,7 @@ export default {
           }
         }
         if (row.removeStatus == '待审核') {
-          const response = await axios.put('http://localhost:9000/admin/handleStoreRemove', null, {
+          const response = await axios.put('/api/admin/handleStoreRemove', null, {
             params: {
               shopId: row.id,
               ifApprove: this.ifApprove
@@ -158,7 +158,7 @@ export default {
         console.log(row.id)
         this.id = row.id
         if (row.regStatus == '待审核') {
-          await axios.put('http://localhost:9000/admin/handleStoreOpen', null, {
+          await axios.put('/api/admin/handleStoreOpen', null, {
             params: {
               shopId: row.id,
               ifApprove: this.ifApprove
@@ -168,7 +168,7 @@ export default {
           await this.fetchData()
         }
         if (row.removeStatus == '待审核') {
-          const response = await axios.put('http://localhost:9000/admin/handleStoreRemove', null, {
+          const response = await axios.put('/api/admin/handleStoreRemove', null, {
             params: {
               shopId: row.id,
               ifApprove: this.ifApprove

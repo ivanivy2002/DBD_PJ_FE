@@ -49,7 +49,7 @@ export default {
       }
       // 发送POST请求
       console.log(JSON.stringify(formData.get('commodity')))
-      const res = await fetch('http://localhost:9000/commodity/reg', {
+      const res = await fetch('/api/commodity/reg', {
         method: 'POST',
         body: formData
       })
@@ -62,11 +62,11 @@ export default {
       console.log(result)
     },
     getImageUrls(imagePaths) {
-      const baseUrl = 'http://localhost:9000/display/commodity/'
+      const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     }
     // getImageUrl(imagePath) {
-    //   const baseUrl = 'http://localhost:9000/display/commodity/';
+    //   const baseUrl = '/api/display/commodity/';
     //   return `${baseUrl}${imagePath}`;
     // },
     // splitByComma(str) {

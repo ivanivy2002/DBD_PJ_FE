@@ -119,7 +119,7 @@ export default {
       try {
         // eslint-disable-next-line no-unused-vars
         const response = await axios
-          .get('http://localhost:9000/shop/displayAccount', {
+          .get('/api/shop/displayAccount', {
             params: {
               shopId: localStorage.getItem('shopId') //获取cookie中的id
             }
@@ -153,7 +153,7 @@ export default {
           return
         }
         const response = axios
-          .post('http://localhost:9000/shop/recharge', null, {
+          .post('/api/shop/recharge', null, {
             params: {
               shopId: localStorage.getItem('shopId'),
               // shopId: this.shopId,
@@ -190,7 +190,7 @@ export default {
       try {
         // eslint-disable-next-line no-unused-vars
         const response = axios
-          .post('http://localhost:9000/shop/remove', null, {
+          .post('/api/shop/remove', null, {
             params: {
               shopId: localStorage.getItem('shopId')
             }
@@ -219,7 +219,7 @@ export default {
     //   try {
     //     // TODO: 未做session测试
     //     console.log(localStorage.getItem('id')) // 从session中拿数据像后端请求
-    //     const response = await axios.get('http://localhost:9000/shop/displayInfo', {
+    //     const response = await axios.get('/api/shop/displayInfo', {
     //       params: {
     //         shopId: localStorage.getItem('id') //获取cookie中的id
     //       }
@@ -259,7 +259,7 @@ export default {
     //         this.$refs.shopInfo.validate((valid) => {
     //             console.log(valid)
     //             if (valid) {
-    //                 const response = axios.put('http://localhost:9000/shop/changeInfo', {
+    //                 const response = axios.put('/api/shop/changeInfo', {
     //                     shopId: localStorage.getItem('id'), //获取cookie中的id
     //                     shopName: this.shopInfoForm.shopName,
     //                     email: this.shopInfoForm.email,
@@ -299,7 +299,7 @@ export default {
     //         console.log(valid)
     //         if (valid) {
     //             try {
-    //                 const response = axios.put('http://localhost:9000/shop/changePassword', {
+    //                 const response = axios.put('/api/shop/changePassword', {
     //                     shopId: localStorage.getItem('id'), //获取cookie中的id
     //                     oldPassword: this.password.oldPassword,
     //                     newPassword: this.password.newPassword

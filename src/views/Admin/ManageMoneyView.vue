@@ -93,7 +93,7 @@ export default {
           return
         }
         const response = axios
-          .post('http://localhost:9000/admin/recharge', null, {
+          .post('/api/admin/recharge', null, {
             params: {
               amount: rechargeAmount
               // TODO: 这里amount和balance的命名和关系
@@ -124,12 +124,10 @@ export default {
       // 发送请求获取余额
       try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axios
-          .get('http://localhost:9000/admin/displayProfitAccount')
-          .then((response) => {
-            this.profitAccount.balance = response.data.data.balance
-            console.log('profitAccount.balance ' + this.profitAccount.balance)
-          })
+        const response = await axios.get('/api/admin/displayProfitAccount').then((response) => {
+          this.profitAccount.balance = response.data.data.balance
+          console.log('profitAccount.balance ' + this.profitAccount.balance)
+        })
       } catch (error) {
         console.log(error)
         ElMessage({
@@ -140,12 +138,10 @@ export default {
       }
       try {
         // eslint-disable-next-line no-unused-vars
-        const response = await axios
-          .get('http://localhost:9000/admin/displayMiddleAccount')
-          .then((response) => {
-            this.middleAccount.balance = response.data.data.balance
-            console.log('middleAccount.balance ' + this.middleAccount.balance)
-          })
+        const response = await axios.get('/api/admin/displayMiddleAccount').then((response) => {
+          this.middleAccount.balance = response.data.data.balance
+          console.log('middleAccount.balance ' + this.middleAccount.balance)
+        })
       } catch (error) {
         console.log(error)
         ElMessage({

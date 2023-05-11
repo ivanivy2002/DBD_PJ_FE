@@ -209,7 +209,7 @@ export default {
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-            .post('http://localhost:9000/commodity/reg', this.signForm)
+            .post('/api/commodity/reg', this.signForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功
@@ -268,8 +268,8 @@ export default {
           console.log('申请提交', this.changeForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-            // .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
-            .put('http://localhost:9000/commodity/changeInfo', this.changeForm)
+            // .post('/api/commodity/changeInfo', this.changeForm)
+            .put('/api/commodity/changeInfo', this.changeForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功
@@ -312,7 +312,7 @@ export default {
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
     async fetchCommodityRegRecord() {
       try {
-        const response = await axios.get('http://localhost:9000/admin/displayCommodityReg')
+        const response = await axios.get('/api/admin/displayCommodityReg')
         this.commoditiesData = response.data.data
         console.log(this.commoditiesData)
         this.stateCommodityRegRecord.tableData = response.data.data.map((row) => {
@@ -329,7 +329,7 @@ export default {
     async fetchDataRegRecord() {
       try {
         console.log(localStorage.getItem('shopId'))
-        const response = await axios.get('http://localhost:9000/commodity/displayRegRecord', {
+        const response = await axios.get('/api/commodity/displayRegRecord', {
           params: {
             shopId: localStorage.getItem('shopId') //获取cookie中的id
           }
@@ -348,14 +348,11 @@ export default {
     async fetchDataChangeInfoRecord() {
       try {
         console.log(localStorage.getItem('shopId'))
-        const response = await axios.get(
-          'http://localhost:9000/commodity/displayChangeInfoRecord',
-          {
-            params: {
-              shopId: localStorage.getItem('shopId') //获取cookie中的id
-            }
+        const response = await axios.get('/api/commodity/displayChangeInfoRecord', {
+          params: {
+            shopId: localStorage.getItem('shopId') //获取cookie中的id
           }
-        )
+        })
         this.commoditiesData = response.data.data
         this.stateRegRecord.tableData = response.data.data.map((row) => {
           // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
@@ -374,7 +371,7 @@ export default {
       try {
         this.ifApprove = 1
         console.log(row.id)
-        const response = await axios.put('http://localhost:9000/admin/handleCommodityReg', null, {
+        const response = await axios.put('/api/admin/handleCommodityReg', null, {
           params: {
             commodityId: row.id,
             ifApprove: this.ifApprove
@@ -397,7 +394,7 @@ export default {
       try {
         this.ifApprove = 2
         this.commodityId = row.id
-        await axios.put('http://localhost:9000/admin/handleCommodityReg', null, {
+        await axios.put('/api/admin/handleCommodityReg', null, {
           params: {
             commodityId: row.id,
             ifApprove: this.ifApprove

@@ -248,7 +248,7 @@ export default {
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-            .post('http://localhost:9000/shop/reg', this.signForm)
+            .post('/api/shop/reg', this.signForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功

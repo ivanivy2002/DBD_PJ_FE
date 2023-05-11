@@ -144,7 +144,7 @@ export default {
     console.log(localStorage.getItem('shopId'))
     // NOTE: 在这里加上await等待，表示主进程会先等待子进程结束
     const response = await axios
-      .get('http://localhost:9000/shop/displayShopInfo', {
+      .get('/api/shop/displayShopInfo', {
         params: {
           userId: localStorage.getItem('userId')
         }
@@ -216,7 +216,7 @@ export default {
           console.log(localStorage.getItem('shopId')) // 从session中拿数据像后端请求
           // eslint-disable-next-line no-unused-vars
           const response = await axios
-            .get('http://localhost:9000/shop/displayInfo', {
+            .get('/api/shop/displayInfo', {
               params: {
                 shopId: localStorage.getItem('shopId') //获取cookie中的id
               }
@@ -273,7 +273,7 @@ export default {
       this.shopInfoForm.id = localStorage.getItem('shopId')
       if (this.shopInfoForm.id !== null) {
         try {
-          const response = await axios.get('http://localhost:9000/commodity/displayQualified/', {
+          const response = await axios.get('/api/commodity/displayQualified/', {
             params: { shopId: this.shopInfoForm.id }
           })
           console.log(response.data)

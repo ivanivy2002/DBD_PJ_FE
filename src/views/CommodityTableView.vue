@@ -75,9 +75,6 @@ export default {
         price: commodity.price,
         commodityNum: 1 // 初始商品数量为1
       }))
-      // TODO: 选择哪一种？
-      // `http://localhost:9000/home/displayCommodity/${this.shopId}`
-      // `http://localhost:9000/commodity/displayQualified/`
     } catch (error) {
       console.log(error)
     }
@@ -86,7 +83,7 @@ export default {
     async fetchData() {
       try {
         this.shopId = localStorage.getItem('shopId')
-        const response = await axios.get('http://localhost:9000/commodity/displayQualified/', {
+        const response = await axios.get('/api/commodity/displayQualified/', {
           params: { shopId: this.shopId }
         })
         console.log(response.data)
@@ -99,7 +96,7 @@ export default {
     addToCart(commodityId, quantity, price) {
       try {
         const response = axios
-          .post('http://localhost:9000/shoppingCart/addCommodity/', {
+          .post('/apiCommodity/', {
             // NOTE: 传一个body
             // id: null,
             userId: localStorage.getItem('userId'),

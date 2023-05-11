@@ -84,8 +84,8 @@ export default {
         commodityNum: 1 // 初始商品数量为1
       }))
       // TODO: 选择哪一种？
-      // `http://localhost:9000/home/displayCommodity/${this.shopId}`
-      // `http://localhost:9000/commodity/displayQualified/`
+      // `/api/home/displayCommodity/${this.shopId}`
+      // `/api/commodity/displayQualified/`
     } catch (error) {
       console.log(error)
     }
@@ -94,7 +94,7 @@ export default {
     async fetchData() {
       try {
         this.shopId = localStorage.getItem('shopId')
-        const response = await axios.get('http://localhost:9000/commodity/displayQualified/', {
+        const response = await axios.get('/api/commodity/displayQualified/', {
           params: { shopId: this.shopId }
         })
         console.log(response.data)
@@ -107,7 +107,7 @@ export default {
     addToCart(commodityId, quantity, price) {
       try {
         const response = axios
-          .post('http://localhost:9000/shoppingCart/addCommodity/', {
+          .post('/api/shoppingCart/addCommodity/', {
             // NOTE: 传一个body
             // id: null,
             userId: localStorage.getItem('userId'),
@@ -146,7 +146,7 @@ export default {
         console.log('图片路径为空')
         return []
       }
-      const baseUrl = 'http://localhost:9000/display/commodity/'
+      const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     }
   }

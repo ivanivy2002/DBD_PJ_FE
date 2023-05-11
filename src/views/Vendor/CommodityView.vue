@@ -346,7 +346,7 @@ export default {
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.signForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
-          const res = fetch('http://localhost:9000/commodity/reg', {
+          const res = fetch('/api/commodity/reg', {
             method: 'POST',
             body: this.organizeFormData(this.signForm)
           })
@@ -391,7 +391,7 @@ export default {
         console.log('图片路径为空')
         return []
       }
-      const baseUrl = 'http://localhost:9000/display/commodity/'
+      const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
     openChangeForm(row) {
@@ -412,7 +412,7 @@ export default {
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.changeForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
-          const res = fetch('http://localhost:9000/commodity/changeInfo', {
+          const res = fetch('/api/commodity/changeInfo', {
             method: 'PUT',
             body: this.organizeFormData(this.changeForm)
           })
@@ -436,8 +436,8 @@ export default {
               }
             })
           // axios
-          //   // .post('http://localhost:9000/commodity/changeInfo', this.changeForm)
-          //   .put('http://localhost:9000/commodity/changeInfo', this.changeForm)
+          //   // .post('/api/commodity/changeInfo', this.changeForm)
+          //   .put('/api/commodity/changeInfo', this.changeForm)
           //   .then((response) => {
           //     console.log(response.data)
           //     if (response.data.code == 200) {
@@ -498,7 +498,7 @@ export default {
       try {
         // eslint-disable-next-line no-unused-vars
         const response = axios
-          .put('http://localhost:9000/commodity/remove', null, {
+          .put('/api/commodity/remove', null, {
             params: {
               commodityId: row.id
             }
@@ -526,7 +526,7 @@ export default {
     async fetchDataQualified() {
       try {
         console.log(localStorage.getItem('shopId'))
-        const response = await axios.get('http://localhost:9000/commodity/displayQualified', {
+        const response = await axios.get('/api/commodity/displayQualified', {
           params: {
             shopId: localStorage.getItem('shopId') //获取cookie中的id
           }
@@ -546,7 +546,7 @@ export default {
     async fetchDataRegRecord() {
       try {
         console.log(localStorage.getItem('shopId'))
-        const response = await axios.get('http://localhost:9000/commodity/displayRegRecord', {
+        const response = await axios.get('/api/commodity/displayRegRecord', {
           params: {
             shopId: localStorage.getItem('shopId') //获取cookie中的id
           }
@@ -565,14 +565,11 @@ export default {
     async fetchDataChangeInfoRecord() {
       try {
         console.log(localStorage.getItem('shopId'))
-        const response = await axios.get(
-          'http://localhost:9000/commodity/displayChangeInfoRecord',
-          {
-            params: {
-              shopId: localStorage.getItem('shopId') //获取cookie中的id
-            }
+        const response = await axios.get('/api/commodity/displayChangeInfoRecord', {
+          params: {
+            shopId: localStorage.getItem('shopId') //获取cookie中的id
           }
-        )
+        })
         this.commoditiesData = response.data.data
         this.stateChangeInfoRecord.tableData = response.data.data.map((row) => {
           // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')

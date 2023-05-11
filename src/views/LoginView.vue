@@ -274,7 +274,7 @@ export default {
         console.log(this.loginForm.role)
         if (this.loginForm.role == 0) {
           //* 非管理员
-          this.backUrl = 'http://localhost:9000/user/login'
+          this.backUrl = '/api/user/login'
 
           const response = await axios.get(this.backUrl, {
             params: {
@@ -324,9 +324,8 @@ export default {
           }
         } else if (this.loginForm.role == 1) {
           //* 管理员
-          // this.backUrl = 'http://localhost:9000/admin/login'
           // TODO: 后端接口有些修改，前端也需要相应修正，管理员和非管理员URL相同
-          this.backUrl = 'api/user/login'
+          this.backUrl = '/api/user/login'
           const response = await axios.get(this.backUrl, {
             params: {
               // 查询
@@ -378,8 +377,6 @@ export default {
             message: '登录失败：未成功连接后端'
           })
         }
-        // TODO: URL需要修改成统一的格式（不要写localhost）
-
         // NOTE: 不需要在前端转换成JSON
         this.$refs.form.resetFields() // 重置表单
       } catch (error) {
@@ -402,7 +399,7 @@ export default {
           console.log('注册', this.registerForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           axios
-            .post('http://localhost:9000/user/reg', this.registerForm)
+            .post('/api/user/reg', this.registerForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功

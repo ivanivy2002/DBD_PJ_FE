@@ -73,7 +73,7 @@ export default {
   methods: {
     fetchData() {
       const response = axios
-        .get('http://localhost:9000/shoppingCart/displayInfo', {
+        .get('/api/shoppingCart/displayInfo', {
           // TODO: 注意测试完之后改成this.id
           // params: { userId: 21 }
           params: { userId: localStorage.getItem('userId') }
@@ -116,7 +116,7 @@ export default {
     // NOTE: 删除单个商品
     removeCommodity(commodityId) {
       const response = axios
-        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+        .delete('/api/shoppingCart/removeCommodity/', {
           params: {
             userId: localStorage.getItem('userId'),
             // userId: 21,
@@ -144,7 +144,7 @@ export default {
       const commodityIdArray = this.selectedItems.map((item) => item.commodityId)
       console.log(commodityIdArray)
       const response = axios
-        .delete('http://localhost:9000/shoppingCart/removeCommodity/', {
+        .delete('/api/shoppingCart/removeCommodity/', {
           params: {
             // userId: 21,
             userId: localStorage.getItem('userId'),

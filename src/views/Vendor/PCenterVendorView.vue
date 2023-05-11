@@ -216,7 +216,7 @@ export default {
         // TODO: 未做session测试
         console.log(localStorage.getItem('userId')) // 从session中拿数据向后端请求
         const response = axios
-          .get('http://localhost:9000/user/displayInfo', {
+          .get('/api/user/displayInfo', {
             params: {
               userId: localStorage.getItem('userId') //获取cookie中的id
               // userId: 20
@@ -249,7 +249,7 @@ export default {
       // 发送请求获取余额
       try {
         const response = axios
-          .get('http://localhost:9000/user/displayAccount', {
+          .get('/api/user/displayAccount', {
             params: {
               userId: localStorage.getItem('userId') //获取cookie中的id
               // userId: 20
@@ -281,7 +281,7 @@ export default {
           return
         }
         const response = axios
-          .post('http://localhost:9000/user/recharge', null, {
+          .post('/api/user/recharge', null, {
             params: {
               userId: localStorage.getItem('userId'), //获取cookie中的id
               // userId: 20,
@@ -315,7 +315,7 @@ export default {
           console.log(valid)
           if (valid) {
             const response = axios
-              .put('http://localhost:9000/user/changeInfo', {
+              .put('/api/user/changeInfo', {
                 userId: localStorage.getItem('userId'), //获取cookie中的id
                 // userId: 20,
                 userName: this.userInfoForm.userName,
@@ -360,7 +360,7 @@ export default {
         if (valid) {
           try {
             const response = axios
-              .put('http://localhost:9000/user/changePassword', null, {
+              .put('/api/user/changePassword', null, {
                 params: {
                   password: this.changePasswordForm.oldPassword,
                   newPassword: this.changePasswordForm.newPassword,
