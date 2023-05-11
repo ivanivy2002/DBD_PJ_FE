@@ -1,8 +1,8 @@
 <template>
-  <div class="shopping-cart dark-bg">
+  <div class="shopping-cart">
     <el-card class="cart-card">
-      <div slot="header" class="card-header">
-        <h2 class="card-title" style="width: 20%">我的购物车</h2>
+      <div class="card-header">
+        <h2 class="card-title">我的购物车</h2>
       </div>
       <!-- NOTE: 下面有一个多选框的监听 -->
       <el-table
@@ -12,7 +12,6 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column prop="commodityName" label="商品名称" width="180" />
-        <!-- <el-table-column prop="intro" label="介绍" /> -->
         <el-table-column prop="commodityPrice" label="价格" width="120">
           <template #default="{ row }">
             <span>{{ row.commodityPrice }}</span>
@@ -21,12 +20,9 @@
         <el-table-column prop="commodityNum" label="数量" width="120" />
         <el-table-column label="状态" width="120">
           <template #default="{ row }">
-            <!-- <el-tag v-if="row.regStatus == '有效'" type="success">正常</el-tag>
-            <el-tag v-else type="danger">已失效</el-tag> -->
             <el-tag :type="row.status === '有效' ? 'success' : 'danger'">{{ row.status }}</el-tag>
           </template>
         </el-table-column>
-        <!-- NOTE: 多选框 -->
         <el-table-column type="selection" width="55" />
         <el-table-column label="操作" width="120">
           <template #default="{ row }">
@@ -35,15 +31,16 @@
         </el-table-column>
       </el-table>
       <div class="footer">
-        <el-button type="danger" @click="removeSelected">批量删除</el-button>
+        <el-button type="default" @click="submitOrder">提交订单</el-button>
+        <el-button type="danger" @click="removeSelected" :disabled="selectedItems.length === 0"
+          >批量删除</el-button
+        >
       </div>
     </el-card>
   </div>
 </template>
-
 <script>
-import { ElTable, ElTableColumn, ElTag, ElButton, ElCard } from 'element-plus'
-// ElMessage
+import { ElTable, ElTableColumn, ElTag, ElButton, ElCard, ElMessage } from 'element-plus'
 import axios from 'axios'
 
 export default {
@@ -72,91 +69,48 @@ export default {
   },
   methods: {
     fetchData() {
-      const response = axios
+      axios
         .get('/api/shoppingCart/displayInfo', {
-          // TODO: 注意测试完之后改成this.id
-          // params: { userId: 21 }
-          params: { userId: localStorage.getItem('userId') }
+          params: { userId: this.userId }
         })
         .then((response) => {
-          console.log(response.data.data)
-          // console.log(Object.values(response.data.data))
-          // const cartObjects = Object.fromEntries(Object.values(response.data.data))
-          // console.log(cartObjects)
-          // const shoppingCarts = Object.keys(response.data.data)[0]
-          // console.log(shoppingCarts)
-          // const cartItems = Object.values(shoppingCarts).flat().map(item => {
-          //   return {
-          //     name: item.commodityName,
-          //     commodityIntro: item.intro,
-          //     commodityPrice: item.commodityPrice,
-          //     commodityNum: item.commodityNum,
-          //     stats: item.status,
-          //     id: item.id
-          //   }
-          // });
-          // console.log(cartItems);
-          // const ShoppingCart = {
-          //   id: 1427763201,
-          //   userId: 21,
-          //   commodityId: 1,
-          //   commodityPrice: 2342.0,
-          //   commodityNum: 2,
-          //   status: '有效'
-          // };
-          // const cartArray = eval(shoppingCarts)
-          // console.log(cartArray)
-          // NOTE: 用Objects.values()方法将对象转换为数组
-          this.cartItems = response.data.data.map((row) => {
-            // console.log(row)
-            return row
-          })
+          this.cartItems = response.data.data
         })
     },
-    // NOTE: 删除单个商品
     removeCommodity(commodityId) {
-      const response = axios
+      axios
         .delete('/api/shoppingCart/removeCommodity/', {
           params: {
-            userId: localStorage.getItem('userId'),
-            // userId: 21,
-            // commodityIdArray: [commodityId] // 这是一个array
+            userId: this.userId,
             commodityIdArray: commodityId.toString()
           }
         })
-        .then((response) => {
+        .then(() => {
           this.fetchData()
         })
     },
-    // NOTE: 删除选中的商品
     async removeSelected() {
-      // TODO：检查是否选中商品
-      console.log(this.selectedItems)
-      // if (this.selectedItems.length === 0) {
-      //   console.log('你没有选中商品，删除失败')
-      //   ElMessage({
-      //     showClose: true,
-      //     type: 'error', //如果失败,未连接上后端
-      //     message: '请选择至少一个商品后删除'
-      //   })
-      //   return
-      // }
+      if (this.selectedItems.length === 0) {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: '请选择至少一个商品后删除'
+        })
+        return
+      }
       const commodityIdArray = this.selectedItems.map((item) => item.commodityId)
-      console.log(commodityIdArray)
-      const response = axios
+      axios
         .delete('/api/shoppingCart/removeCommodity/', {
           params: {
-            // userId: 21,
-            userId: localStorage.getItem('userId'),
+            userId: this.userId,
             commodityIdArray: this.joinWithComma(commodityIdArray)
           }
         })
-        .then((response) => {
+        .then(() => {
           this.fetchData()
           this.selectedItems = []
         })
     },
-    // NOTE: 多选框即时更新（监听）
     handleSelectionChange(selection) {
       this.selectedItems = selection
     },
@@ -165,6 +119,18 @@ export default {
         throw new Error('Argument must be an array')
       }
       return categories.join(',')
+    },
+    // TODO: 参数还没写完
+    submitOrder() {
+      this.$router.push('/home/orduser/order/create')
+      // TODO: 下面这种传参的方式可参考
+      // this.$router.push({
+      //   path: '/home/orduser/order/create',
+      //   query: {
+      //     userId: this.userId,
+      //     commodityIdArray: this.joinWithComma(this.selectedItems.map((item) => item.commodityId))
+      //   }
+      // })
     }
   }
 }
@@ -182,14 +148,13 @@ export default {
   align-items: center;
   padding: 24px;
   border-bottom: 1px solid #ebeef5;
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #24b8c6;
+  color: #fff;
 }
 
 .card-title {
   margin: 0;
   font-size: 24px;
-  color: #fff;
 }
 
 .cart-card {
@@ -199,30 +164,15 @@ export default {
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.cart-item-enter-active,
-.cart-item-leave-active {
-  transition: all 0.3s ease;
-}
-
-.cart-item-enter,
-.cart-item-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
+  background-color: #fff;
 }
 
 .el-table__row {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-  color: #cfd8dc;
+  background-color: #f5f5f5;
 }
 
 .el-table__header {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #24b8c6;
   color: #fff;
 }
 
