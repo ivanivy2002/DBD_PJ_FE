@@ -9,6 +9,7 @@
     <el-main>
       <el-row :gutter="20">
         <el-col :span="6">
+          <!-- NOTE: 这个方法挺厉害的，选中之后调用函数设置不同的activeStatus -->
           <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
             <el-submenu index="1">
               <template #title>
