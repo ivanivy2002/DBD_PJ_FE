@@ -1,10 +1,19 @@
 <template>
   <div class="aside">
     <el-menu :default-active="activeSelect" class="el-menu-vertical-demo" @select="handleSelect">
-      <el-menu-item index="1">个人信息</el-menu-item>
-      <el-menu-item index="2">修改信息</el-menu-item>
-      <el-menu-item index="3">修改密码</el-menu-item>
-      <el-menu-item index="4">查看资金</el-menu-item>
+      <el-menu-item index="1">
+        <el-icon><User /></el-icon>
+        个人信息
+      </el-menu-item>
+      <el-menu-item index="2">
+        <el-icon><Edit /></el-icon>修改信息</el-menu-item
+      >
+      <el-menu-item index="3"
+        ><el-icon><WarningFilled /></el-icon>修改密码</el-menu-item
+      >
+      <el-menu-item index="4"
+        ><el-icon><Money /></el-icon>查看资金</el-menu-item
+      >
     </el-menu>
   </div>
   <div class="personal-center">
@@ -101,6 +110,7 @@
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { User, Edit, WarningFilled, Money } from '@element-plus/icons-vue'
 
 export default {
   data() {
