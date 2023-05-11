@@ -1,6 +1,14 @@
 <template>
+  <div class="aside">
+    <el-menu :default-active="activeSelect" class="el-menu-vertical-demo" @select="handleSelect">
+      <el-menu-item index="1">个人信息</el-menu-item>
+      <el-menu-item index="2">修改信息</el-menu-item>
+      <el-menu-item index="3">修改密码</el-menu-item>
+      <el-menu-item index="4">查看资金</el-menu-item>
+    </el-menu>
+  </div>
   <div class="personal-center">
-    <div class="personal-info">
+    <div v-if="activeSelect === '1'" class="personal-info">
       <h2>修改个人信息</h2>
       <el-form
         :model="userInfoForm"
@@ -46,7 +54,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="personal-balance">
+    <div v-if="activeSelect === '4'" class="personal-balance">
       <h2>个人资金</h2>
       <p>当前余额: {{ balance }}</p>
       <el-form
@@ -64,7 +72,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="change-password">
+    <div v-if="activeSelect === '3'" class="change-password">
       <h2>修改密码</h2>
       <el-form
         :model="changePasswordForm"
@@ -97,6 +105,7 @@ import { ElMessage } from 'element-plus'
 export default {
   data() {
     return {
+      activeSelect: '1',
       userInfoForm: {
         userName: 'gan',
         email: '2251@vwv.com',
@@ -252,7 +261,6 @@ export default {
           .get('/api/user/displayAccount', {
             params: {
               userId: localStorage.getItem('userId') //获取cookie中的id
-              // userId: 20
             }
           })
           .then((response) => {
@@ -408,18 +416,22 @@ export default {
       //* 重置表单
       this.$refs.userInfo.resetFields()
       this.getUserInfo() //刷新表单
+    },
+    handleSelect(index) {
+      this.activeSelect = index // 根据点击的菜单项更新显示的栏目
     }
   }
 }
 </script>
 
 <style>
-body {
-  /* background-color: #2d2d2d; */
+/* body {
+  background-color: #2d2d2d;
   font-family: Arial, sans-serif;
-}
+} */
 
 .personal-center {
+  margin-top: 50px; /* 顶栏的高度 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -430,7 +442,6 @@ body {
 .personal-info,
 .personal-balance,
 .change-password {
-  /* background-color: #444444; */
   background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
@@ -444,7 +455,7 @@ body {
 h2 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #66ccff;
+  color: #fcfcfc;
 }
 
 .user-form,
@@ -497,6 +508,35 @@ h2 {
   outline: none;
   box-shadow: 0 0 5px rgba(102, 204, 255, 0.5);
   border-color: #66ccff;
+}
+
+.aside {
+  margin: 20px;
+  float: left;
+  margin-right: 20px;
+}
+
+/* 设置菜单栏的宽度和高度 */
+.el-menu-vertical-demo {
+  width: 200px;
+  height: 100%;
+}
+
+/* 设置菜单项的字体大小和颜色 */
+.el-menu-item {
+  font-size: 16px;
+  color: #606266;
+}
+
+/* 鼠标悬停在菜单项上时的背景色 */
+.el-menu-item:hover {
+  background-color: #f5f7fa;
+}
+
+/* 设置菜单的边框和背景色 */
+.aside {
+  border: 1px solid #ebeef5;
+  background-color: #fff;
 }
 </style>
 
