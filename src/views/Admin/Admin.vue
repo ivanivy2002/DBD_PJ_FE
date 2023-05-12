@@ -3,6 +3,9 @@
   <div id="head" style="z-index: 10000">
     <HeaderAdmin />
   </div>
+  <div>
+    <AdminAside />
+  </div>
   <!-- TODO: 手动添加边距（？或许需要修正 -->
   <div>
     <br />
@@ -25,10 +28,11 @@
 <script>
 // import PCenterAdmin from "@/components/PCenterAdmin";
 import HeaderAdmin from '@/components/AdminComponents/HeaderAdmin.vue'
-
+import AdminAside from '@/components/AdminComponents/AdminAside.vue'
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Admin',
-  components: { HeaderAdmin }
+  components: { HeaderAdmin, AdminAside }
 }
 </script>
 

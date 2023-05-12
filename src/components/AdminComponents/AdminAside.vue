@@ -5,72 +5,39 @@
       class="sidebar-menu"
       :collapse-transition="false"
       :unique-opened="true"
-      :background-color="'#2e2e2e'"
+      :background-color="'rgba(33,220,186,0.95)'"
       :text-color="'#fff'"
-      :active-text-color="'#ffd04b'"
+      :active-text-color="'#ffffff'"
     >
-      <el-menu-item index="1" class="sidebar-menu-item" @click="handleClick('account')">
+      <el-menu-item index="2-4" class="sidebar-menu-item" @click="gotoStorePage">
         <i class="el-icon-user"></i>
-        <span slot="title">商城账户</span>
+        <span slot="title">查看首页</span>
       </el-menu-item>
-      <el-menu-item index="2" class="sidebar-menu-item" @click="handleClick('transfer')">
-        <i class="el-icon-document"></i>
-        <span slot="title">转账流水</span>
+      <el-menu-item index="2-1" class="sidebar-menu-item" @click="gotoStoreManagePage">
+        <i class="el-icon-user"></i>
+        <span slot="title">管理店铺</span>
+      </el-menu-item>
+      <el-menu-item index="2-2" class="sidebar-menu-item" @click="gotoCommodityRegManagePage">
+        <i class="el-icon-user"></i>
+        <span slot="title">管理商品上架</span>
+      </el-menu-item>
+      <el-menu-item
+        index="2-3"
+        class="sidebar-menu-item"
+        @click="gotoCommodityChangeInfoManagePage"
+      >
+        <i class="el-icon-user"></i>
+        <span slot="title">管理商品信息修改</span>
+      </el-menu-item>
+      <el-menu-item index="2-3" class="sidebar-menu-item" @click="gotoManageMoneyPage">
+        <i class="el-icon-user"></i>
+        <span slot="title">管理账户</span>
+      </el-menu-item>
+      <el-menu-item index="2-3" class="sidebar-menu-item" @click="gotoCashFlowRecordPage">
+        <i class="el-icon-user"></i>
+        <span slot="title">查看流水</span>
       </el-menu-item>
     </el-menu>
-    <div class="sidebar-content">
-      <transition name="fade" mode="out-in">
-        <div v-if="activeTab === 'account'" key="account" class="account-tab">
-          <div class="account-management">
-            <h2 class="page-title">账户管理</h2>
-            <div class="profit-account">
-              <h3 class="section-title">商城利润账户</h3>
-              <div class="account-info">
-                <div class="balance">余额：{{ profitAccount.balance }}</div>
-                <div>
-                  <el-form ref="balanceForm" label-width="120px" class="balance-form">
-                    <el-form-item label="充值金额" prop="balance">
-                      <el-input v-model="rechargeAmount" type="number"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                      <el-button type="primary" @click="recharge(rechargeAmount)">充值</el-button>
-                    </el-form-item>
-                  </el-form>
-                </div>
-                <!--                <el-button type="primary" @click="showRechargeDialog = true">充值</el-button>-->
-              </div>
-            </div>
-            <div class="middle-account">
-              <h3 class="section-title">商城中间账户</h3>
-              <div class="account-info">
-                <div class="balance">余额：{{ middleAccount.balance }}</div>
-              </div>
-            </div>
-            <el-dialog title="充值商城利润账户" v-model="showRechargeDialog">
-              <el-form :model="rechargeForm" label-width="80px">
-                <el-form-item label="充值金额">
-                  <el-input v-model.number="rechargeForm.amount"></el-input>
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="showRechargeDialog = false">取消</el-button>
-                <el-button type="primary" @click="recharge">确认充值</el-button>
-              </div>
-            </el-dialog>
-          </div>
-        </div>
-        <div v-else-if="activeTab === 'transfer'" key="transfer" class="transfer-tab">
-          <ul class="transfer-list">
-            <li v-for="(item, index) in transferList" :key="index">
-              <span>{{ item.date }}</span>
-              <span>{{ item.description }}</span>
-              <span>{{ item.amount }}</span>
-            </li>
-          </ul>
-          <button class="transfer-btn">新建转账</button>
-        </div>
-      </transition>
-    </div>
   </div>
 </template>
 
@@ -105,6 +72,27 @@ export default {
     }
   },
   methods: {
+    gotoStoreManagePage() {
+      this.$router.push('/home/admin/manage')
+    },
+    gotoStorePage() {
+      this.$router.push('/home/admin/store')
+    },
+    gotoCommodityTablePage() {
+      this.$router.push('/home/admin/commodityTable')
+    },
+    gotoCommodityRegManagePage() {
+      this.$router.push('/home/admin/commodityReg')
+    },
+    gotoCommodityChangeInfoManagePage() {
+      this.$router.push('/home/admin/commodityChangeInfo')
+    },
+    gotoManageMoneyPage() {
+      this.$router.push('/home/admin/manageMoney')
+    },
+    gotoCashFlowRecordPage() {
+      this.$router.push('/home/admin/cashFlowRecord')
+    },
     handleClick(tab) {
       this.activeTab = tab
     }
@@ -120,14 +108,33 @@ export default {
 }
 
 .sidebar-menu {
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
   width: 80px;
 }
 
-.sidebar-menu-item {
+.sidebar-menu-item:hover {
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar-menu-item {
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header .el-menu {
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  border: none;
+  min-height: 100%;
 }
 
 .sidebar-content {

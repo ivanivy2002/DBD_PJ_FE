@@ -76,7 +76,7 @@ export default {
 }
 
 .header .el-menu {
-  background-image: linear-gradient(to right, #32c8b2, #30d4c0);
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
   border: none;
   min-height: 100%;
 }
@@ -103,7 +103,7 @@ export default {
 }
 
 .header .el-menu-item span {
-  color: #2795d9;
+  color: rgba(33, 220, 186, 0.95);
   font-weight: 500;
 }
 </style>
