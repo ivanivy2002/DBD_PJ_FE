@@ -115,7 +115,6 @@ export default {
   methods: {
     async fetchActivity() {
       try {
-
         const response = await axios.get('/api/home/getActivity')
         console.log(response.data)
         return response.data
