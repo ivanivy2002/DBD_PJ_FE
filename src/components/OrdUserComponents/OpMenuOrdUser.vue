@@ -20,6 +20,9 @@
     <el-menu-item index="2-5" @click="gotoShoppingCart">
       <button class="btn btn-outline-primary">查看购物车</button>
     </el-menu-item>
+    <el-menu-item index="2-6" @click="gotoDisplayOrder">
+      <button class="btn btn-outline-primary">订单管理</button>
+    </el-menu-item>
     <!-- </div> -->
   </el-sub-menu>
 </template>
@@ -42,6 +45,9 @@ export default {
     },
     gotoShoppingCart() {
       this.$router.push('/home/orduser/cart')
+    },
+    gotoDisplayOrder() {
+      this.$router.push('/home/orduser/order/display')
     }
   },
   setup() {

@@ -17,6 +17,9 @@
     <el-menu-item index="2-4" @click="gotoStorePage">
       <button class="btn btn-outline-primary">查看首页</button>
     </el-menu-item>
+    <el-menu-item index="2-5" @click="gotoOrderManage">
+      <button class="btn btn-outline-primary">查看订单</button>
+    </el-menu-item>
   </el-sub-menu>
 </template>
 
@@ -46,6 +49,9 @@ export default {
     },
     gotoSignForm() {
       this.$router.push('/home/vendor/signform')
+    },
+    gotoOrderManage() {
+      this.$router.push('/home/vendor/order/manage')
     }
   },
   data() {

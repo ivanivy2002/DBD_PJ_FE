@@ -1,6 +1,6 @@
 <template>
   <div class="info">
-<!--    <h1>商店页面</h1>-->
+    <!--    <h1>商店页面</h1>-->
   </div>
   <div class="dashboard" style="z-index: -1">
     <el-row gutter="24">

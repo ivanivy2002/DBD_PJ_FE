@@ -9,6 +9,7 @@ import PicUploadTest from '@/views/Vendor/PicUploadTest'
 // import CommodityTableView from '@/views/CommodityTableView.vue'
 import VendorCommodityView from '@/views/Vendor/VendorCommodityView.vue'
 import StoreTableView from '@/views/StoreTableView.vue'
+import OrderManageView from '@/views/Vendor/Order/OrderManageView'
 
 export default [
   {
@@ -49,6 +50,11 @@ export default [
         path: '/home/vendor/pic',
         name: 'PicUploadTest',
         component: PicUploadTest
+      },
+      {
+        path: '/home/vendor/order/manage',
+        name: 'OrderManageView',
+        component: OrderManageView
       }
     ]
   }
