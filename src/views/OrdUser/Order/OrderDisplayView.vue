@@ -16,26 +16,30 @@
                 <i class="el-icon-notebook-1"></i>
                 订单分类
               </template>
-              <el-menu-item index="1-1">待支付</el-menu-item>
-              <el-menu-item index="1-2">待发货</el-menu-item>
-              <el-menu-item index="1-3">待收货</el-menu-item>
-              <el-menu-item index="1-4">已完成</el-menu-item>
-              <el-menu-item index="1-5">已撤销</el-menu-item>
-              <el-menu-item index="1-6">已退款</el-menu-item>
+              <el-menu-item index="待支付">待支付</el-menu-item>
+              <el-menu-item index="待发货">待发货</el-menu-item>
+              <el-menu-item index="待收货">待收货</el-menu-item>
+              <el-menu-item index="已完成">已完成</el-menu-item>
+              <el-menu-item index="已撤销">已撤销</el-menu-item>
+              <el-menu-item index="已退款">已退款</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-col>
         <el-col :span="18">
           <el-table :data="orderData" stripe style="width: 100%">
-            <el-table-column prop="orderNumber" label="订单号" width="180"> </el-table-column>
-            <el-table-column prop="productName" label="商品名称"> </el-table-column>
-            <el-table-column prop="price" label="价格" width="120"> </el-table-column>
+            <el-table-column prop="id" label="订单号" width="180"> </el-table-column>
+            <el-table-column prop="shopName" label="店铺"> </el-table-column>
+            <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
+            <el-table-column prop="productName" label="商品图片"> </el-table-column>
+            <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
             <el-table-column prop="status" label="状态" width="120">
               <template #default="{ row }">
-                <el-tag :type="statusType(row.status)" disable-transitions>{{ row.status }}</el-tag>
+                <el-tag :type="statusTagType(row.status)" disable-transitions>{{
+                  row.status
+                }}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="date" label="下单时间" width="180"> </el-table-column>
+            <el-table-column prop="createTime" label="下单时间" width="180"> </el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -53,6 +57,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'OrderList',
   data() {
@@ -61,18 +66,53 @@ export default {
       pageSize: 10,
       totalOrders: 0,
       orderData: [],
-      activeStatus: ''
+      allOrders: [], // 新增属性
+      activeStatus: '待支付' // 代表当前页面是筛选哪个状态的订单
     }
   },
   created() {
-    this.getOrderData()
+    this.getAllOrders() // 新增方法
+    // this.getOrderData() 放到了getAllOrders里面
   },
   methods: {
-    getOrderData() {
-      // 在此处获取订单数据，例如通过API调用
-      // 根据当前页数、页面大小和订单状态筛选数据
-      // 更新totalOrders和orderData
+    getAllOrders() {
+      // 新增方法
+      const url = '/api/order/' + this.statusSelect(this.activeStatus)
+      console.log('11' + url)
+      axios
+        .get(url, {
+          params: { userId: localStorage.getItem('userId') }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            console.log('成功获取所有订单')
+            this.allOrders = response.data.data
+            this.currentPage = 1 // 重新设置 currentPage 变量
+            this.pageSize = 10 // 重新设置 pageSize 变量
+            this.getOrderData() // 更新数据和重新渲染
+          } else {
+            console.log('获取所有订单失败')
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
+
+    // getOrderData方法开始
+    getOrderData() {
+      // 计算当前页的起始和结束下标
+      const startIndex = (this.currentPage - 1) * this.pageSize
+      const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
+      // 获取当前页的订单数据
+      const orders = this.allOrders.slice(startIndex, endIndex)
+      // 更新总订单数
+      this.totalOrders = this.allOrders.length
+      // 更新当前页的订单数据
+      this.orderData = orders
+    }, // getOrderData方法结束
+
     handleSizeChange(val) {
       this.pageSize = val
       this.getOrderData()
@@ -83,10 +123,29 @@ export default {
     },
     handleSelect(key) {
       // 切换订单状态
+      console.log(key)
       this.activeStatus = key
-      this.getOrderData()
+      this.getAllOrders()
     },
-    statusType(status) {
+    statusSelect(status) {
+      switch (status) {
+        case '待支付':
+          return 'displayToBePaid'
+        case '待发货':
+          return 'displayToBeShipped'
+        case '待收货':
+          return 'displayToBeConfirmed'
+        case '已完成':
+          return 'displayFinished'
+        case '已撤销':
+          return 'displayRevoked'
+        case '已退款':
+          return 'displayRefunded'
+        default:
+          return ''
+      }
+    },
+    statusTagType(status) {
       switch (status) {
         case '待支付':
           return 'info'
