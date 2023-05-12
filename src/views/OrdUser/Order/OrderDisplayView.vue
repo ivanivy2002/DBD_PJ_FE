@@ -30,7 +30,15 @@
             <el-table-column prop="id" label="订单号" width="180"> </el-table-column>
             <el-table-column prop="shopName" label="店铺"> </el-table-column>
             <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
-            <el-table-column prop="productName" label="商品图片"> </el-table-column>
+            <el-table-column prop="imagePath" label="商品图片">
+              <template #default="{ row }">
+                <img
+                  v-for="imageUrl in getImageUrls(row.imagePath)"
+                  :key="imageUrl"
+                  :src="imageUrl"
+                />
+              </template>
+            </el-table-column>
             <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
             <el-table-column prop="status" label="状态" width="120">
               <template #default="{ row }">
@@ -113,6 +121,16 @@ export default {
       this.orderData = orders
     }, // getOrderData方法结束
 
+    getImageUrls(imagePaths) {
+      // NOTE: 从后端获取图片的url(特殊URL)
+      //  || imagePaths == undefined || imagePaths == ''
+      if (!imagePaths) {
+        console.log('图片路径为空')
+        return []
+      }
+      const baseUrl = '/api/display/commodity/'
+      return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
+    },
     handleSizeChange(val) {
       this.pageSize = val
       this.getOrderData()
