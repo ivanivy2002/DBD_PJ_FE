@@ -1,6 +1,6 @@
 <template>
   <!-- <p>This is Vendor.</p> -->
-  <div id="head" style="z-index: 10000">
+  <div id="head" style="z-index: 10000; position: relative">
     <HeaderVendor />
   </div>
   <!-- TODO: 手动添加边距（？或许需要修正 -->
