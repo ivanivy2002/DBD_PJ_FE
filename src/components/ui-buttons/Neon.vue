@@ -88,7 +88,7 @@ export default {
   box-shadow: 0 0 5px var(--neon), 0 0 25px var(--neon), 0 0 50px var(--neon), 0 0 100px var(--neon);
   color: #fff;
   outline-color: transparent;
-  transition: 0.2s linear 0.6s;
+  transition: 0.2s linear 0.3s;
 }
 .btn-76 span {
   display: block;
