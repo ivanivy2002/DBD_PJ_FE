@@ -4,8 +4,7 @@
     <HeaderAdmin />
   </div>
   <div style="z-index: 1">
-    <AdminAside />
-    <router-view />
+    <!--    <AdminAside />-->
   </div>
   <!-- TODO: 手动添加边距（？或许需要修正 -->
   <div>
@@ -20,7 +19,9 @@
   <div class="welcomeAdmin">
     <h1>欢迎来到管理员界面，请选择你接下来的操作😉</h1>
   </div>
-  <div id="router" style="z-index: 1"></div>
+  <div id="router" style="z-index: 1">
+    <router-view />
+  </div>
   <!-- <StoreTable /> -->
 </template>
 

@@ -1,5 +1,22 @@
 <template>
-  <div class="dashboard">
+  <div class="activity-board">
+    <el-row gutter="24">
+      <el-col v-for="activity in activities" :key="activity.id" :xs="24" :sm="12" :md="8" :lg="10">
+        <el-card
+          class="animated-card-activity"
+          shadow="hover"
+          @click="navigateToActivity(activity.id)"
+        >
+          <div slot="header" class="card-header">
+            <div class="card-title">活动 {{ activity.id }}</div>
+          </div>
+          <div class="card-content">活动状态：{{ activity.status }}</div>
+          <div class="card-content">活动资金：{{ activity.regFund }}</div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
+  <div class="store-board">
     <el-row gutter="24">
       <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
         <el-card class="animated-card" shadow="hover" @click="navigateToCommodity(store.id)">
@@ -14,7 +31,11 @@
               <span v-for="(category, index) in store.categories" :key="index">{{ category }}</span>
             </div>
           </div>
-          <div class="card-content">商店简介：{{ store.intro }}</div>
+          <div class="card-content">
+            <span class="category-title">商店简介：</span>
+            <!--                        商店简介：-->
+            {{ store.intro }}
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -35,7 +56,22 @@ export default {
   },
   data() {
     return {
-      stores: []
+      stores: [],
+      activities: [
+        {
+          id: 1,
+          lastTime: 7,
+          activityFund: 999999,
+          x: 10,
+          y: 20,
+          regFund: 100,
+          monthlySales: 2000,
+          monthlyAmount: 200,
+          status: '开启成功',
+          createTime: '2023-05-12 16:16:46',
+          originFund: 2000
+        }
+      ]
     }
   },
   async mounted() {
@@ -56,13 +92,43 @@ export default {
     } catch (error) {
       console.log(error)
     }
+    // try {
+    //     const activityResponse = await this.fetchActivity()
+    //     console.log(activityResponse.data)
+    //     this.activities = activityResponse.data.map((activity) => ({
+    //         id: activity.id,
+    //         lastTime: activity.lastTime,
+    //         activityFund: activity.activityFund,
+    //         x: activity.x,
+    //         y: activity.y,
+    //         regFund: activity.regFund,
+    //         monthlySales: activity.monthlySales,
+    //         monthlyAmount: activity.monthlyAmount,
+    //         status: activity.status,
+    //         createTime: activity.createTime,
+    //         originFund: activity.originFund,
+    //     }))
+    // } catch (error) {
+    //     console.log(error)
+    // };
   },
   methods: {
+    async fetchActivity() {
+      try {
+
+        const response = await axios.get('/api/home/getActivity')
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        console.log(error)
+        throw error
+      }
+    },
     async fetchData() {
       try {
         // TODO: 相对路径（'api/home/display'）访问出错，这个问题应该和路由相关
         const response = await axios.get('/api/home/displayShop')
-        // const response = await axios.get('api/home/display')
+        // const response = await axios.get('/api/home/display')
         console.log(response.data)
         return response.data
       } catch (error) {
@@ -75,13 +141,14 @@ export default {
       // TODO: 这里的路由上面需不需要显示shopId
       // this.$router.push({ path: `/home/orduser/commodity/${shopId}` });
       this.$router.push({ path: `/home/orduser/commodity/` })
-    }
+    },
+    navigateToActivity(activityId) {}
   }
 }
 </script>
 
 <style scoped>
-.dashboard {
+.store-board {
   padding: 24px;
   background-color: #232836;
   min-height: 100vh;

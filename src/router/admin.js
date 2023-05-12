@@ -8,6 +8,7 @@ import CommodityChangeInfoView from '@/views/Admin/CommodityChangeInfoView.vue'
 // import CommodityTableView from '@/views/CommodityTableView.vue'
 import AdminCommodityView from '@/views/Admin/AdminCommodityView.vue'
 import CashFlowRecordView from '@/views/Admin/CashFlowRecordView.vue'
+import ActivityManage from '@/views/Admin/Activity/ActivityManage.vue'
 
 export default [
   {
@@ -47,6 +48,10 @@ export default [
       {
         path: '/home/admin/cashFlowRecord',
         component: CashFlowRecordView
+      },
+      {
+        path: '/home/admin/activityMange',
+        component: ActivityManage
       }
       // TODO: 这里和vendor保持一致
       // {
