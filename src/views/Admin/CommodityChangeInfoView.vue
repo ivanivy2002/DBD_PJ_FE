@@ -152,11 +152,12 @@ export default {
   computed: {
     isButtonDisabled() {
       return (row) => {
-        if (row.changeStatus !== '待审核') {
-          return true
-        } else {
-          return false
-        }
+          // if (row.changeStatus !== '待审核') {
+          //     return true
+          // } else {
+          //     return false
+          // }
+        return row.changeStatus !== '待审核';
       }
     },
     rules: function () {
@@ -415,19 +416,19 @@ export default {
 </script>
 
 <style scoped>
-.el-tabs__header,
-.el-tabs__content {
-  color: white;
-}
+/*.el-tabs__header,*/
+/*.el-tabs__content {*/
+/*  color: white;*/
+/*}*/
 
-.changeButton:hover {
-  background-color: #4db8ff;
-  color: white;
-}
+/*.changeButton:hover {*/
+/*  background-color: #4db8ff;*/
+/*  color: white;*/
+/*}*/
 
-#changeForm {
-  /* background-color: #2d2d2d; */
-}
+/*#changeForm {*/
+/*  !* background-color: #2d2d2d; *!*/
+/*}*/
 .container {
   max-width: 1200px;
   margin: 0 auto;
