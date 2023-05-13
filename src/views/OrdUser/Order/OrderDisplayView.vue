@@ -120,7 +120,37 @@ export default {
       // 更新当前页的订单数据
       this.orderData = orders
     }, // getOrderData方法结束
-
+    // NOTE: 用于通过commodityId查询commodity的各个属性
+    getCommodityInfo(commodityId) {
+      const response = axios.get('/api/commodity/displayInfo', {
+        params: { commodityId: commodityId }
+      }).then((response) => {
+        console.log(response)
+        if (response.data.code == 200) {
+          console.log('成功获取商品信息')
+          return response.data.data
+        } else {
+          console.log('获取商品信息失败')
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    getShopInfo(shopId) {
+      const response = axios.get('/api/shop/displayInfo', {
+        params: { shopId: shopId }
+      }).then((response) => {
+        console.log(response)
+        if (response.data.code == 200) {
+          console.log('成功获取店铺信息')
+          return response.data.data
+        } else {
+          console.log('获取店铺信息失败')
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
       //  || imagePaths == undefined || imagePaths == ''
