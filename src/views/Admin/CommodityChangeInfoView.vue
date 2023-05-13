@@ -152,12 +152,12 @@ export default {
   computed: {
     isButtonDisabled() {
       return (row) => {
-          // if (row.changeStatus !== '待审核') {
-          //     return true
-          // } else {
-          //     return false
-          // }
-        return row.changeStatus !== '待审核';
+        // if (row.changeStatus !== '待审核') {
+        //     return true
+        // } else {
+        //     return false
+        // }
+        return row.changeStatus !== '待审核'
       }
     },
     rules: function () {

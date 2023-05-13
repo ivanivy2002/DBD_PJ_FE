@@ -35,23 +35,23 @@
 // import { reactive, ref } from 'vue'
 
 import {
-  ElTabs,
-  ElTabPane,
+  // ElTabs,
+  // ElTabPane,
   ElForm,
   ElFormItem,
   ElInput,
   ElButton,
   ElMessage,
-  ElCheckbox,
-  ElCheckboxGroup
+  // ElCheckbox,
+  // ElCheckboxGroup,
 } from 'element-plus'
 import axios from 'axios'
 // TODO: 这个options还没用上
-const options = [
-  { value: 'HTML', label: 'HTML' },
-  { value: 'CSS', label: 'CSS' },
-  { value: 'JavaScript', label: 'JavaScript' }
-]
+// const options = [
+//   { value: 'HTML', label: 'HTML' },
+//   { value: 'CSS', label: 'CSS' },
+//   { value: 'JavaScript', label: 'JavaScript' }
+// ]
 
 export default {
   name: 'PresetFormView',
@@ -71,11 +71,11 @@ export default {
       activeTab: 'signin',
       categories: [],
       presetForm: {
-        activityFund: 0,
+        activityFund: 10,
         lastTime: 0,
         x: 0,
         y: 0,
-        regFund: 0,
+        regFund: 10,
         monthlySales: 0,
         monthlyAmount: 0,
         status: null,
@@ -123,7 +123,14 @@ export default {
           callback()
         }
       },
-
+      validateActivityFund: (rule, value, callback) => {
+        const fund = parseFloat(value)
+        if (isNaN(fund) || fund <= 0) {
+          callback(new Error('资金需大于' + 0 + '元！'))
+        } else {
+          callback()
+        }
+      },
       $message: this.message //引入$message组件
     }
   },
@@ -137,6 +144,14 @@ export default {
             trigger: 'blur'
           },
           { validator: this.validateUserName, trigger: 'blur' }
+        ],
+        activityFund: [
+          {
+            required: true,
+            message: '资金不能为空！',
+            trigger: 'blur'
+          },
+          { validator: this.validateActivityFund, trigger: 'blur' }
         ],
         shopName: [
           {
@@ -294,14 +309,18 @@ export default {
 }
 
 .form-container {
-  font-weight: 500;
+  font-weight: bold;
   color: #ffffff;
 }
 
 .sign-form {
   max-width: 600px;
   margin: 0 auto;
-  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(177, 234, 221, 0.91),
+    rgba(49, 231, 206, 0.71)
+  );
   padding: 30px;
   border-radius: 10px;
 }

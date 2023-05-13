@@ -92,7 +92,7 @@ export default {
           })
           return
         }
-          // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         const response = axios
           .post('/api/admin/recharge', null, {
             params: {
@@ -169,7 +169,7 @@ export default {
   padding: 20px;
   /* background-color: #f0f0f0; */
   background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }
 
@@ -192,7 +192,7 @@ export default {
 
 .balance {
   /*border-color: #2d2d2d;*/
-  margin-left: 0px;
+  margin-left: 0;
   /*margin-right: 20px;*/
 }
 
@@ -200,18 +200,18 @@ export default {
   margin-top: 20px;
 }
 
-.transaction-list {
-  max-height: 300px;
-  overflow: auto;
-}
+/*.transaction-list {*/
+/*  max-height: 300px;*/
+/*  overflow: auto;*/
+/*}*/
 
-.el-dialog__body {
-  padding: 20px;
-}
+/*.el-dialog__body {*/
+/*  padding: 20px;*/
+/*}*/
 
-.el-table__body {
-  background-color: #fff;
-}
+/*.el-table__body {*/
+/*  background-color: #fff;*/
+/*}*/
 
 .el-table__row--striped:nth-child(even) {
   background-color: #f5f5f5;

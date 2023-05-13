@@ -10,6 +10,7 @@ import PicUploadTest from '@/views/Vendor/PicUploadTest'
 import VendorCommodityView from '@/views/Vendor/VendorCommodityView.vue'
 import StoreTableView from '@/views/StoreTableView.vue'
 import OrderManageView from '@/views/Vendor/Order/OrderManageView'
+import VendorActivity from '@/views/Vendor/VendorActivity.vue'
 
 export default [
   {
@@ -55,6 +56,11 @@ export default [
         path: '/home/vendor/order/manage',
         name: 'OrderManageView',
         component: OrderManageView
+      },
+      {
+        path: '/home/vendor/activity',
+        name: 'VendorActivity',
+        component: VendorActivity
       }
     ]
   }

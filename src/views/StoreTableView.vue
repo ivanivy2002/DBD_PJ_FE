@@ -321,7 +321,7 @@ export default {
   /*display: block;*/
   background-color: #26d6cd;
   opacity: 100%;
-  border-radius: 4px;
+  border-radius: 13px;
   /*padding: 100px;*/
   /*padding-left: 100px;*/
   /*padding-right: 100px;*/
@@ -373,7 +373,7 @@ export default {
 
 .category-title {
   margin-right: 5px;
-  font-family: '宋体';
+  font-family: '宋体',serif;
   color: #ffffff;
 }
 
