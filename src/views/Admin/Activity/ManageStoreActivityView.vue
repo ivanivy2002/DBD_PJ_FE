@@ -132,7 +132,7 @@ export default {
         this.ifApprove = 1
         console.log(row.id)
         if (row.activityStatus == '待审核') {
-          const response = await axios.put('/api/admin/handleStoreRemove', null, {
+          const response = await axios.put('/api/admin/handleStoreJoinActivity', null, {
             params: {
               shopId: row.id,
               ifApprove: this.ifApprove
