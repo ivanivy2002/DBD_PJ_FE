@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-table :data="state.tableData" style="width: 100%">
       <el-table-column prop="operateType" label="操作类型"></el-table-column>
       <el-table-column prop="sourceName" label="来源名称"></el-table-column>
@@ -123,5 +123,12 @@ export default {
 
 .el-table__row--striped:nth-child(even) {
   background-color: #f5f5f5;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
 }
 </style>

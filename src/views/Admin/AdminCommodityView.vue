@@ -18,7 +18,8 @@
             electronics: commodity.category === 'electronics'
           }"
         >
-          <div slot="header" class="commodity-header">
+          <!--  slot="header"-->
+          <div class="commodity-header">
             <div class="commodity-name">{{ commodity.commodityName }}</div>
           </div>
           <div class="commodity-content">介绍：{{ commodity.intro }}</div>
@@ -31,20 +32,20 @@
             />
           </div>
           <!-- <div class="commodity-action">
-            <el-input-number
-              v-model="commodityNum"
-              :min="1"
-              :max="10"
-              label="数量"
-              controls-position="right"
-              style="width: 120px"
-            ></el-input-number>
-            <el-button
-              type="primary"
-              @click="addToCart(commodity.id, commodityNum, commodity.price)"
-              >添加到购物车</el-button
-            >
-          </div> -->
+                      <el-input-number
+                        v-model="commodityNum"
+                        :min="1"
+                        :max="10"
+                        label="数量"
+                        controls-position="right"
+                        style="width: 120px"
+                      ></el-input-number>
+                      <el-button
+                        type="primary"
+                        @click="addToCart(commodity.id, commodityNum, commodity.price)"
+                        >添加到购物车</el-button
+                      >
+                    </div> -->
         </el-card>
       </el-col>
     </el-row>
@@ -52,7 +53,8 @@
 </template>
 
 <script>
-import { ElRow, ElCol, ElCard, ElButton, ElInputNumber, ElMessage } from 'element-plus'
+import { ElRow, ElCol, ElCard, ElMessage } from 'element-plus'
+// ElButton, ElInputNumber,
 import axios from 'axios'
 
 export default {
@@ -60,9 +62,9 @@ export default {
   components: {
     ElRow,
     ElCol,
-    ElCard,
-    ElButton,
-    ElInputNumber
+    ElCard
+    // ElButton,
+    // ElInputNumber
   },
   data() {
     return {
@@ -103,6 +105,7 @@ export default {
     // NOTE: 添加商品到购物车
     addToCart(commodityId, quantity, price) {
       try {
+        // eslint-disable-next-line no-unused-vars
         const response = axios
           .post('/api/shoppingCart/addCommodity/', {
             // NOTE: 传一个body

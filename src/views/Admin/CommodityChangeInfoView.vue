@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-table :data="stateRegRecord.tableData" style="width: 100%">
       <el-table-column prop="commodityName" label="商品名称"></el-table-column>
       <el-table-column prop="intro" label="商品简介"></el-table-column>
@@ -47,10 +47,10 @@
 <script>
 import {
   // ElTabs,
-  ElTabPane,
-  ElForm,
-  ElFormItem,
-  ElInput,
+  // ElTabPane,
+  // ElForm,
+  // ElFormItem,
+  // ElInput,
   ElButton,
   ElMessage
   // ElCheckbox,
@@ -62,10 +62,10 @@ export default {
   name: 'CommodityChangeInfoView',
   components: {
     // ElTabs,
-    ElTabPane,
-    ElForm,
-    ElFormItem,
-    ElInput,
+    // ElTabPane,
+    // ElForm,
+    // ElFormItem,
+    // ElInput,
     ElButton
     // ElCheckbox,
     // ElCheckboxGroup,
@@ -427,5 +427,12 @@ export default {
 
 #changeForm {
   /* background-color: #2d2d2d; */
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
 }
 </style>

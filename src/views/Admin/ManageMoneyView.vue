@@ -42,10 +42,10 @@
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import AdminAside from '@/components/AdminComponents/AdminAside.vue'
+// import AdminAside from '@/components/AdminComponents/AdminAside.vue'
 export default {
   components: {
-    AdminAside
+    // AdminAside
   },
   data() {
     return {
@@ -92,6 +92,7 @@ export default {
           })
           return
         }
+          // eslint-disable-next-line no-unused-vars
         const response = axios
           .post('/api/admin/recharge', null, {
             params: {
@@ -173,13 +174,13 @@ export default {
 }
 
 .page-title {
-  color: #1e90ff;
+  color: #ffffff;
 }
 
 .section-title {
   margin-top: 20px;
   margin-bottom: 10px;
-  color: #1e90ff;
+  color: #ffffff;
 }
 
 .account-info {

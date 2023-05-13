@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-table :data="state.tableData" style="width: 100%">
       <el-table-column prop="id" label="活动编号" width="100px"></el-table-column>
       <el-table-column prop="lastTime" label="持续时间" width="100px"></el-table-column>
@@ -285,4 +285,11 @@ export default {
 /*    padding: 30px;*/
 /*    border-radius: 10px;*/
 /*}*/
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+}
 </style>
