@@ -3,9 +3,9 @@
     <el-table :data="state.tableData" style="width: 100%">
       <el-table-column prop="shopName" label="店名"></el-table-column>
       <el-table-column prop="categories" label="商品类别"></el-table-column>
-<!--      <el-table-column prop="idNumber" label="身份证号"></el-table-column>-->
-<!--      <el-table-column prop="intro" label="商店简介"></el-table-column>-->
-<!--      <el-table-column prop="address" label="备案地址"></el-table-column>-->
+      <!--      <el-table-column prop="idNumber" label="身份证号"></el-table-column>-->
+      <!--      <el-table-column prop="intro" label="商店简介"></el-table-column>-->
+      <!--      <el-table-column prop="address" label="备案地址"></el-table-column>-->
       <el-table-column prop="fund" label="注册资金"></el-table-column>
       <!--            <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
       <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
@@ -39,10 +39,10 @@
           </el-tag>
         </template>
       </el-table-column>
-        <el-table-column prop="activityStatus" label="活动状态">
-            <template #default="{ row }">
-                <el-tag
-                        :type="
+      <el-table-column prop="activityStatus" label="活动状态">
+        <template #default="{ row }">
+          <el-tag
+            :type="
               row.activityStatus === '待审核'
                 ? 'warning'
                 : row.activityStatus === '已同意'
@@ -51,10 +51,10 @@
                 ? 'danger'
                 : 'info'
             "
-                >{{ row.activityStatus }}
-                </el-tag>
-            </template>
-        </el-table-column>
+            >{{ row.activityStatus }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template #default="{ row }">
           <el-button
