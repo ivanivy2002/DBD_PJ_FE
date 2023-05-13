@@ -17,7 +17,7 @@
         <el-menu-item index="2-3" @click="gotoCommodityChangeInfoManagePage">
             <button class="btn btn-outline-primary">管理商品信息修改</button>
         </el-menu-item>
-        <el-menu-item index="2-3" @click="gotoManageMoneyPage">
+        <el-menu-item index="2-6" @click="gotoManageMoneyPage">
             <button class="btn btn-outline-primary">管理账户</button>
         </el-menu-item>
         <el-menu-item index="2-4" @click="gotoCashFlowRecordPage">
@@ -25,6 +25,9 @@
         </el-menu-item>
         <el-menu-item index="2-5" @click="gotoActivityPage">
             <button class="btn btn-outline-primary">查看活动</button>
+        </el-menu-item>
+        <el-menu-item index="2-7" @click="gotoManageStoreActivityPage">
+            <button class="btn btn-outline-primary">查看商店参加活动</button>
         </el-menu-item>
     </el-sub-menu>
 </template>
@@ -59,7 +62,10 @@ export default {
         },
         gotoActivityPage() {
             this.$router.push('/home/admin/activityManage')
-        }
+        },
+        gotoManageStoreActivityPage() {
+            this.$router.push('/home/admin/manageStoreActivity')
+        },
     },
     setup() {
         const handleCommand = (command: string | number | object) => {
