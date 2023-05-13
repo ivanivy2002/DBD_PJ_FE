@@ -12,7 +12,8 @@
 
                 <div class="flex-grow"></div>
                 <div class="welcomeWord">
-                    欢迎 {{ this.userName }}
+<!--                    欢迎 {{ this.userName }}-->
+                    欢迎, 管理员!
                 </div>
                 <!-- TODO: logout函数逻辑还没写，这个要配合session -->
                 <div class="logout" style="display: flex">
@@ -26,11 +27,11 @@
 
 <script lang="ts">
 import {ref} from 'vue'
+import axios from "axios";
 import {useRouter} from 'vue-router'
 import OpMenuAdmin from './OpMenuAdmin.vue'
 import Btn76 from '../ui-buttons/Neon.vue'
 import Btn87 from '../ui-buttons/CircularCharge.vue'
-import axios from "axios";
 import {ElMessage} from "element-plus";
 
 export default {
@@ -64,6 +65,7 @@ export default {
             try {
                 // TODO: 未做session测试
                 console.log(localStorage.getItem('userId')) // 从session中拿数据向后端请求
+                // console.log(localStorage.getItem('id')) // 从session中拿数据向后端请求
                 const response = axios
                     .get('/api/user/displayInfo', {
                         params: {
