@@ -33,8 +33,8 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+// import { ElMessage } from 'element-plus'
+// import { ArrowDown } from '@element-plus/icons-vue'
 
 export default {
   name: 'OpMenuAdmin',
@@ -68,11 +68,11 @@ export default {
     }
   },
   setup() {
-    const handleCommand = (command: string | number | object) => {
-      ElMessage(`click on item ${command}`)
-    }
+    // const handleCommand = (command: string | number | object) => {
+    //   ElMessage(`click on item ${command}`)
+    // }
     return {
-      handleCommand
+      // handleCommand
     }
   }
 }
@@ -89,11 +89,11 @@ export default {
 }
 
 .submenu-title-text {
-    color: #ffffff;
-    font-size: 18px;
-    margin-left: 6px;
-    /*font-family: Apple;*/
-    font-weight: bold;
+  color: #ffffff;
+  font-size: 18px;
+  margin-left: 6px;
+  /*font-family: Apple;*/
+  font-weight: bold;
 }
 
 .submenu-title-text:hover {
@@ -154,6 +154,6 @@ export default {
   border-color: #ffffff;
 }
 .OpMenuButton:hover .submenu-title-text {
-    color: #4befc3;
+  color: #4befc3;
 }
 </style>
