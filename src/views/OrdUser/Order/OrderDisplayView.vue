@@ -66,6 +66,7 @@
 
 <script>
 import axios from 'axios'
+import { toRaw } from 'vue'
 export default {
   name: 'OrderList',
   data() {
@@ -83,11 +84,10 @@ export default {
     // this.getOrderData() 放到了getAllOrders里面
   },
   methods: {
-    getAllOrders() {
+    async getAllOrders() {
       // 新增方法
       const url = '/api/order/' + this.statusSelect(this.activeStatus)
-      console.log('11' + url)
-      axios
+      await axios
         .get(url, {
           params: { userId: localStorage.getItem('userId') }
         })
@@ -109,47 +109,83 @@ export default {
     },
 
     // getOrderData方法开始
-    getOrderData() {
+    async getOrderData() {
       // 计算当前页的起始和结束下标
       const startIndex = (this.currentPage - 1) * this.pageSize
       const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
       // 获取当前页的订单数据
       const orders = this.allOrders.slice(startIndex, endIndex)
+      console.log(2222)
+
       // 更新总订单数
       this.totalOrders = this.allOrders.length
       // 更新当前页的订单数据
       this.orderData = orders
+      console.log(toRaw(this.orderData))
+      await this.changeInfoById() // 新增调用changeInfoById函数
     }, // getOrderData方法结束
-    // NOTE: 用于通过commodityId查询commodity的各个属性
-    getCommodityInfo(commodityId) {
-      const response = axios.get('/api/commodity/displayInfo', {
-        params: { commodityId: commodityId }
-      }).then((response) => {
-        console.log(response)
-        if (response.data.code == 200) {
-          console.log('成功获取商品信息')
-          return response.data.data
-        } else {
-          console.log('获取商品信息失败')
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
+
+    // NOTE: 通过id查询order的具体各个属性
+    async changeInfoById() {
+      // NOTE: 下面的这个想法很好，在别的地方应该可以复用
+      for (let i = 0; i < this.orderData.length; i++) {
+        const order = this.orderData[i]
+        const commodityInfo = await this.getCommodityInfo(order.commodityId)
+        const shopInfo = await this.getShopInfo(order.shopId)
+        order.commodityName = commodityInfo.commodityName
+        order.imagePath = commodityInfo.imagePath
+        order.shopName = shopInfo.shopName
+        // this.$set(this.orderData, i, order)
+        this.orderData[i] = { ...order } // 将order对象复制到orderData数组的第i个位置
+      }
     },
-    getShopInfo(shopId) {
-      const response = axios.get('/api/shop/displayInfo', {
-        params: { shopId: shopId }
-      }).then((response) => {
-        console.log(response)
-        if (response.data.code == 200) {
-          console.log('成功获取店铺信息')
-          return response.data.data
-        } else {
-          console.log('获取店铺信息失败')
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
+    // NOTE: 通过commodityId查询commodity的各个属性
+    async getCommodityInfo(commodityId) {
+      let commodityInfo = {}
+      await axios
+        .get('/api/commodity/displayInfo', {
+          params: { commodityId: commodityId }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            console.log('成功获取商品信息')
+            console.log(response.data.data)
+            commodityInfo = response.data.data
+          } else {
+            console.log('获取商品信息失败')
+            commodityInfo = {} // 返回一个空对象
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          commodityInfo = {} // 返回一个空对象
+        })
+      return commodityInfo
+    },
+    // NOTE: 通过shopId查询shop的各个属性
+    async getShopInfo(shopId) {
+      let shopInfo = {}
+      await axios
+        .get('/api/shop/displayInfo', {
+          params: { shopId: shopId }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            console.log('成功获取店铺信息')
+            console.log(response.data.data)
+            shopInfo = response.data.data
+          } else {
+            console.log('获取店铺信息失败')
+            shopInfo = {} // 返回一个空对象
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          shopInfo = {} // 返回一个空对象
+        })
+      return shopInfo
     },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
@@ -217,6 +253,11 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900');
+
+img {
+  width: 50px;
+  height: 50px;
+}
 .el-breadcrumb-item {
   color: #409eff;
 }

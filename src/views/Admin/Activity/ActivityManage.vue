@@ -43,22 +43,22 @@
     </div>
     <div>
     <el-dialog v-model="presetFormVisible" title="活动新开" class="preset-dialog">
-        <!--        append-to-body-->
-        <div class="preset-form">
-            <div class="form-header">申请开店</div>
-            <div class="form-container">
-                <el-form ref="form" :model="presetForm" label-width="80px" :rules="rules">
-                    <!-- <el-form-item label="用户名" prop="userName">
+      <!--        append-to-body-->
+      <div class="preset-form">
+        <div class="form-header">申请开店</div>
+        <div class="form-container">
+          <el-form ref="form" :model="presetForm" label-width="80px" :rules="rules">
+            <!-- <el-form-item label="用户名" prop="userName">
                                 <el-input
                                   v-model="presetForm.userName"
                                   placeholder="请输入您的用户名以供确认"
                                   onfocus="if (this.placeholder == this.value) this.value = ''"
                                 ></el-input>
                               </el-form-item> -->
-                    <el-form-item label="店名" prop="shopName">
-                        <el-input v-model="presetForm.shopName"></el-input>
-                    </el-form-item>
-                    <!-- <el-form-item label="商品类别" prop="categories">
+            <el-form-item label="店名" prop="shopName">
+              <el-input v-model="presetForm.shopName"></el-input>
+            </el-form-item>
+            <!-- <el-form-item label="商品类别" prop="categories">
                                 <el-checkbox-group v-model="presetForm.categories">
                                   <el-checkbox label="food">食品</el-checkbox>
                                   <el-checkbox label="clothing">服装</el-checkbox>
@@ -71,56 +71,56 @@
                                   ></el-input>
                                 </el-checkbox-group>
                               </el-form-item> -->
-                    <el-form-item label="商品类别" prop="categories">
-                        <el-select
-                                v-model="categories"
-                                multiple
-                                filterable
-                                allow-create
-                                default-first-option
-                                :reserve-keyword="false"
-                                placeholder="Choose tags for your shop"
-                        >
-                            <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value"
-                            />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="身份证号" prop="idNumber">
-                        <el-input v-model="presetForm.idNumber"></el-input>
-                    </el-form-item>
-                    <el-form-item label="商店简介" prop="intro">
-                        <el-input v-model="presetForm.intro"></el-input>
-                    </el-form-item>
-                    <el-form-item label="备案地址" prop="address">
-                        <el-input v-model="presetForm.address"></el-input>
-                    </el-form-item>
-                    <el-form-item label="注册资金" prop="fund">
-                        <el-input v-model="presetForm.fund"></el-input>
-                    </el-form-item>
-                    <el-form-item label="注册时间" prop="registrationTime">
-                        <el-input v-model="presetForm.registrationTime" type="date"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="signIn" style="color: #fff">申请</el-button>
-                        <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
+            <el-form-item label="商品类别" prop="categories">
+              <el-select
+                v-model="categories"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                :reserve-keyword="false"
+                placeholder="Choose tags for your shop"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="身份证号" prop="idNumber">
+              <el-input v-model="presetForm.idNumber"></el-input>
+            </el-form-item>
+            <el-form-item label="商店简介" prop="intro">
+              <el-input v-model="presetForm.intro"></el-input>
+            </el-form-item>
+            <el-form-item label="备案地址" prop="address">
+              <el-input v-model="presetForm.address"></el-input>
+            </el-form-item>
+            <el-form-item label="注册资金" prop="fund">
+              <el-input v-model="presetForm.fund"></el-input>
+            </el-form-item>
+            <el-form-item label="注册时间" prop="registrationTime">
+              <el-input v-model="presetForm.registrationTime" type="date"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="signIn" style="color: #fff">申请</el-button>
+              <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>
+            </el-form-item>
+          </el-form>
         </div>
+      </div>
     </el-dialog>
-    </div>
+  </div>
 </template>
 
 <script>
 // import { reactive, ref, onMounted } from 'vue'
 import axios from 'axios'
-import {ElMessage} from 'element-plus'
+import { ElMessage } from 'element-plus'
 import PresetButton from '@/components/AdminComponents/PresetButton.vue'
-import {ref} from 'vue'
+import { ref } from 'vue'
 
 export default {
     name: 'ActivityManage',
@@ -277,24 +277,24 @@ export default {
 
 <style scoped>
 .preset-board {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .preset-dialog {
-    max-width: 600px;
-    margin: 0 auto;
-    background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
-    padding: 30px;
-    border-radius: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  padding: 30px;
+  border-radius: 10px;
 }
 
 .preset-form {
-    max-width: 600px;
-    margin: 0 auto;
-    background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
-    padding: 30px;
-    border-radius: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  padding: 30px;
+  border-radius: 10px;
 }
 
 /*.el-dialog .preset-dialog{*/
