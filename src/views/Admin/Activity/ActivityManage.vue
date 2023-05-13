@@ -37,7 +37,7 @@
             </el-table-column>
         </el-table>
     </div>
-    <div class="preset-board" @click="gotoPresetForm">
+    <div class="preset-board" >
 <!--        @click="presetFormVisible = true"-->
         <PresetButton/>
     </div>
@@ -172,9 +172,7 @@ export default {
         }
     },
     methods: {
-        gotoPresetForm(){
-            this.$router.push('/home/admin/presetForm')
-        },
+
         fetchData: async function () {
             try {
                 const response = await axios.get('/api/home/getActivity')

@@ -90,8 +90,10 @@ export default {
 
 .submenu-title-text {
     color: #ffffff;
-    font-size: 16px;
+    font-size: 18px;
     margin-left: 6px;
+    /*font-family: Apple;*/
+    font-weight: bold;
 }
 
 .submenu-title-text:hover {
@@ -150,5 +152,8 @@ export default {
     background-color: #2de9ef;
     color: #1dc8de;
     border-color: #ffffff;
+}
+.OpMenuButton:hover .submenu-title-text {
+    color: #4befc3;
 }
 </style>
