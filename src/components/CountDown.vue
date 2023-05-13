@@ -19,10 +19,8 @@ export default {
         setInterval(() => {
             // 获取当前时间
             const now = new Date().getTime();
-
             // 计算时间差
             const distance = this.countDownDate - now;
-
             // 计算天数，小时数，分钟数和秒数
             this.days = Math.floor(distance / (1000 * 60 * 60 * 24));
             this.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

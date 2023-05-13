@@ -11,7 +11,7 @@
                         shadow="hover"
                         @click="navigateToActivity(activity.id)"
                 >
-                    <div slot="header" class="card-header">
+                    <div class="card-header">
                         <div class="card-title">活动 {{ activity.id }}</div>
                     </div>
                     <div class="card-content">活动状态：{{ activity.status }}</div>
@@ -24,7 +24,7 @@
         <el-row gutter="24">
             <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
                 <el-card class="animated-card" shadow="hover" @click="navigateToCommodity(store.id)">
-                    <div slot="header" class="card-header">
+                    <div class="card-header">
                         <div class="card-title">
                             {{ store.shopName }}
                         </div>
@@ -72,12 +72,13 @@ export default {
                     status: '开启成功',
                     createTime: '2023-05-12 20:16:46',
                     originFund: 2000,
-                    remainTime: 0
+                    // remainTimeString: '',
                 }
             ]
         }
     },
     async mounted() {
+        // Store
         try {
             const storesResponse = await this.fetchData()
             console.log(storesResponse.data)
@@ -96,27 +97,37 @@ export default {
         } catch (error) {
             console.log(error)
         }
-        try {
-            const activityResponse = await this.fetchActivity()
-            console.log("activity: \n")
-            console.log(activityResponse.data)
-            this.activities = activityResponse.data.map((activity) => ({
-                id: activity.id,
-                lastTime: activity.lastTime,
-                activityFund: activity.activityFund,
-                x: activity.x,
-                y: activity.y,
-                regFund: activity.regFund,
-                monthlySales: activity.monthlySales,
-                monthlyAmount: activity.monthlyAmount,
-                status: activity.status,
-                createTime: activity.createTime,
-                originFund: activity.originFund,
-            }))
-        } catch (error) {
-            console.log(error)
-        }
-        ;
+        // Activity
+        await this.fetchActivity();
+        // try {
+        //     const activityResponse = await this.fetchActivity()
+        //     // console.log("activity: \n")
+        //     // console.log(activityResponse.data)
+        //     this.activities = activityResponse.data.map((activity) => {
+        //         const remainTimeString = this.calRemainTime(activity);
+        //             return {
+        //                 id: activity.id,
+        //                 lastTime: activity.lastTime,
+        //                 activityFund: activity.activityFund,
+        //                 x: activity.x,
+        //                 y: activity.y,
+        //                 regFund: activity.regFund,
+        //                 monthlySales: activity.monthlySales,
+        //                 monthlyAmount: activity.monthlyAmount,
+        //                 status: activity.status,
+        //                 createTime: activity.createTime,
+        //                 originFund: activity.originFund,
+        //                 remainTimeString: remainTimeString
+        //             };
+        //         }
+        //     )
+        //
+        // } catch (error) {
+        //     console.log(error)
+        // }
+        setInterval(() => {
+            this.fetchActivity()
+        }, 1000);
         // this.startTimer()
     },
     // beforeUnmount(){
@@ -124,26 +135,27 @@ export default {
     //     clearInterval(this.timer);  // 销毁定时器
     // },
     computed: {
-        // calRemainTime(activity) {
-        //     //     createTime,lastTime
-        //     const currentTime = Math.floor(Date.now() / 1000);
-        //     // const dateCreatTime = new Date(activity.createTime);
-        //     console.log(activity.createTime);
-        //     const [dateString, timeStringWithoutSeconds] = (activity.createTime).split(" ");
-        //     const [year, month, day] = dateString.split("-");
-        //     const [hours, minutes] = timeStringWithoutSeconds.split(":");
-        //     const seconds = "00";
-        //     const date = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`);
-        //     // console.log(dateCreatTime);
-        //     console.log(date);
-        //     // const remainTime = Math.max(dateCreatTime + activity.lastTime - currentTime, 0);
-        //     const remainTime = Math.max(date + activity.lastTime - currentTime, 0);
-        //     // const remainTime=currentTime;
-        //     const hour = Math.floor(remainTime / 3600);
-        //     const minute = Math.floor((remainTime - 3600 * hour) / 60);
-        //     const second = remainTime % 60;
-        //     return `${hour}小时${minute}分钟${second}秒`;
-        //     // return (currentTime);
+        // calRemainTime() {
+        //     return (endTime, activities) => {
+        //         // 对所有的 activities 进行处理，计算出剩余时间并返回一个新数组
+        //         return activities.map((activity) => {
+        //             const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
+        //             const currentTime = Math.floor(Date.now() / 1000)
+        //             const remainTime = Math.max(createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime, 0)
+        //             const second = remainTime % 60
+        //             let minute = Math.floor(remainTime / 60)
+        //             let hour = Math.floor(minute / 60)
+        //             minute = minute % 60
+        //             const day = Math.floor(hour / 60)
+        //             hour = hour % 60
+        //             const remainTimeString= `${day}天${hour}小时${minute}分钟${second}秒`
+        //             return {
+        //                 ...activity,
+        //                 remainTimeString,
+        //             }
+        //         });
+        //     };
+        //
         // },
     },
     methods: {
@@ -151,26 +163,22 @@ export default {
             //     createTime,lastTime
             const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
             const currentTime = Math.floor(Date.now() / 1000)
-            const dateCreatTime = new Date(activity.createTime)
-            console.log(activity.createTime)
-            console.log(dateCreatTime)
-            console.log(createTimeInSeconds)
-            console.log(activity.lastTime)
-            // const [dateString, timeStringWithoutSeconds] = (activity.createTime).split(" ");
-            // const [year, month, day] = dateString.split("-");
-            // const [hours, minutes] = timeStringWithoutSeconds.split(":");
-            // const seconds = "00";
-            // const date = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`);
-            // console.log(dateCreatTime);
-            // console.log(date);
-            // const remainTime = Math.max(dateCreatTime + activity.lastTime - currentTime, 0);
-            const remainTime = Math.max(createTimeInSeconds + activity.lastTime - currentTime, 0)
-            // const remainTime = Math.max(date + activity.lastTime - currentTime, 0);
-            // const remainTime=currentTime;
-            const hour = Math.floor(remainTime / 3600)
-            const minute = Math.floor((remainTime - 3600 * hour) / 60)
+            // const dateCreatTime = new Date(activity.createTime)
+            // console.log(activity.createTime)
+            // console.log(dateCreatTime)
+            // console.log(createTimeInSeconds)
+            // console.log(activity.lastTime)
+            const remainTime = Math.max(createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime, 0)
             const second = remainTime % 60
-            return `${hour}小时${minute}分钟${second}秒`
+            let minute = Math.floor(remainTime / 60)
+            // const hour = Math.floor(remainTime / 3600)
+            let hour = Math.floor(minute / 60)
+            minute = minute % 60
+            const day = Math.floor(hour / 60)
+            hour = hour % 60
+            // const minute = Math.floor((remainTime - 3600 * hour) / 60)
+            const secondString = String(second).padStart(2, "0");
+            return `${day}天${hour}小时${minute}分钟${secondString}秒`
             // return (currentTime);
         },
         startTimer() {
@@ -201,7 +209,25 @@ export default {
         async fetchActivity() {
             try {
                 const response = await axios.get('/api/home/getActivity')
-                console.log(response.data)
+                // console.log(response.data)
+                this.activities = response.data.data.map((activity) => {
+                        const remainTimeString = this.calRemainTime(activity);
+                        return {
+                            id: activity.id,
+                            lastTime: activity.lastTime,
+                            activityFund: activity.activityFund,
+                            x: activity.x,
+                            y: activity.y,
+                            regFund: activity.regFund,
+                            monthlySales: activity.monthlySales,
+                            monthlyAmount: activity.monthlyAmount,
+                            status: activity.status,
+                            createTime: activity.createTime,
+                            originFund: activity.originFund,
+                            remainTimeString: remainTimeString
+                        };
+                    }
+                )
                 return response.data
             } catch (error) {
                 console.log(error)
@@ -225,7 +251,6 @@ export default {
         // eslint-disable-next-line no-unused-vars
         navigateToActivity(activityId) {
         },
-
     }
     // filters: {
     //     formatTime(value) {
