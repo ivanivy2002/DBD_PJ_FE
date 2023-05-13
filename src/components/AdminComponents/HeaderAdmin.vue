@@ -93,7 +93,7 @@ export default {
     },
     mounted() {
         // 获取用户信息和余额
-        this.getUserInfo();
+        // this.getUserInfo();
     },
 }
 </script>

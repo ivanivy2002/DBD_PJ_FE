@@ -1,15 +1,15 @@
 <template>
     <div>
         <el-table :data="state.tableData" style="width: 100%">
-            <el-table-column prop="id" label="活动编号"></el-table-column>
-            <el-table-column prop="lastTime" label="持续时间"></el-table-column>
-            <el-table-column prop="activityFund" label="活动资金"></el-table-column>
-            <el-table-column prop="regFund" label="注册资金阈值"></el-table-column>
-            <el-table-column prop="monthlySales" label="月销量阈值"></el-table-column>
-            <el-table-column prop="monthlyAmount" label="月销售阈值"></el-table-column>
+            <el-table-column prop="id" label="活动编号" width="100px"></el-table-column>
+            <el-table-column prop="lastTime" label="持续时间" width="100px"></el-table-column>
+            <el-table-column prop="activityFund" label="活动资金" width="100px"></el-table-column>
+            <el-table-column prop="regFund" label="注册资金阈值" width="110px"></el-table-column>
+            <el-table-column prop="monthlySales" label="月销量阈值" width="100px"></el-table-column>
+            <el-table-column prop="monthlyAmount" label="月销售阈值" width="100px"></el-table-column>
             <!--      <el-table-column prop="status" label="活动状态"></el-table-column>-->
+            <el-table-column prop="originFund" label="初始资金" width="100px"></el-table-column>
             <el-table-column prop="createTime" label="创建时间"></el-table-column>
-            <el-table-column prop="originFund" label="初始资金"></el-table-column>
             <!--            <el-table-column prop="x" label="X"></el-table-column>-->
             <!--            <el-table-column prop="y" label="Y"></el-table-column>-->
             <el-table-column prop="status" label="活动状态">
@@ -23,14 +23,14 @@
                             type="success"
                             size="small"
                             @click="openActivity(row)"
-                            :disabled="isButtonDisabled(row)"
+                            :disabled="isOpenButtonDisabled(row)"
                     >开始
                     </el-button>
                     <el-button
                             type="danger"
                             size="small"
                             @click="stopActivity(row)"
-                            :disabled="isButtonDisabled(row)"
+                            :disabled="isStopButtonDisabled(row)"
                     >结束
                     </el-button>
                 </template>
@@ -138,7 +138,6 @@ export default {
             state: {
                 tableData: []
             },
-            storesData: [],
             ifApprove: 0,
             userName: '',
             presetForm: {
@@ -161,7 +160,7 @@ export default {
     // NOTE: 用computed来实现按钮的disabled属性，如果不是待审核状态，就禁用按钮
     // NOTE: 需要注意的是，这里的row是一个参数，要在调用的时候传入
     computed: {
-        isButtonDisabled() {
+        isOpenButtonDisabled() {
             return (row) => {
                 if (row.status !== '待开启' ) {
                     return true
@@ -169,24 +168,28 @@ export default {
                     return false
                 }
             }
-        }
+        },
+        isStopButtonDisabled() {
+            return (row) => {
+                if (row.status !== '开启成功' ) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
     },
     methods: {
 
         fetchData: async function () {
             try {
+                // const response = await axios.get('/api/activity/display')
                 const response = await axios.get('/api/home/getActivity')
-                this.storesData = response.data.data
-                // TODO: 下面的函数需要修改（字符串解析）
-                // this.storesData = this.removeZerosInObjectArray(this.storesData)
+                console.log(response.data.data)
                 this.state.tableData = response.data.data.map((row) => {
-                    // row.goodsInfo = row.goodsInfo.replace(/\+/g, ' ')
                     console.log(row)
-                    // row = this.removeZerosInObjectArray(row)
                     return row
                 })
-                // console.log(this.state.tableData)
-                // this.state.tableData = this.removeZerosInObjectArray(this.state.tableData)
                 console.log(this.state.tableData)
             } catch (error) {
                 console.log(error)
@@ -231,27 +234,6 @@ export default {
                 }
             } catch (error) {
                 console.log(error)
-            }
-        },
-        // NOTE: 去掉数组末尾多余的零
-        removeTrailingZeros(arr) {
-            if (arr == null) {
-                console.log('这个店没有选商品类别')
-                return arr
-            } else {
-                // NOTE: 用===的时候小心
-                // TODO：后期优化可以确定类型之后用===，现在先用==
-                while (arr[arr.length - 1] == 0) {
-                    arr.pop()
-                }
-                return arr
-                // return arr.map((item) => item.toString().replace(/0+$/, '') || item);
-            }
-        },
-        removeZerosInObjectArray(arr) {
-            let i
-            for (i = 0; i < arr.length; i++) {
-                arr[i].categories = this.removeTrailingZeros(arr[i].categories)
             }
         },
         statusTagType(status) {
