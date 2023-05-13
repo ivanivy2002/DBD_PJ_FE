@@ -50,7 +50,7 @@ export default [
         component: CashFlowRecordView
       },
       {
-        path: '/home/admin/activityMange',
+        path: '/home/admin/activityManage',
         component: ActivityManage
       }
       // TODO: 这里和vendor保持一致
