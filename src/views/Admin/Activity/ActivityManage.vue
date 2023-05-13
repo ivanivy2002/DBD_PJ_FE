@@ -17,36 +17,21 @@
                     <el-tag :type="statusTagType(row.status)" disable-transitions>{{ row.status }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column prop="removeStatus" label="申请删除状态">
-                <template #default="{ row }">
-                    <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
-                    <el-tag
-                            :type="
-              row.removeStatus === '待审核'
-                ? 'warning'
-                : row.removeStatus === '已通过'
-                ? 'success'
-                : 'danger'
-            "
-                    >{{ row.removeStatus }}
-                    </el-tag>
-                </template>
-            </el-table-column>
             <el-table-column label="操作">
                 <template #default="{ row }">
                     <el-button
                             type="success"
                             size="small"
-                            @click="approveShop(row)"
+                            @click="openActivity(row)"
                             :disabled="isButtonDisabled(row)"
-                    >同意
+                    >开始
                     </el-button>
                     <el-button
                             type="danger"
                             size="small"
-                            @click="rejectShop(row)"
+                            @click="stopActivity(row)"
                             :disabled="isButtonDisabled(row)"
-                    >拒绝
+                    >结束
                     </el-button>
                 </template>
             </el-table-column>
@@ -178,7 +163,7 @@ export default {
     computed: {
         isButtonDisabled() {
             return (row) => {
-                if (row.status !== '待审核' && row.removeStatus !== '待审核') {
+                if (row.status !== '待开启' ) {
                     return true
                 } else {
                     return false
@@ -209,76 +194,42 @@ export default {
                 console.log(error)
             }
         },
-        approveShop: async function (row) {
+        openActivity: async function (row) {
             try {
-                this.ifApprove = 1
                 console.log(row.id)
-                if (row.status == '待审核') {
-                    const response = await axios.put('/api/admin/handleStoreOpen', null, {
+                if (row.status == '待开启') {
+                    const response = await axios.put('/api/activity/open', null, {
                         params: {
-                            // userName: 'penny',
-                            shopId: row.id,
-                            ifApprove: this.ifApprove
+                            activityId: row.id,
                         }
                     })
                     if (response.data.code == 200) {
-                        ElMessage.success('已同意开店')
+                        ElMessage.success('已开启')
                         await this.fetchData()
                     } else if (response.data.code == 400) {
-                        ElMessage.error('同意开店失败，请重新尝试')
-                        await this.fetchData()
-                    }
-                }
-                if (row.removeStatus == '待审核') {
-                    const response = await axios.put('/api/admin/handleStoreRemove', null, {
-                        params: {
-                            shopId: row.id,
-                            ifApprove: this.ifApprove
-                        }
-                    })
-                    if (response.data.code == 200) {
-                        ElMessage.success('已同意注销')
-                        await this.fetchData()
-                    } else if (response.data.code == 400) {
-                        ElMessage.error('同意注销失败，请重新尝试')
+                        ElMessage.error('开启失败')
                         await this.fetchData()
                     }
                 }
             } catch (error) {
-                ElMessage.error('Sorry,好像有什么地方出错了')
+                ElMessage.error('Sorry,好像什么地方出错了..')
                 await this.fetchData()
                 console.log(error)
             }
         },
-        rejectShop: async function (row) {
+        stopActivity: async function (row) {
             try {
                 this.ifApprove = 2
                 console.log(row.id)
                 this.id = row.id
-                if (row.status == '待审核') {
-                    await axios.put('/api/admin/handleStoreOpen', null, {
+                if (row.status == '开启成功') {
+                    await axios.put('/api/activity/stop', null, {
                         params: {
-                            shopId: row.id,
-                            ifApprove: this.ifApprove
+                            activityId: row.id,
                         }
                     })
-                    ElMessage.success('已拒绝开店')
+                    ElMessage.success('已关闭')
                     await this.fetchData()
-                }
-                if (row.removeStatus == '待审核') {
-                    const response = await axios.put('/api/admin/handleStoreRemove', null, {
-                        params: {
-                            shopId: row.id,
-                            ifApprove: this.ifApprove
-                        }
-                    })
-                    if (response.data.code == 200) {
-                        ElMessage.success('已拒绝注销')
-                        await this.fetchData()
-                    } else if (response.data.code == 400) {
-                        ElMessage.error('拒绝注销失败，请重新尝试')
-                        await this.fetchData()
-                    }
                 }
             } catch (error) {
                 console.log(error)

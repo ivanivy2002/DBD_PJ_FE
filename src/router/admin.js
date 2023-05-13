@@ -10,6 +10,7 @@ import AdminCommodityView from '@/views/Admin/AdminCommodityView.vue'
 import CashFlowRecordView from '@/views/Admin/CashFlowRecordView.vue'
 import ActivityManage from '@/views/Admin/Activity/ActivityManage.vue'
 import PresetFormView from "@/views/Admin/Activity/PresetFormView.vue";
+import ManageStoreActivityView from "@/views/Admin/Activity/ManageStoreActivityView.vue";
 
 export default [
   {
@@ -58,6 +59,11 @@ export default [
         path: '/home/admin/presetForm',
         component: PresetFormView
       },
+      {
+        path: '/home/admin/manageStoreActivity',
+        component: ManageStoreActivityView
+      },
+
       // TODO: 这里和vendor保持一致
       // {
       //   path: '/home/admin',

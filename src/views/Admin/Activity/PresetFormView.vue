@@ -21,6 +21,7 @@
                 <el-form-item label="初始活动资金" prop="originFund">
                     <el-input v-model="presetForm.originFund"></el-input>
                 </el-form-item>
+
                 <el-form-item>
                     <el-button type="primary" @click="signIn" style="color: #fff">活动新开</el-button>
                     <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>
