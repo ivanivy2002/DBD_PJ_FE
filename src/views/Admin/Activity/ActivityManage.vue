@@ -26,92 +26,26 @@
             :disabled="isOpenButtonDisabled(row)"
             >开始
           </el-button>
-          <el-button
-            type="danger"
-            size="small"
-            @click="stopActivity(row)"
-            :disabled="isStopButtonDisabled(row)"
-            >结束
-          </el-button>
+          <!--                    <el-button-->
+          <!--                            type="danger"-->
+          <!--                            size="small"-->
+          <!--                            @click="stopActivity(row)"-->
+          <!--                            :disabled="isStopButtonDisabled(row)"-->
+          <!--                    >结束-->
+          <!--                    </el-button>-->
         </template>
       </el-table-column>
     </el-table>
   </div>
+  <!--  <div class="container">-->
+  <!--    <el-table :data="categoryState.categoryData" style="width: 100%">-->
+  <!--      <el-table-column prop="id" label="类别编号" width="100px"></el-table-column>-->
+  <!--      <el-table-column prop="category" label="商品类别" width="100px"></el-table-column>-->
+  <!--    </el-table>-->
+  <!--  </div>-->
   <div class="preset-board">
     <!--        @click="presetFormVisible = true"-->
     <PresetButton />
-  </div>
-  <div>
-    <el-dialog v-model="presetFormVisible" title="活动新开" class="preset-dialog">
-      <!--        append-to-body-->
-      <div class="preset-form">
-        <div class="form-header">申请开店</div>
-        <div class="form-container">
-          <el-form ref="form" :model="presetForm" label-width="80px" :rules="rules">
-            <!-- <el-form-item label="用户名" prop="userName">
-                                <el-input
-                                  v-model="presetForm.userName"
-                                  placeholder="请输入您的用户名以供确认"
-                                  onfocus="if (this.placeholder == this.value) this.value = ''"
-                                ></el-input>
-                              </el-form-item> -->
-            <el-form-item label="店名" prop="shopName">
-              <el-input v-model="presetForm.shopName"></el-input>
-            </el-form-item>
-            <!-- <el-form-item label="商品类别" prop="categories">
-                                <el-checkbox-group v-model="presetForm.categories">
-                                  <el-checkbox label="food">食品</el-checkbox>
-                                  <el-checkbox label="clothing">服装</el-checkbox>
-                                  <el-checkbox label="electronics">电子产品</el-checkbox>
-                                  <el-checkbox label="GPT">GPT</el-checkbox>
-                                  <el-input
-                                    v-model="catagoryInput"
-                                    placeholder="请输入自定义的商品类别："
-                                    onfocus="if (this.placeholder == this.value) this.value = ''"
-                                  ></el-input>
-                                </el-checkbox-group>
-                              </el-form-item> -->
-            <el-form-item label="商品类别" prop="categories">
-              <el-select
-                v-model="categories"
-                multiple
-                filterable
-                allow-create
-                default-first-option
-                :reserve-keyword="false"
-                placeholder="Choose tags for your shop"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="idNumber">
-              <el-input v-model="presetForm.idNumber"></el-input>
-            </el-form-item>
-            <el-form-item label="商店简介" prop="intro">
-              <el-input v-model="presetForm.intro"></el-input>
-            </el-form-item>
-            <el-form-item label="备案地址" prop="address">
-              <el-input v-model="presetForm.address"></el-input>
-            </el-form-item>
-            <el-form-item label="注册资金" prop="fund">
-              <el-input v-model="presetForm.fund"></el-input>
-            </el-form-item>
-            <el-form-item label="注册时间" prop="registrationTime">
-              <el-input v-model="presetForm.registrationTime" type="date"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="signIn" style="color: #fff">申请</el-button>
-              <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -137,6 +71,9 @@ export default {
     return {
       state: {
         tableData: []
+      },
+      categoryState: {
+        categoryData: []
       },
       ifApprove: 0,
       userName: '',
@@ -182,14 +119,28 @@ export default {
   methods: {
     fetchData: async function () {
       try {
-        // const response = await axios.get('/api/activity/display')
-        const response = await axios.get('/api/home/getActivity')
+        const response = await axios.get('/api/activity/displayAll')
+        // const response = await axios.get('/api/home/getActivity')
         console.log(response.data.data)
         this.state.tableData = response.data.data.map((row) => {
           console.log(row)
           return row
         })
         console.log(this.state.tableData)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    fetchCategory: async function () {
+      try {
+        const response = await axios.get('/api/category/getAllCategoryList')
+        // const response = await axios.get('/api/home/getActivity')
+        console.log(response.data.data)
+        this.categoryState.categoryData = response.data.data.map((row) => {
+          console.log(row)
+          return row
+        })
+        console.log(this.categoryState.categoryData)
       } catch (error) {
         console.log(error)
       }
@@ -252,6 +203,7 @@ export default {
   },
   mounted: function () {
     this.fetchData()
+    this.fetchCategory()
   }
 }
 </script>

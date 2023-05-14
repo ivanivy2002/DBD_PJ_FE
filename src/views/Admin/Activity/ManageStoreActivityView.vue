@@ -110,7 +110,7 @@ export default {
   methods: {
     fetchData: async function () {
       try {
-        const response = await axios.get('/api/admin/displayShop')
+        const response = await axios.get('/api/admin/displayShopJoinActivity')
         this.storesData = response.data.data
         // TODO: 下面的函数需要修改（字符串解析）
         // this.storesData = this.removeZerosInObjectArray(this.storesData)

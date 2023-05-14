@@ -9,6 +9,18 @@
         <el-form-item label="活动资金" prop="activityFund">
           <el-input v-model="presetForm.activityFund"></el-input>
         </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="满" prop="x">
+              <el-input v-model="presetForm.x"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="减" prop="y">
+              <el-input v-model="presetForm.y"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="商店注册资金阈值" prop="regFund">
           <el-input v-model="presetForm.regFund"></el-input>
         </el-form-item>
@@ -21,9 +33,17 @@
         <el-form-item label="初始活动资金" prop="originFund">
           <el-input v-model="presetForm.originFund"></el-input>
         </el-form-item>
+        <el-form-item label="参加商品类别" prop="category">
+          <!--   这里的categoriesSend 是什么？？是绑定的数据去向-->
+          <el-checkbox-group v-model="categoriesSend">
+            <el-checkbox v-for="category in categoryVector" :label="category" :key="category"
+              >{{ category }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="signIn" style="color: #fff">活动新开</el-button>
+          <el-button type="primary" @click="presetSend" style="color: #fff">活动新开</el-button>
           <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>
         </el-form-item>
       </el-form>
@@ -68,8 +88,12 @@ export default {
   data() {
     return {
       // dialogFormVisible: false,
-      activeTab: 'signin',
-      categories: [],
+      activeTab: 'presetSend',
+      categoriesSend: [],
+      activityId: null,
+      categoryState: {
+        categoryData: []
+      },
       presetForm: {
         activityFund: 10,
         lastTime: 0,
@@ -82,6 +106,13 @@ export default {
         creatTime: null,
         originFund: 0
       },
+      categoryForm: {
+        id: 0,
+        relatedId: 0,
+        type: 0,
+        category: null
+      },
+      categoryVector: [],
       loading: false,
       disabled: false,
       options: [],
@@ -211,29 +242,35 @@ export default {
     }
   },
   methods: {
+    fetchCategory: async function () {
+      try {
+        const response = await axios.get('/api/category/getAllCategoryList')
+        // const response = await axios.get('/api/home/getActivity')
+        console.log(response.data.data)
+        this.categoryState.categoryData = response.data.data.map((row) => {
+          console.log(row)
+          return row
+        })
+        // 使用 map 方法提取 category 字段，生成一个包含所有 category 值的向量
+        this.categoryVector = this.categoryState.categoryData.map((item) => item.category)
+        // 输出 categoryVector，可以看到它包含了所有 category 值
+        console.log(this.categoryVector)
+        console.log(this.categoryState.categoryData)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     //NOTE: 重置表单
     resetForm() {
       this.$refs.form.resetFields()
     },
-    gotoPCenter() {
-      this.$router.push('/home/vendor/profile')
-    },
     //TODO: 缺少异常处理；修改成PUT请求
-    signIn() {
+    async presetSend() {
       // NOTE: 前端检查是否符合规范
-      this.presetForm.vendorId = localStorage.getItem('userId')
+      // this.presetForm.vendorId = localStorage.getItem('userId')
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
-          // this.AddArray() //* 将categories数组增加10个空元素
-          // this.presetForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-          // if (this.categories.length === 0) {
-          //     this.$message({
-          //         message: '请选择至少一个商品类别',
-          //         type: 'warning'
-          //     })
-          //     return
-          // }
           // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑
@@ -245,22 +282,36 @@ export default {
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功
-              if (response.data.code == 200) {
-                console.log('申请提交成功')
-                ElMessage({
-                  //用于弹出消息提示
-                  showClose: true,
-                  type: 'success', //如果成功
-                  message: '申请提交成功'
-                })
-                this.$refs.form.resetFields() // 重置表单
-                // this.dialogFormVisible = false
+              if (response.data.code === 200) {
+                console.log('第一步成功')
+                this.activityId = response.data.activityId
+                console.log(this.activityId)
+                console.log(this.categoriesSend)
+                axios
+                  .post('/api/category/saveActivityCategory', {
+                    categories: this.categoriesSend,
+                    activityId: this.activityId
+                  })
+                  .then((response) => {
+                    console.log(response.data)
+                    if (response.data.code === 200) {
+                      console.log('第二步成功')
+                      ElMessage({
+                        //用于弹出消息提示
+                        showClose: true,
+                        type: 'success', //如果成功
+                        message: '活动预设成功'
+                      })
+                      this.$refs.form.resetFields() // 重置表单
+                      // this.dialogFormVisible = false
+                    }
+                  })
               } else {
-                console.error('申请提交失败，请重试！')
+                console.error('活动预设失败，请重试！')
                 ElMessage({
                   showClose: true,
                   type: 'error', //如果失败输出状态码
-                  message: '申请提交失败:' + response.data.msg
+                  message: '活动预设失败:' + response.data.msg
                 })
               }
             })
@@ -269,7 +320,7 @@ export default {
               ElMessage({
                 showClose: true,
                 type: 'error', //如果失败，未连接上后端
-                message: '申请提交失败:vue好像有什么地方错了呢'
+                message: '活动预设失败:vue好像出错了。。'
               })
               // this.$message.error('数据保存失败，' + error.toString())
             })
@@ -281,13 +332,6 @@ export default {
         }
       })
     },
-
-    // AddArray() {
-    //   this.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    // },
-    gotoStoreInfo() {
-      this.$router.push('/home/vendor/storeinfo')
-    },
     // NOTE: 将数组中的单词变成一个字符串，中间用 + 连接
     joinWithComma(categories) {
       if (!Array.isArray(categories)) {
@@ -295,13 +339,16 @@ export default {
       }
       return categories.join(',')
     }
+  },
+  mounted: function () {
+    this.fetchCategory()
   }
 }
 </script>
 
 <style scoped>
 .form-header {
-  font-family: '黑体';
+  font-family: '黑体', serif;
   font-size: 30px;
   color: #ffffff;
   text-align: center;
