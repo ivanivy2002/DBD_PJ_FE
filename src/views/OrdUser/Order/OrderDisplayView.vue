@@ -27,7 +27,7 @@
         </el-col>
         <el-col :span="18">
           <el-table :data="orderData" stripe style="width: 100%">
-            <el-table-column prop="id" label="订单号" width="180"> </el-table-column>
+            <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
             <el-table-column prop="shopName" label="店铺"> </el-table-column>
             <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
             <el-table-column prop="imagePath" label="商品图片">
@@ -40,6 +40,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
+            <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
             <el-table-column prop="status" label="状态" width="120">
               <template #default="{ row }">
                 <el-tag :type="statusTagType(row.status)" disable-transitions>{{
@@ -72,6 +73,13 @@
                   >确认收货</el-button
                 >
                 <el-button
+                  v-if="activeStatus === '待发货'"
+                  type="warning"
+                  size="mini"
+                  @click="handleRefund(row)"
+                  >申请退款</el-button
+                >
+                <el-button
                   v-if="
                     activeStatus === '已完成' ||
                     activeStatus === '已撤销' ||
@@ -79,7 +87,7 @@
                   "
                   type="danger"
                   size="mini"
-                  @click="handleDelete(row)"
+                  @click="handleRemove(row)"
                   >删除记录</el-button
                 >
               </template>
@@ -132,6 +140,8 @@ export default {
           if (response.data.code == 200) {
             console.log('成功获取所有订单')
             this.allOrders = response.data.data
+            // 在这里进行过滤
+            this.allOrders = this.allOrders.filter((order) => order.removeStatus !== '已删除')
             this.currentPage = 1 // 重新设置 currentPage 变量
             this.pageSize = 10 // 重新设置 pageSize 变量
             this.getOrderData() // 更新数据和重新渲染
@@ -201,7 +211,7 @@ export default {
     },
     // NOTE: 通过shopId查询shop的各个属性
     async getShopInfo(shopId) {
-      let shopInfo = {}
+      let shopInfo = {} //* 为了使整个函数返回一个对象，所以这里先定义一个空对象
       await axios
         .get('/api/shop/displayInfo', {
           params: { shopId: shopId }
@@ -247,20 +257,6 @@ export default {
           // 用户点击了取消按钮
         })
     },
-    handleDelete(row) {
-      this.$confirm('确定要删除吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          // 用户点击了确定按钮
-          // 在这里添加删除的逻辑
-        })
-        .catch(() => {
-          // 用户点击了取消按钮
-        })
-    },
     handleCancel(row) {
       this.$confirm('确定要撤销订单吗？', '提示', {
         confirmButtonText: '确定',
@@ -268,8 +264,29 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          // 用户点击了确定按钮
-          // 在这里添加撤销的逻辑
+          axios
+            .put('/api/order/revoke', null, {
+              params: {
+                orderId: row.id
+              }
+            })
+            .then((response) => {
+              console.log(response)
+              if (response.data.code == 200) {
+                console.log('成功撤销订单')
+                this.$message({
+                  type: 'success',
+                  message: '撤销订单成功'
+                })
+                this.getAllOrders() //* 重新获取所有订单
+              } else {
+                console.log('撤销订单失败')
+                this.$message({
+                  type: 'error',
+                  message: '撤销订单失败: ' + response.data.message
+                })
+              }
+            })
         })
         .catch(() => {
           // 用户点击了取消按钮
@@ -282,14 +299,104 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          // 用户点击了确定按钮
-          // 在这里添加确认收货的逻辑
+          axios
+            .put('/api/order/confirmReceipt', null, {
+              params: {
+                orderId: row.id
+              }
+            })
+            .then((response) => {
+              console.log(response)
+              if (response.data.code == 200) {
+                console.log('成功确认收货')
+                this.$message({
+                  type: 'success',
+                  message: '确认收货成功'
+                })
+                this.getAllOrders() //* 重新获取所有订单
+              } else {
+                console.log('确认收货失败')
+                this.$message({
+                  type: 'error',
+                  message: '确认收货失败: ' + response.data.message
+                })
+              }
+            })
         })
         .catch(() => {
           // 用户点击了取消按钮
         })
     },
-
+    handleRefund(row) {
+      this.$confirm('确定要申请退款吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          axios
+            .put('/api/order/refund', null, {
+              params: {
+                orderId: row.id
+              }
+            })
+            .then((response) => {
+              console.log(response)
+              if (response.data.code == 200) {
+                console.log('成功申请退款')
+                this.$message({
+                  type: 'success',
+                  message: '已提交退款申请'
+                })
+                this.getAllOrders() //* 重新获取所有订单
+              } else {
+                console.log('提交申请退款失败')
+                this.$message({
+                  type: 'error',
+                  message: '提交申请退款失败: ' + response.data.message
+                })
+              }
+            })
+        })
+        .catch(() => {
+          // 用户点击了取消按钮
+        })
+    },
+    handleRemove(row) {
+      this.$confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          axios
+            .delete('/api/order/remove', null, {
+              params: {
+                orderId: row.id
+              }
+            })
+            .then((response) => {
+              console.log(response)
+              if (response.data.code == 200) {
+                console.log('成功删除订单')
+                this.$message({
+                  type: 'success',
+                  message: '删除订单成功'
+                })
+                this.getAllOrders() //* 重新获取所有订单
+              } else {
+                console.log('删除订单失败')
+                this.$message({
+                  type: 'error',
+                  message: '删除订单失败: ' + response.data.message
+                })
+              }
+            })
+        })
+        .catch(() => {
+          // 用户点击了取消按钮
+        })
+    },
     // NOTE: 和分页有关的方法
     handleSizeChange(val) {
       this.pageSize = val
