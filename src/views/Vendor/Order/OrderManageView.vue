@@ -43,38 +43,43 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-
+import { reactive } from 'vue'
+import axios from 'axios'
 export default {
   name: 'ManageOrderView',
-  setup() {
-    const currentView = ref('1')
-    const orders = ref([]) // Replace with actual data fetching
-    const returns = ref([]) // Replace with actual data fetching
-
-    const handleSelect = (index) => {
-      currentView.value = index
-    }
-
-    const handleDelivery = (order) => {
-      // Handle delivery logic here
-    }
-
-    const handleRefund = (order) => {
-      // Handle refund logic here
-    }
-
+  data() {
     return {
-      currentView,
-      orders,
-      returns,
-      handleSelect,
-      handleDelivery,
-      handleRefund
+      currentView: '1',
+      orders: [], // Replace with actual data fetching
+      returns: [] // Replace with actual data fetching
+    }
+  },
+  created() {
+
+  },
+  methods: {
+    getOrderInfo() {
+      // 发送请求获取订单信息
+      // await axios.get('/api/order/displayOrder', {
+      //   params: {orderId: localStorage.getItem('orderId')}
+      // })
+      //   .then(res => {
+      //     this.orderPrice = res.data.data.price;
+      //   })
+    },
+    handleSelect(index) {
+      this.currentView = index
+    },
+    handleDelivery(order) {
+      
+    },
+    handleRefund(order) {
+      
     }
   }
 }
 </script>
+
 
 <style scoped>
 .el-menu-vertical-demo {
