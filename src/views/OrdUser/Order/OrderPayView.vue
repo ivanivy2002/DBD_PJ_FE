@@ -72,33 +72,42 @@ export default {
       // if (parseFloat(this.userBalance) >= parseFloat(this.order.price)) {
       //   console.log('支付成功！');
       //   this.userBalance -= this.order.price;
-      if (userBalance >= orderPrice) {
+      if (this.userBalance >= this.orderPrice) {
         console.log('支付成功！')
         // userBalance -= orderPrice;
-        axios.put('/api/order/pay', {
-          params: {
-            orderId: localStorage.getItem('orderId')
-          }
-            .then((res) => {
-              if (res.data.code == 200) {
-                console.log(res.data)
-                ElMessage({
-                  showClose: true,
-                  type: 'success',
-                  message: '支付成功！'
-                })
-              } else {
-                ElMessage({
-                  showClose: true,
-                  type: 'error',
-                  message: '支付失败: ' + res.data.msg
-                })
-              }
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        })
+        axios
+          .put('/api/order/pay', {
+            params: {
+              orderId: localStorage.getItem('orderId')
+            }
+          })
+          .then((res) => {
+            if (res.data.code == 200) {
+              console.log(res.data)
+              ElMessage({
+                showClose: true,
+                type: 'success',
+                message: '支付成功！'
+              })
+              axios.post('/api/user/recharge', null, {
+                params: {
+                  userId: localStorage.getItem('userId'), //获取cookie中的id
+                  // userId: 20,
+                  amount: this.orderPrice * -1 // 传一个负的"充值金额"，实现扣款
+                  // TODO: 这里amount和balance的命名和关系
+                }
+              })
+            } else {
+              ElMessage({
+                showClose: true,
+                type: 'error',
+                message: '支付失败: ' + res.data.msg
+              })
+            }
+          })
+          .catch((err) => {
+            console.log(err)
+          })
       } else {
         ElMessage({
           showClose: true,

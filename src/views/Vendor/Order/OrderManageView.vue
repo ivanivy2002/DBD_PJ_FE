@@ -54,9 +54,7 @@ export default {
       returns: [] // Replace with actual data fetching
     }
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     getOrderInfo() {
       // 发送请求获取订单信息
@@ -70,16 +68,11 @@ export default {
     handleSelect(index) {
       this.currentView = index
     },
-    handleDelivery(order) {
-      
-    },
-    handleRefund(order) {
-      
-    }
+    handleDelivery(order) {},
+    handleRefund(order) {}
   }
 }
 </script>
-
 
 <style scoped>
 .el-menu-vertical-demo {

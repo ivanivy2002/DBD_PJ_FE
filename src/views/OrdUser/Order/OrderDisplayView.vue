@@ -73,7 +73,7 @@
                   >确认收货</el-button
                 >
                 <el-button
-                  v-if="activeStatus === '待发货'"
+                  v-if="activeStatus === '待发货' || activeStatus === '待收货'"
                   type="warning"
                   size="mini"
                   @click="handleRefund(row)"
@@ -247,19 +247,19 @@ export default {
     },
     // NOTE: 和API有关的方法
     handlePay(row) {
-      this.$confirm('确定要支付吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          localStorage.setItem('orderPrice', row.paidAmount) // 将订单价格存入localStorage
-          localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
-          this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
-        })
-        .catch(() => {
-          // 用户点击了取消按钮
-        })
+      // this.$confirm('确定要支付吗？', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // })
+      //   .then(() => {
+      localStorage.setItem('orderPrice', row.paidAmount) // 将订单价格存入localStorage
+      localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+      this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
+      // })
+      // .catch(() => {
+      //   // 用户点击了取消按钮
+      // })
     },
     handleCancel(row) {
       this.$confirm('确定要撤销订单吗？', '提示', {
@@ -287,7 +287,7 @@ export default {
                 console.log('撤销订单失败')
                 this.$message({
                   type: 'error',
-                  message: '撤销订单失败: ' + response.data.message
+                  message: '撤销订单失败: ' + response.data.msg
                 })
               }
             })
@@ -322,7 +322,7 @@ export default {
                 console.log('确认收货失败')
                 this.$message({
                   type: 'error',
-                  message: '确认收货失败: ' + response.data.message
+                  message: '确认收货失败: ' + response.data.msg
                 })
               }
             })
@@ -357,7 +357,7 @@ export default {
                 console.log('提交申请退款失败')
                 this.$message({
                   type: 'error',
-                  message: '提交申请退款失败: ' + response.data.message
+                  message: '提交申请退款失败: ' + response.data.msg
                 })
               }
             })
@@ -374,7 +374,7 @@ export default {
       })
         .then(() => {
           axios
-            .delete('/api/order/remove', null, {
+            .delete('/api/order/remove', {
               params: {
                 orderId: row.id
               }
@@ -392,7 +392,7 @@ export default {
                 console.log('删除订单失败')
                 this.$message({
                   type: 'error',
-                  message: '删除订单失败: ' + response.data.message
+                  message: '删除订单失败: ' + response.data.msg
                 })
               }
             })

@@ -142,9 +142,9 @@ export default {
             // id: null,
             userId: localStorage.getItem('userId'),
             commodityId: commodityId,
-            commodityName: name,
-            commodityNum: quantity,
-            commodityPrice: price
+            // commodityName: name,
+            commodityNum: quantity
+            // commodityPrice: price
             // status: null
           })
           .then((response) => {
