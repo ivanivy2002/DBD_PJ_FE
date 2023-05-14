@@ -48,6 +48,42 @@
               </template>
             </el-table-column>
             <el-table-column prop="createTime" label="下单时间" width="180"> </el-table-column>
+            <el-table-column label="操作" width="180">
+              <template #default="{ row }">
+                <el-button
+                  v-if="activeStatus === '待支付'"
+                  type="primary"
+                  size="mini"
+                  @click="handlePay(row)"
+                  >支付</el-button
+                >
+                <el-button
+                  v-if="activeStatus === '待支付'"
+                  type="warning"
+                  size="mini"
+                  @click="handleCancel(row)"
+                  >撤销</el-button
+                >
+                <el-button
+                  v-if="activeStatus === '待收货'"
+                  type="success"
+                  size="mini"
+                  @click="handleConfirm(row)"
+                  >确认收货</el-button
+                >
+                <el-button
+                  v-if="
+                    activeStatus === '已完成' ||
+                    activeStatus === '已撤销' ||
+                    activeStatus === '已退款'
+                  "
+                  type="danger"
+                  size="mini"
+                  @click="handleDelete(row)"
+                  >删除记录</el-button
+                >
+              </template>
+            </el-table-column>
           </el-table>
           <el-pagination
             @size-change="handleSizeChange"
@@ -197,6 +233,64 @@ export default {
       const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
+    // NOTE: 和API有关的方法
+    handlePay(row) {
+      this.$confirm('确定要支付吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
+        })
+        .catch(() => {
+          // 用户点击了取消按钮
+        })
+    },
+    handleDelete(row) {
+      this.$confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          // 用户点击了确定按钮
+          // 在这里添加删除的逻辑
+        })
+        .catch(() => {
+          // 用户点击了取消按钮
+        })
+    },
+    handleCancel(row) {
+      this.$confirm('确定要撤销订单吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          // 用户点击了确定按钮
+          // 在这里添加撤销的逻辑
+        })
+        .catch(() => {
+          // 用户点击了取消按钮
+        })
+    },
+    handleConfirm(row) {
+      this.$confirm('确认已收到货', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          // 用户点击了确定按钮
+          // 在这里添加确认收货的逻辑
+        })
+        .catch(() => {
+          // 用户点击了取消按钮
+        })
+    },
+
+    // NOTE: 和分页有关的方法
     handleSizeChange(val) {
       this.pageSize = val
       this.getOrderData()

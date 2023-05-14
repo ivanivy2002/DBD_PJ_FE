@@ -41,7 +41,7 @@ import {
   ElFormItem,
   ElInput,
   ElButton,
-  ElMessage,
+  ElMessage
   // ElCheckbox,
   // ElCheckboxGroup,
 } from 'element-plus'

@@ -111,9 +111,7 @@ export default {
       }
     },
     // eslint-disable-next-line no-unused-vars
-    navigateToActivity(activityId) {
-
-    }
+    navigateToActivity(activityId) {}
   }
 }
 </script>

@@ -7,6 +7,7 @@ import ShoppingCartView from '@/views/OrdUser/ShoppingCartView'
 import OrderCreateView from '@/views/OrdUser/Order/OrderCreateView'
 import OrderDisplayView from '@/views/Orduser/Order/OrderDisplayView'
 import OrderPayView from '@/views/Orduser/Order/OrderPayView'
+import OrderDetailView from '@/views/Orduser/Order/OrderDetailView'
 
 export default [
   {
@@ -51,6 +52,11 @@ export default [
         path: '/home/orduser/order/pay',
         name: 'OrderPayView',
         component: OrderPayView
+      },
+      {
+        path: '/home/orduser/order/detail',
+        name: 'OrderDetailView',
+        component: OrderDetailView
       }
     ]
   }

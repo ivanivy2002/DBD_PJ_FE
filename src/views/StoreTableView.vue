@@ -373,7 +373,7 @@ export default {
 
 .category-title {
   margin-right: 5px;
-  font-family: '宋体',serif;
+  font-family: '宋体', serif;
   color: #ffffff;
 }
 
