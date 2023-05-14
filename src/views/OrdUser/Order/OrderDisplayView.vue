@@ -124,6 +124,8 @@ export default {
     }
   },
   created() {
+    localStorage.setItem('orderPrice', 0) // 初始化订单价格
+    localStorage.setItem('orderId', 0) // 初始化订单ID
     this.getAllOrders() // 新增方法
     // this.getOrderData() 放到了getAllOrders里面
   },
@@ -251,6 +253,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
+          localStorage.setItem('orderPrice', row.paidAmount) // 将订单价格存入localStorage
+          localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
           this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
         })
         .catch(() => {
