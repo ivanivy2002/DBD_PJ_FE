@@ -96,7 +96,7 @@ export default {
     addToCart(commodityId, quantity, price) {
       try {
         const response = axios
-          .post('/apiCommodity/', {
+          .post('/api/Commodity/', {
             // NOTE: 传一个body
             // id: null,
             userId: localStorage.getItem('userId'),
