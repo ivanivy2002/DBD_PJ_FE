@@ -16,6 +16,7 @@
                 <i class="el-icon-notebook-1"></i>
                 订单分类
               </template>
+              <el-menu-item index="全部">全部</el-menu-item>
               <el-menu-item index="待支付">待支付</el-menu-item>
               <el-menu-item index="待发货">待发货</el-menu-item>
               <el-menu-item index="待收货">待收货</el-menu-item>
@@ -163,13 +164,11 @@ export default {
       const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
       // 获取当前页的订单数据
       const orders = this.allOrders.slice(startIndex, endIndex)
-      console.log(2222)
-
       // 更新总订单数
       this.totalOrders = this.allOrders.length
       // 更新当前页的订单数据
       this.orderData = orders
-      console.log(toRaw(this.orderData))
+      // console.log(toRaw(this.orderData))
       await this.changeInfoById() // 新增调用changeInfoById函数
     }, // getOrderData方法结束
 
