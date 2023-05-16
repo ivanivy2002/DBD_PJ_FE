@@ -53,6 +53,13 @@
             <el-table-column label="操作" width="180">
               <template #default="{ row }">
                 <el-button
+                  v-if="activeStatus === '所有订单'"
+                  type="default"
+                  size="mini"
+                  @click="navigateToOrderDetail(row)"
+                  >详情</el-button
+                >
+                <el-button
                   v-if="activeStatus === '待支付'"
                   type="primary"
                   size="mini"
@@ -452,6 +459,10 @@ export default {
         default:
           return ''
       }
+    },
+    navigateToOrderDetail(row) {
+      localStorage.setItem('orderId', row.id)
+      this.$router.push('/home/orduser/order/detail')
     }
   }
 }
