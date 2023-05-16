@@ -10,27 +10,49 @@
     <el-main>
       <div v-if="currentView === '1'">
         <el-table :data="orderData" style="width: 100%">
-          <el-table-column prop="orderNumber" label="订单编号"></el-table-column>
-          <el-table-column prop="productName" label="商品名称"></el-table-column>
-          <el-table-column prop="unitPrice" label="商品单价"></el-table-column>
-          <el-table-column prop="quantity" label="购买数量"></el-table-column>
-          <el-table-column prop="totalPrice" label="订单总价"></el-table-column>
-          <el-table-column prop="purchaseTime" label="购买时间"></el-table-column>
-          <el-table-column prop="address" label="收货地址"></el-table-column>
-          <el-table-column prop="username" label="用户名"></el-table-column>
+          <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
+          <!-- <el-table-column prop="shopName" label="店铺"> </el-table-column> -->
+          <el-table-column prop="commodityName" label="商品名称" width="180px"> </el-table-column>
+          <el-table-column prop="imagePath" label="商品图片">
+            <template #default="{ row }">
+              <img
+                v-for="imageUrl in getImageUrls(row.imagePath)"
+                :key="imageUrl"
+                :src="imageUrl"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
+          <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
+          <el-table-column prop="status" label="状态" width="120">
+            <template #default="{ row }">
+              <el-tag :type="statusTagType(row.status)" disable-transitions>{{
+                row.status
+              }}</el-tag>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template #default="{ row }">
               <el-button @click="handleDelivery(row)">发货</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[5, 10, 20, 50]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalOrders"
+        ></el-pagination>
       </div>
 
       <div v-if="currentView === '2'">
         <el-table :data="orderData" style="width: 100%">
           <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
           <!-- <el-table-column prop="shopName" label="店铺"> </el-table-column> -->
-          <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
+          <el-table-column prop="commodityName" label="商品名称" width="180px"> </el-table-column>
           <el-table-column prop="imagePath" label="商品图片">
             <template #default="{ row }">
               <img
@@ -77,7 +99,7 @@ export default {
   name: 'ManageOrderView',
   data() {
     return {
-      currentPage: 1,
+      currentPage: '2',
       pageSize: 10,
       totalOrders: 0,
       currentView: '1',
@@ -86,12 +108,13 @@ export default {
       // refundData: []
     }
   },
-  created() {
-    if (this.currentView == 1) {
-      this.getOrderInfo()
-    } else if (this.currentView == 2) {
-      this.getRefundInfo()
-    }
+  mounted() {
+    // if (this.currentView == '1') {
+    //   this.getOrderInfo()
+    // } else if (this.currentView == '2') {
+    this.getRefundInfo()
+    console.log(88)
+    // }
   },
   methods: {
     getOrderInfo() {
@@ -106,15 +129,19 @@ export default {
         .then((res) => {
           if (res.data.code == 200) {
             console.log('拿取信息成功')
-            this.allOrders = response.data.data
+            this.allOrders = res.data.data
+            console.log(this.allOrders)
             // 在这里进行过滤
             this.allOrders = this.allOrders.filter((order) => order.removeStatus !== '已删除')
             // 分页设置，具体的注释看OrderDisplayView
             const startIndex = (this.currentPage - 1) * this.pageSize
             const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
             const orders = this.allOrders.slice(startIndex, endIndex)
+            // BUG: 这里order是空的，但是this.allOrders不是空的
+            console.log(orders)
             this.totalOrders = this.allOrders.length
             this.orderData = orders
+            console.log(this.orderData)
             // NOTE: 调用id查询函数
             this.changeInfoById()
           } else {
