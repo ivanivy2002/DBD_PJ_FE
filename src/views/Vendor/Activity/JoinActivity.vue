@@ -31,7 +31,7 @@ export default {
         ElRow,
         ElCol,
     },
-    <!--/category/getCategoryList-->
+    // <!--/category/getCategoryList-->
     data() {
         return {
             stores: [],
