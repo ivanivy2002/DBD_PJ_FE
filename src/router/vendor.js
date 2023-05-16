@@ -11,6 +11,7 @@ import VendorCommodityView from '@/views/Vendor/VendorCommodityView.vue'
 import StoreTableView from '@/views/StoreTableView.vue'
 import OrderManageView from '@/views/Vendor/Order/OrderManageView'
 import VendorActivity from '@/views/Vendor/Activity/VendorActivity.vue'
+import JoinActivity from '@/views/Vendor/Activity/JoinActivity.vue'
 
 export default [
   {
@@ -61,6 +62,11 @@ export default [
         path: '/home/vendor/activity',
         name: 'VendorActivity',
         component: VendorActivity
+      },
+      {
+        path: '/home/vendor/joinActivity',
+        name: 'JoinActivity',
+        component: JoinActivity
       }
     ]
   }

@@ -80,7 +80,7 @@ export default {
     //   // this.showRechargeDialog
     // },
     recharge(rechargeAmount) {
-      console.log('rechargeAmount before try ' + this.rechargeAmount)
+      // console.log('rechargeAmount before try ' + this.rechargeAmount)
       try {
         // this.shopId = localStorage.getItem('shopId')
         // eslint-disable-next-line no-unused-vars
@@ -103,7 +103,7 @@ export default {
           // eslint-disable-next-line no-unused-vars
           .then((response) => {
             // console.log(response)
-            console.log('rechargeAmount after post' + this.rechargeAmount)
+            console.log('rechargeAmount after post ' + this.rechargeAmount)
             // this.balance = response.data.balance
             ElMessage({
               showClose: true,

@@ -13,6 +13,7 @@
           </div>
           <div class="card-content">活动状态：{{ activity.status }}</div>
           <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>
+          <div class="card-content">商品类别：{{ activity.category }}</div>
           <div class="ActivityButton" @click="navigateToActivity(activity.id)">
             <el-button> 参加活动</el-button>
           </div>
@@ -47,6 +48,7 @@ export default {
           status: '开启成功',
           createTime: '2023-05-12 20:16:46',
           originFund: 2000
+
           // remainTimeString: '',
         }
       ]
@@ -61,6 +63,21 @@ export default {
   },
   computed: {},
   methods: {
+    navigateToActivity(activityId) {
+      localStorage.setItem('activityId', activityId) // 将shopId存入localStorage
+      // TODO: 这里的路由上面需不需要显示shopId
+      // this.$router.push({ path: `/home/orduser/commodity/${activityId}` });
+      this.$router.push({ path: `/home/vendor/joinActivity` })
+      // if (localStorage.getItem('role') == '1') {
+      //     this.$router.push({ path: `/home/orduser/commodity` })
+      // }
+      // if (localStorage.getItem('role') == '2') {
+      //     this.$router.push({ path: `/home/vendor/commodityTable` })
+      // }
+      // if (localStorage.getItem('role') == '3') {
+      //     this.$router.push({ path: `/home/admin/commodityTable` })
+      // }
+    },
     calRemainTime(activity) {
       const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
       const currentTime = Math.floor(Date.now() / 1000)
@@ -109,9 +126,7 @@ export default {
         console.log(error)
         throw error
       }
-    },
-    // eslint-disable-next-line no-unused-vars
-    navigateToActivity(activityId) {}
+    }
   }
 }
 </script>
