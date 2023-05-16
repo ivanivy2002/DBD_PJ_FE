@@ -90,7 +90,8 @@ export default {
         // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
         // TODO: 目前categories字段的值不能为NULL，否则会报错
         // categories: store.categories.split(',').map((category) => category.trim()),
-        categories: this.splitByComma(store.categories),
+          //TODO: categories is removed from the chart..
+        // categories: this.splitByComma(store.categories),
         intro: store.intro
       }))
       // console.log(store.categories)
@@ -125,9 +126,12 @@ export default {
     // } catch (error) {
     //     console.log(error)
     // }
-    setInterval(() => {
-      this.fetchActivity()
-    }, 1000)
+
+      //TODO: setInterval Disabled, 以下三行
+    // setInterval(() => {
+    //   this.fetchActivity()
+    // }, 1000)
+
     // this.startTimer()
   },
   // beforeUnmount(){
