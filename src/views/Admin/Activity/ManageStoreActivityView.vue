@@ -6,39 +6,8 @@
       <!--      <el-table-column prop="idNumber" label="身份证号"></el-table-column>-->
       <!--      <el-table-column prop="intro" label="商店简介"></el-table-column>-->
       <!--      <el-table-column prop="address" label="备案地址"></el-table-column>-->
-      <el-table-column prop="fund" label="注册资金"></el-table-column>
       <!--            <el-table-column prop="registrationTime" label="注册时间"></el-table-column>-->
       <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
-      <el-table-column prop="regStatus" label="注册状态">
-        <template #default="{ row }">
-          <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
-          <el-tag
-            :type="
-              row.regStatus === '待审核'
-                ? 'warning'
-                : row.regStatus === '已通过'
-                ? 'success'
-                : 'danger'
-            "
-            >{{ row.regStatus }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="removeStatus" label="申请删除状态">
-        <template #default="{ row }">
-          <!-- NOTE: 0是待审核，1是已通过，2是已拒绝 -->
-          <el-tag
-            :type="
-              row.removeStatus === '待审核'
-                ? 'warning'
-                : row.removeStatus === '已通过'
-                ? 'success'
-                : 'danger'
-            "
-            >{{ row.removeStatus }}
-          </el-tag>
-        </template>
-      </el-table-column>
       <el-table-column prop="activityStatus" label="活动状态">
         <template #default="{ row }">
           <el-tag

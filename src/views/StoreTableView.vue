@@ -177,8 +177,8 @@ export default {
       // const hour = Math.floor(remainTime / 3600)
       let hour = Math.floor(minute / 60)
       minute = minute % 60
-      const day = Math.floor(hour / 60)
-      hour = hour % 60
+      const day = Math.floor(hour / 24)
+      hour = hour % 24
       // const minute = Math.floor((remainTime - 3600 * hour) / 60)
       const secondString = String(second).padStart(2, '0')
       const minuteString = String(minute).padStart(2, '0')

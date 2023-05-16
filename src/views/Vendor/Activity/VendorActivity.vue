@@ -73,8 +73,8 @@ export default {
       // const hour = Math.floor(remainTime / 3600)
       let hour = Math.floor(minute / 60)
       minute = minute % 60
-      const day = Math.floor(hour / 60)
-      hour = hour % 60
+      const day = Math.floor(hour / 24)
+      hour = hour % 24
       const secondString = String(second).padStart(2, '0')
       const minuteString = String(minute).padStart(2, '0')
       const hourString = String(hour).padStart(2, '0')
@@ -181,5 +181,10 @@ export default {
 }
 .ActivityButton {
   padding-right: 10px;
+}
+.kuuki {
+  color: rgba(11, 80, 52, 0.78);
+  background-color: rgba(110, 194, 175, 0.53);
+  text-decoration-color: rgba(150, 125, 90, 0.96);
 }
 </style>

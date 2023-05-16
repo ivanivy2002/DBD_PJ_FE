@@ -10,7 +10,7 @@ import PicUploadTest from '@/views/Vendor/PicUploadTest'
 import VendorCommodityView from '@/views/Vendor/VendorCommodityView.vue'
 import StoreTableView from '@/views/StoreTableView.vue'
 import OrderManageView from '@/views/Vendor/Order/OrderManageView'
-import VendorActivity from '@/views/Vendor/VendorActivity.vue'
+import VendorActivity from '@/views/Vendor/Activity/VendorActivity.vue'
 
 export default [
   {

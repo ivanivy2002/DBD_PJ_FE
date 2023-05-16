@@ -3,8 +3,8 @@
   <div class="center">
     <!-- TODO: 通过修改URL造成错误的消息提示 -->
     <!-- <div class="errorInfo">
-      <h2>{{ error }}</h2>
-    </div> -->
+          <h2>{{ error }}</h2>
+        </div> -->
     <div class="title">
       <div class="title-text">
         <h1>Welcome to GanSui Mall!</h1>
@@ -269,6 +269,7 @@ export default {
     async login() {
       // 异步发送post请求
       try {
+          // eslint-disable-next-line no-unused-vars
         const router = useRouter()
         // NOTE: 区分是管理员还是非管理员
         console.log(this.loginForm.role)
@@ -280,10 +281,13 @@ export default {
             params: {
               // 查询
               userName: this.loginForm.userName,
-              password: this.loginForm.password
+              password: this.loginForm.password,
+                // TODO:可能有隐藏的bug
+                role:this.loginForm.role,
             },
             withCredentials: true // 携带session信息
           })
+            // eslint-disable-next-line no-unused-vars
           const { token, user } = response.data // 验证返回值
           console.log(response.data)
           // 处理登录逻辑，例如将token和用户信息保存到浏览器本地缓存
@@ -330,10 +334,12 @@ export default {
             params: {
               // 查询
               userName: this.loginForm.userName,
-              password: this.loginForm.password
+              password: this.loginForm.password,
+              role: 3
               // session: this.loginForm.session
             }
           })
+            // eslint-disable-next-line no-unused-vars
           const { token, user } = response.data // 验证返回值
           // NOTE:处理登录逻辑，例如将token和用户信息保存到本地缓存
           localStorage.setItem('token', token)
@@ -457,9 +463,9 @@ export default {
   background: linear-gradient(to bottom right, #177f7f, #32c8b2);
   /* background: url("https://images.unsplash.com/photo-1523875969136-392c28a97f81?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80") no-repeat center center fixed; */
   /* -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover; */
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; */
 }
 
 .title {
@@ -498,44 +504,44 @@ export default {
   border-radius: 15px;
 }
 
-.el-tabs__header {
-  padding: 0;
-  margin-bottom: 0;
-}
+/*.el-tabs__header {*/
+/*  padding: 0;*/
+/*  margin-bottom: 0;*/
+/*}*/
 
-.el-tabs__nav {
-  border-bottom: none;
-  margin-top: 0;
-}
+/*.el-tabs__nav {*/
+/*  border-bottom: none;*/
+/*  margin-top: 0;*/
+/*}*/
 
-.el-tabs__item {
-  color: #606266;
-  font-size: 16px;
-  height: 50px;
-  line-height: 50px;
-}
+/*.el-tabs__item {*/
+/*  color: #606266;*/
+/*  font-size: 16px;*/
+/*  height: 50px;*/
+/*  line-height: 50px;*/
+/*}*/
 
-.el-tabs__active-bar {
-  background-color: #409eff;
-  height: 2px;
-}
+/*.el-tabs__active-bar {*/
+/*  background-color: #409eff;*/
+/*  height: 2px;*/
+/*}*/
 
-.el-form-item__label {
-  text-align: left;
-  color: #606266;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
+/*.el-form-item__label {*/
+/*  text-align: left;*/
+/*  color: #606266;*/
+/*  margin-bottom: 10px;*/
+/*  font-weight: bold;*/
+/*}*/
 
-.el-input__inner {
-  border-radius: 5px;
-  padding: 0 15px;
-  height: 40px;
-  border: 1px solid #dcdfe6;
-}
+/*.el-input__inner {*/
+/*  border-radius: 5px;*/
+/*  padding: 0 15px;*/
+/*  height: 40px;*/
+/*  border: 1px solid #dcdfe6;*/
+/*}*/
 
-.el-button {
-  padding: 9px 20px;
-  border-radius: 5px;
-}
+/*.el-button {*/
+/*  padding: 9px 20px;*/
+/*  border-radius: 5px;*/
+/*}*/
 </style>
