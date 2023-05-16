@@ -18,8 +18,8 @@
                 订单分类
               </template>
               <el-menu-item index="所有订单">所有订单</el-menu-item>
-              <el-menu-item index="待支付">发货管理</el-menu-item>
-              <el-menu-item index="待发货">退货退款</el-menu-item>
+              <el-menu-item index="发货管理">发货管理</el-menu-item>
+              <el-menu-item index="退货管理">退货管理</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-col>
@@ -48,7 +48,21 @@
             </el-table-column>
             <el-table-column label="操作">
               <template #default="{ row }">
-                <el-button @click="handleDelivery(row)">发货</el-button>
+                <el-button
+                  v-if="activeStatus === '发货管理'"
+                  @click="handleDelivery(row)"
+                  type="default"
+                  >发货</el-button
+                >
+                <el-button
+                  v-if="activeStatus === '退货管理'"
+                  @click="handleRefund(row)"
+                  type="success"
+                  >同意</el-button
+                >
+                <el-button v-if="activeStatus === '退货管理'" disabled type="danger"
+                  >拒绝</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -70,6 +84,7 @@
 <script>
 import { reactive } from 'vue'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 export default {
   name: 'ManageOrderView',
   data() {
@@ -79,7 +94,8 @@ export default {
       totalOrders: 0,
       currentView: '1',
       orderData: [],
-      allOrders: []
+      allOrders: [],
+      activeStatus: '所有订单'
       // refundData: []
     }
   },
@@ -109,7 +125,10 @@ export default {
             this.allOrders = response.data.data
             console.log(this.allOrders)
             // 在这里进行过滤
-            this.allOrders = this.allOrders.filter((order) => order.removeStatus !== '已删除')
+            // this.allOrders = this.allOrders.filter((order) => order.removeStatus !== '已删除')
+            console.log(this.allOrders)
+            this.currentPage = 1 // 重新设置 currentPage 变量，这个很关键
+            this.pageSize = 10 // 重新设置 pageSize 变量
             // 分页设置，具体的注释看OrderDisplayView
             const startIndex = (this.currentPage - 1) * this.pageSize
             const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
@@ -203,42 +222,54 @@ export default {
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
     // 选择哪个视图
-    handleSelect(index) {
-      this.currentView = index
+    handleSelect(key) {
+      this.activeStatus = key
+      this.getAllOrders()
     },
     handleDelivery(row) {
       // 发送请求，将订单状态改为已发货
-      axios
-        .post('/api/shop/deliverCommodity', {
-          params: {
-            orderId: row.id
-          }
-        })
-        .then((response) => {
-          console.log(response)
-          if (response.data.code == 200) {
-            console.log('发货成功')
-            this.$message({
-              type: 'success',
-              message: '发货成功'
+      this.$confirm('确定要发货吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          axios
+            .post('/api/shop/deliverCommodity', null, {
+              params: {
+                orderId: row.id
+              }
             })
-            this.getOrderInfo()
-          } else {
-            console.log('发货失败')
-            this.$message({
-              type: 'error',
-              message: '发货失败: ' + response.data.msg
+            .then((response) => {
+              console.log(response)
+              if (response.data.code == 200) {
+                console.log('发货成功')
+                this.$message({
+                  type: 'success',
+                  message: '发货成功'
+                })
+                this.getAllOrders()
+              } else {
+                console.log('发货失败')
+                this.$message({
+                  type: 'error',
+                  message: '发货失败: ' + response.data.msg
+                })
+              }
             })
-          }
+            .catch((error) => {
+              console.log(error)
+              this.$message({
+                type: 'error',
+                message: '发货失败'
+              })
+            })
         })
-        .catch((error) => {
-          console.log(error)
-          this.$message({
-            type: 'error',
-            message: '发货失败'
-          })
+        .catch(() => {
+          // 用户点击了取消按钮
         })
     },
+    // NOTE: 允许退款
     handleRefund(row) {
       this.$confirm('确认同意退款', '提示', {
         confirmButtonText: '确定',
@@ -247,9 +278,10 @@ export default {
       })
         .then(() => {
           axios
-            .post('/api/shop/handleOrderRefund', {
+            .post('/api/shop/handleOrderRefund', null, {
               params: {
-                orderId: row.id
+                orderId: row.id,
+                ifApprove: 1
               }
             })
             .then((response) => {
@@ -259,12 +291,15 @@ export default {
                   type: 'success',
                   message: '退款成功'
                 })
-                this.getRefundInfo()
+                this.getAllOrders()
               } else {
                 console.log('退款失败')
-                this.$message({
-                  type: 'error',
-                  message: '退款失败:' + response.data.msg
+                console.log(response.data.msg)
+                ElMessage({
+                  //用于弹出消息提示
+                  showClose: true,
+                  type: 'danger', //如果失败
+                  message: response.data.msg //弹出的消息内容
                 })
               }
             })
@@ -280,16 +315,26 @@ export default {
           // 点击取消按钮
         })
     },
+    // NOTE: 和分页有关的方法
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.getOrderData()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.getOrderData()
+    },
     statusSelect(status) {
       switch (status) {
         case '所有订单':
-          return 'displayAll'
-        // case '发货管理':
-        //   return 'displayToBeRefunded'
+          return 'displayAllForShop'
+        case '发货管理':
+          return 'displayShipToUser'
         case '退货管理':
           return 'displayToBeRefunded'
         default:
-          console.log('错误!!statusSelect: 未知的status')
+          console.log('错误!!未知的status')
+          console.log(status)
           return ''
       }
     },
@@ -316,6 +361,10 @@ export default {
 </script>
 
 <style scoped>
+img {
+  width: 50px;
+  height: 50px;
+}
 .el-menu-vertical-demo {
   border-right: 1px solid #eee;
 }

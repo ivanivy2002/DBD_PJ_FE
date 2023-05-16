@@ -121,7 +121,7 @@ export default {
       totalOrders: 0,
       orderData: [],
       allOrders: [], // 新增属性
-      activeStatus: '待支付' // 代表当前页面是筛选哪个状态的订单
+      activeStatus: '所有订单' // 代表当前页面是筛选哪个状态的订单
     }
   },
   created() {
@@ -417,7 +417,7 @@ export default {
     statusSelect(status) {
       switch (status) {
         case '所有订单':
-          return 'displayAll'
+          return 'displayAllForUser'
         case '待支付':
           return 'displayToBePaid'
         case '待发货':
@@ -431,6 +431,7 @@ export default {
         case '已退款':
           return 'displayRefunded'
         default:
+          console.log('status出错了!!')
           return ''
       }
     },
