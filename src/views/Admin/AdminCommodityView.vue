@@ -92,7 +92,7 @@ export default {
   methods: {
     async fetchData() {
       try {
-        this.shopId = localStorage.getItem('shopId')
+        this.shopId = localStorage.getItem('showShopId')
         const response = await axios.get('/api/commodity/displayQualified/', {
           params: { shopId: this.shopId }
         })

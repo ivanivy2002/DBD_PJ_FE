@@ -241,7 +241,7 @@ export default {
       }
     },
     navigateToCommodity(shopId) {
-      localStorage.setItem('shopId', shopId) // 将shopId存入localStorage
+      localStorage.setItem('showShopId', shopId) // 注意：将showShopId存入localStorage
       // TODO: 这里的路由上面需不需要显示shopId
       // this.$router.push({ path: `/home/orduser/commodity/${shopId}` });
       if (localStorage.getItem('role') == '1') {

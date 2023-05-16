@@ -1,93 +1,68 @@
 <template>
   <el-container>
-    <el-aside width="200px">
+    <!-- <el-aside width="200px">
       <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
         <el-menu-item index="1">发货管理</el-menu-item>
         <el-menu-item index="2">退货退款</el-menu-item>
       </el-menu>
-    </el-aside>
+    </el-aside> -->
 
     <el-main>
-      <div v-if="currentView === '1'">
-        <el-table :data="orderData" style="width: 100%">
-          <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
-          <!-- <el-table-column prop="shopName" label="店铺"> </el-table-column> -->
-          <el-table-column prop="commodityName" label="商品名称" width="180px"> </el-table-column>
-          <el-table-column prop="imagePath" label="商品图片">
-            <template #default="{ row }">
-              <img
-                v-for="imageUrl in getImageUrls(row.imagePath)"
-                :key="imageUrl"
-                :src="imageUrl"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
-          <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
-          <el-table-column prop="status" label="状态" width="120">
-            <template #default="{ row }">
-              <el-tag :type="statusTagType(row.status)" disable-transitions>{{
-                row.status
-              }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template #default="{ row }">
-              <el-button @click="handleDelivery(row)">发货</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 50]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalOrders"
-        ></el-pagination>
-      </div>
-
-      <div v-if="currentView === '2'">
-        <el-table :data="orderData" style="width: 100%">
-          <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
-          <!-- <el-table-column prop="shopName" label="店铺"> </el-table-column> -->
-          <el-table-column prop="commodityName" label="商品名称" width="180px"> </el-table-column>
-          <el-table-column prop="imagePath" label="商品图片">
-            <template #default="{ row }">
-              <img
-                v-for="imageUrl in getImageUrls(row.imagePath)"
-                :key="imageUrl"
-                :src="imageUrl"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
-          <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
-          <el-table-column prop="status" label="状态" width="120">
-            <template #default="{ row }">
-              <el-tag :type="statusTagType(row.status)" disable-transitions>{{
-                row.status
-              }}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template #default="{ row }">
-              <el-button @click="handleRefund(row)">同意退款</el-button>
-              <el-button @click="handleRefund(row)" disabled>拒绝</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 50]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalOrders"
-        ></el-pagination>
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <!-- NOTE: 这个方法挺厉害的，选中之后调用函数设置不同的activeStatus -->
+          <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
+            <el-submenu index="1">
+              <template #title>
+                <i class="el-icon-notebook-1"></i>
+                订单分类
+              </template>
+              <el-menu-item index="所有订单">所有订单</el-menu-item>
+              <el-menu-item index="待支付">发货管理</el-menu-item>
+              <el-menu-item index="待发货">退货退款</el-menu-item>
+            </el-submenu>
+          </el-menu>
+        </el-col>
+        <el-col :span="18">
+          <el-table :data="orderData" style="width: 100%">
+            <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
+            <!-- <el-table-column prop="shopName" label="店铺"> </el-table-column> -->
+            <el-table-column prop="commodityName" label="商品名称" width="180px"> </el-table-column>
+            <el-table-column prop="imagePath" label="商品图片">
+              <template #default="{ row }">
+                <img
+                  v-for="imageUrl in getImageUrls(row.imagePath)"
+                  :key="imageUrl"
+                  :src="imageUrl"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
+            <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
+            <el-table-column prop="status" label="状态" width="120">
+              <template #default="{ row }">
+                <el-tag :type="statusTagType(row.status)" disable-transitions>{{
+                  row.status
+                }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template #default="{ row }">
+                <el-button @click="handleDelivery(row)">发货</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 20, 50]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalOrders"
+          ></el-pagination>
+        </el-col>
+      </el-row>
     </el-main>
   </el-container>
 </template>
@@ -112,7 +87,8 @@ export default {
     // if (this.currentView == '1') {
     //   this.getOrderInfo()
     // } else if (this.currentView == '2') {
-    this.getRefundInfo()
+    // this.getRefundInfo()
+    this.getAllOrders()
     console.log(88)
     // }
   },
@@ -120,16 +96,17 @@ export default {
     getOrderInfo() {
       // 发送请求获取订单信息
     },
-    async getRefundInfo() {
+    async getAllOrders() {
       // 发送请求获取退款信息
+      const url = '/api/order/' + this.statusSelect(this.activeStatus)
       await axios
-        .get('/api/order/displayToBeRefunded', {
+        .get(url, {
           params: { shopId: localStorage.getItem('shopId') }
         })
-        .then((res) => {
-          if (res.data.code == 200) {
+        .then((response) => {
+          if (response.data.code == 200) {
             console.log('拿取信息成功')
-            this.allOrders = res.data.data
+            this.allOrders = response.data.data
             console.log(this.allOrders)
             // 在这里进行过滤
             this.allOrders = this.allOrders.filter((order) => order.removeStatus !== '已删除')
@@ -302,6 +279,37 @@ export default {
         .catch(() => {
           // 点击取消按钮
         })
+    },
+    statusSelect(status) {
+      switch (status) {
+        case '所有订单':
+          return 'displayAll'
+        // case '发货管理':
+        //   return 'displayToBeRefunded'
+        case '退货管理':
+          return 'displayToBeRefunded'
+        default:
+          console.log('错误!!statusSelect: 未知的status')
+          return ''
+      }
+    },
+    statusTagType(status) {
+      switch (status) {
+        case '待支付':
+          return 'info'
+        case '待发货':
+          return 'warning'
+        case '待收货':
+          return 'success'
+        case '已完成':
+          return 'success'
+        case '已撤销':
+          return 'danger'
+        case '已退款':
+          return 'danger'
+        default:
+          return ''
+      }
     }
   }
 }

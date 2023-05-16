@@ -16,7 +16,7 @@
                 <i class="el-icon-notebook-1"></i>
                 订单分类
               </template>
-              <el-menu-item index="全部">全部</el-menu-item>
+              <el-menu-item index="所有订单">所有订单</el-menu-item>
               <el-menu-item index="待支付">待支付</el-menu-item>
               <el-menu-item index="待发货">待发货</el-menu-item>
               <el-menu-item index="待收货">待收货</el-menu-item>
@@ -132,7 +132,6 @@ export default {
   },
   methods: {
     async getAllOrders() {
-      // 新增方法
       const url = '/api/order/' + this.statusSelect(this.activeStatus)
       await axios
         .get(url, {
@@ -417,6 +416,8 @@ export default {
     },
     statusSelect(status) {
       switch (status) {
+        case '所有订单':
+          return 'displayAll'
         case '待支付':
           return 'displayToBePaid'
         case '待发货':
