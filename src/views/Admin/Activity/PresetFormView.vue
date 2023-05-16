@@ -287,17 +287,31 @@ export default {
                 this.activityId = response.data.activityId
                 console.log(this.activityId)
                 console.log(this.categoriesSend)
+
+                // NOTE: 将 categoriesSend 数组中的每个元素添加到 URLSearchParams 对象中
+                const params = new URLSearchParams()
+                this.categoriesSend.forEach((category) => {
+                  params.append('categories', category)
+                })
+                // 添加 activityId 到 URLSearchParams 对象中
+                params.append('activityId', this.activityId)
+
+                // 发送 POST 请求，将 URLSearchParams 对象作为参数传递
                 axios
-                  .post('/api/category/saveActivityCategory', {
-                      data: {
-                          activityId: this.activityId,
-                          categories: this.categoriesSend,
-                      }
-                  }, {
-                      headers: {
-                          'Content-Type': 'application/json'
-                      }
-                  })
+                  .post('/api/category/saveActivityCategory?' + params.toString())
+                  // axios
+                  //   .post('/api/category/saveActivityCategory', {
+                  //     params: {
+                  //       categories: this.categoriesSend,
+                  //       // categories: ["sofa"],
+                  //       activityId: this.activityId,
+                  //     }
+                  //   })
+                  // {
+                  //   headers: {
+                  //       'Content-Type': 'application/json'
+                  //   }
+
                   // .post('/api/category/saveActivityCategory', {
                   //     data: {
                   //     activityId: this.activityId,

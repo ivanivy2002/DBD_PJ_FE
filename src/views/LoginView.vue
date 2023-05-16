@@ -269,7 +269,7 @@ export default {
     async login() {
       // 异步发送post请求
       try {
-          // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         const router = useRouter()
         // NOTE: 区分是管理员还是非管理员
         console.log(this.loginForm.role)
@@ -282,12 +282,12 @@ export default {
               // 查询
               userName: this.loginForm.userName,
               password: this.loginForm.password,
-                // TODO:可能有隐藏的bug
-                role:this.loginForm.role,
+              // TODO:可能有隐藏的bug
+              role: this.loginForm.role
             },
             withCredentials: true // 携带session信息
           })
-            // eslint-disable-next-line no-unused-vars
+          // eslint-disable-next-line no-unused-vars
           const { token, user } = response.data // 验证返回值
           console.log(response.data)
           // 处理登录逻辑，例如将token和用户信息保存到浏览器本地缓存
@@ -335,11 +335,12 @@ export default {
               // 查询
               userName: this.loginForm.userName,
               password: this.loginForm.password,
-              role: 3
+              // role: 3
+              role: this.loginForm.role
               // session: this.loginForm.session
             }
           })
-            // eslint-disable-next-line no-unused-vars
+          // eslint-disable-next-line no-unused-vars
           const { token, user } = response.data // 验证返回值
           // NOTE:处理登录逻辑，例如将token和用户信息保存到本地缓存
           localStorage.setItem('token', token)
