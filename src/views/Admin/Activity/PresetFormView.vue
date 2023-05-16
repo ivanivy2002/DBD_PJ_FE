@@ -96,15 +96,15 @@ export default {
       },
       presetForm: {
         activityFund: 10,
-        lastTime: 0,
+        lastTime: 1,
         x: 0,
         y: 0,
         regFund: 10,
-        monthlySales: 0,
-        monthlyAmount: 0,
-        status: null,
+        monthlySales: 5,
+        monthlyAmount: 5,
+        status: '待开启',
         creatTime: null,
-        originFund: 0
+        originFund: 500
       },
       categoryForm: {
         id: 0,
@@ -289,9 +289,25 @@ export default {
                 console.log(this.categoriesSend)
                 axios
                   .post('/api/category/saveActivityCategory', {
-                    categories: this.categoriesSend,
-                    activityId: this.activityId
+                      data: {
+                          activityId: this.activityId,
+                          categories: this.categoriesSend,
+                      }
+                  }, {
+                      headers: {
+                          'Content-Type': 'application/json'
+                      }
                   })
+                  // .post('/api/category/saveActivityCategory', {
+                  //     data: {
+                  //     activityId: this.activityId,
+                  //     categories: this.categoriesSend,
+                  //     }},{
+                  //         headers: {
+                  //             'Content-Type': 'application/json'
+                  //         }
+                  // }
+                  // })
                   .then((response) => {
                     console.log(response.data)
                     if (response.data.code === 200) {
@@ -347,13 +363,13 @@ export default {
 </script>
 
 <style scoped>
-.form-header {
-  font-family: '黑体', serif;
-  font-size: 30px;
-  color: #ffffff;
-  text-align: center;
-  margin-bottom: 20px;
-}
+/*.form-header {*/
+/*  font-family: '黑体', serif;*/
+/*  font-size: 30px;*/
+/*  color: #ffffff;*/
+/*  text-align: center;*/
+/*  margin-bottom: 20px;*/
+/*}*/
 
 .form-container {
   font-weight: bold;
@@ -372,50 +388,50 @@ export default {
   border-radius: 10px;
 }
 
-.sign-form__title {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
-}
+/*.sign-form__title {*/
+/*  font-size: 24px;*/
+/*  text-align: center;*/
+/*  margin-bottom: 20px;*/
+/*}*/
 
-.el-form-item__label {
-  color: #333;
-}
+/*.el-form-item__label {*/
+/*  color: #333;*/
+/*}*/
 
-.el-input__inner {
-  background-color: rgb(46, 24, 109);
-  border-color: rgb(53, 4, 4);
-  color: #333;
-}
+/*.el-input__inner {*/
+/*  background-color: rgb(46, 24, 109);*/
+/*  border-color: rgb(53, 4, 4);*/
+/*  color: #333;*/
+/*}*/
 
-.el-checkbox__inner {
-  border-color: rgb(32, 7, 7);
-  background-color: rgb(32, 5, 5);
-}
+/*.el-checkbox__inner {*/
+/*  border-color: rgb(32, 7, 7);*/
+/*  background-color: rgb(32, 5, 5);*/
+/*}*/
 
-.el-checkbox__label {
-  color: #333;
-}
+/*.el-checkbox__label {*/
+/*  color: #333;*/
+/*}*/
 
-.el-button {
-  background-color: #4ca9df;
-  border-color: #4ca9df;
-  border-radius: 5px;
-  color: rgb(178, 218, 217);
-}
+/*.el-button {*/
+/*  background-color: #4ca9df;*/
+/*  border-color: #4ca9df;*/
+/*  border-radius: 5px;*/
+/*  color: rgb(178, 218, 217);*/
+/*}*/
 
-.el-button:hover,
-.el-button:focus {
-  background-color: #105494;
-  border-color: #105494;
-}
+/*.el-button:hover,*/
+/*.el-button:focus {*/
+/*  background-color: #105494;*/
+/*  border-color: #105494;*/
+/*}*/
 
-.el-button:active {
-  background-color: #1f2937;
-  border-color: #1f2937;
-}
+/*.el-button:active {*/
+/*  background-color: #1f2937;*/
+/*  border-color: #1f2937;*/
+/*}*/
 
-.el-message__content {
-  color: #fff;
-}
+/*.el-message__content {*/
+/*  color: #fff;*/
+/*}*/
 </style>
