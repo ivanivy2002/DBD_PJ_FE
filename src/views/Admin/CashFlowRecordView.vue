@@ -48,7 +48,7 @@ export default {
     fetchData: async function () {
       try {
         const response = await axios.get('/api/admin/displayCashFlow')
-          //?
+        //?
         // this.state = response.data.data
         // TODO: 下面的函数需要修改（字符串解析）
         this.state.tableData = response.data.data.map((row) => {
