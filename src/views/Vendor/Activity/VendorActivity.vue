@@ -68,15 +68,6 @@ export default {
       // TODO: 这里的路由上面需不需要显示shopId
       // this.$router.push({ path: `/home/orduser/commodity/${activityId}` });
       this.$router.push({ path: `/home/vendor/joinActivity` })
-      // if (localStorage.getItem('role') == '1') {
-      //     this.$router.push({ path: `/home/orduser/commodity` })
-      // }
-      // if (localStorage.getItem('role') == '2') {
-      //     this.$router.push({ path: `/home/vendor/commodityTable` })
-      // }
-      // if (localStorage.getItem('role') == '3') {
-      //     this.$router.push({ path: `/home/admin/commodityTable` })
-      // }
     },
     calRemainTime(activity) {
       const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
