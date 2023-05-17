@@ -331,6 +331,11 @@ export default {
             if (localStorage.getItem('role') == '2') {
                 this.$router.push({path: `/home/vendor/joinActivity`})
             }
+            if (localStorage.getItem('role') == '1') {
+                this.$router.push({
+                    path: '/home/orduser/activityCommodity',
+                })
+            }
         }
     }
     // filters: {
