@@ -26,108 +26,107 @@
 import { ElCol, ElRow } from 'element-plus'
 import axios from 'axios'
 export default {
-    name: "JoinActivity.vue",
-    components: {
-        ElRow,
-        ElCol,
-    },
-    // <!--/category/getCategoryList-->
-    data() {
-        return {
-            stores: [],
-            activities: [
-                {
-                    id: 1,
-                    lastTime: 999999,
-                    activityFund: 999999,
-                    x: 10,
-                    y: 20,
-                    regFund: 100,
-                    monthlySales: 2000,
-                    monthlyAmount: 200,
-                    status: '开启成功',
-                    createTime: '2023-05-12 20:16:46',
-                    originFund: 2000
-                    // remainTimeString: '',
-                }
-            ]
+  name: 'JoinActivity.vue',
+  components: {
+    ElRow,
+    ElCol
+  },
+  // <!--/category/getCategoryList-->
+  data() {
+    return {
+      stores: [],
+      activities: [
+        {
+          id: 1,
+          lastTime: 999999,
+          activityFund: 999999,
+          x: 10,
+          y: 20,
+          regFund: 100,
+          monthlySales: 2000,
+          monthlyAmount: 200,
+          status: '开启成功',
+          createTime: '2023-05-12 20:16:46',
+          originFund: 2000
+          // remainTimeString: '',
         }
-    },
-    async mounted() {
-        // Activity
-        await this.fetchActivity()
-        setInterval(() => {
-            this.fetchActivity()
-        }, 1000)
-    },
-    computed: {},
-    methods: {
-        navigateToActivity(activityId) {
-            localStorage.setItem('activityId', activityId) // 将shopId存入localStorage
-            // TODO: 这里的路由上面需不需要显示shopId
-            // this.$router.push({ path: `/home/orduser/commodity/${activityId}` });
-            this.$router.push({ path: `/home/vendor/joinActivity` });
-            // if (localStorage.getItem('role') == '1') {
-            //     this.$router.push({ path: `/home/orduser/commodity` })
-            // }
-            // if (localStorage.getItem('role') == '2') {
-            //     this.$router.push({ path: `/home/vendor/commodityTable` })
-            // }
-            // if (localStorage.getItem('role') == '3') {
-            //     this.$router.push({ path: `/home/admin/commodityTable` })
-            // }
-        },
-        calRemainTime(activity) {
-            const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
-            const currentTime = Math.floor(Date.now() / 1000)
-            const remainTime = Math.max(
-                createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime,
-                0
-            )
-            const second = remainTime % 60
-            let minute = Math.floor(remainTime / 60)
-            // const hour = Math.floor(remainTime / 3600)
-            let hour = Math.floor(minute / 60)
-            minute = minute % 60
-            const day = Math.floor(hour / 24)
-            hour = hour % 24
-            const secondString = String(second).padStart(2, '0')
-            const minuteString = String(minute).padStart(2, '0')
-            const hourString = String(hour).padStart(2, '0')
-            return `${day}天${hourString}小时${minuteString}分钟${secondString}秒`
-        },
-        splitByComma(str) {
-            return str.split(',').map((category) => category.trim())
-        },
-        async fetchActivity() {
-            try {
-                const response = await axios.get('/api/home/getActivity')
-                // console.log(response.data)
-                this.activities = response.data.data.map((activity) => {
-                    const remainTimeString = this.calRemainTime(activity)
-                    return {
-                        id: activity.id,
-                        lastTime: activity.lastTime,
-                        activityFund: activity.activityFund,
-                        x: activity.x,
-                        y: activity.y,
-                        regFund: activity.regFund,
-                        monthlySales: activity.monthlySales,
-                        monthlyAmount: activity.monthlyAmount,
-                        status: activity.status,
-                        createTime: activity.createTime,
-                        originFund: activity.originFund,
-                        remainTimeString: remainTimeString
-                    }
-                })
-                return response.data
-            } catch (error) {
-                console.log(error)
-                throw error
-            }
-        },
-
+      ]
     }
+  },
+  async mounted() {
+    // Activity
+    await this.fetchActivity()
+    setInterval(() => {
+      this.fetchActivity()
+    }, 1000)
+  },
+  computed: {},
+  methods: {
+    navigateToActivity(activityId) {
+      localStorage.setItem('activityId', activityId) // 将shopId存入localStorage
+      // TODO: 这里的路由上面需不需要显示shopId
+      // this.$router.push({ path: `/home/orduser/commodity/${activityId}` });
+      this.$router.push({ path: `/home/vendor/joinActivity` })
+      // if (localStorage.getItem('role') == '1') {
+      //     this.$router.push({ path: `/home/orduser/commodity` })
+      // }
+      // if (localStorage.getItem('role') == '2') {
+      //     this.$router.push({ path: `/home/vendor/commodityTable` })
+      // }
+      // if (localStorage.getItem('role') == '3') {
+      //     this.$router.push({ path: `/home/admin/commodityTable` })
+      // }
+    },
+    calRemainTime(activity) {
+      const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
+      const currentTime = Math.floor(Date.now() / 1000)
+      const remainTime = Math.max(
+        createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime,
+        0
+      )
+      const second = remainTime % 60
+      let minute = Math.floor(remainTime / 60)
+      // const hour = Math.floor(remainTime / 3600)
+      let hour = Math.floor(minute / 60)
+      minute = minute % 60
+      const day = Math.floor(hour / 24)
+      hour = hour % 24
+      const secondString = String(second).padStart(2, '0')
+      const minuteString = String(minute).padStart(2, '0')
+      const hourString = String(hour).padStart(2, '0')
+      return `${day}天${hourString}小时${minuteString}分钟${secondString}秒`
+    },
+    splitByComma(str) {
+      return str.split(',').map((category) => category.trim())
+    },
+    async fetchActivity() {
+      try {
+        const response = await axios.get('/api/home/getActivity')
+        // console.log(response.data)
+        this.activities = response.data.data.map((activity) => {
+          const remainTimeString = this.calRemainTime(activity)
+          return {
+            id: activity.id,
+            lastTime: activity.lastTime,
+            activityFund: activity.activityFund,
+            x: activity.x,
+            y: activity.y,
+            regFund: activity.regFund,
+            monthlySales: activity.monthlySales,
+            monthlyAmount: activity.monthlyAmount,
+            status: activity.status,
+            createTime: activity.createTime,
+            originFund: activity.originFund,
+            remainTimeString: remainTimeString
+          }
+        })
+        return response.data
+      } catch (error) {
+        console.log(error)
+        throw error
+      }
+    }
+  }
 }
 </script>
 

@@ -58,18 +58,17 @@
               <el-input-number
                 v-model="commodityNum"
                 :min="1"
-                :max="10"
+                :max="10000"
                 label="数量"
                 controls-position="right"
                 style="width: 120px"
               ></el-input-number>
-              <el-button
-                type="primary"
-                @click="
-                  addToCart(commodity.id, commodity.commodityName, commodityNum, commodity.price)
-                "
-                >添加到购物车</el-button
-              >
+              <el-button color="#626aef" @click="PunchaseDirect(commodity.id)">
+                直接购买
+              </el-button>
+              <el-button type="primary" @click="addToCart(commodity.id, commodityNum)"
+                ><el-icon><ShoppingCart /></el-icon
+              ></el-button>
             </div>
           </div>
         </el-card>
@@ -84,6 +83,7 @@ import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper-bundle.min.css'
 import CommoditySwiper from '../../components/CommoditySwiper.vue'
+import { ShoppingCart } from '@element-plus/icons-vue'
 
 export default {
   components: {
@@ -98,6 +98,17 @@ export default {
   },
   data() {
     return {
+      imageUrls: [],
+      imageUrls: [],
+      swiperOptions: {
+        pagination: {
+          el: '.swiper-pagination'
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      },
       shopId: '', // 假设shopId已经从localStorage中获取
       commodities: []
       // commodityNum: 0 // 购物车数量
@@ -134,18 +145,17 @@ export default {
       }
     },
     // NOTE: 添加商品到购物车
-    addToCart(commodityId, name, quantity, price) {
+    addToCart(commodityId, quantity) {
       try {
         const response = axios
           .post('/api/shoppingCart/addCommodity/', {
             // NOTE: 传一个body
-            // id: null,
+            id: null,
             userId: localStorage.getItem('userId'),
+            shopId: localStorage.getItem('showShopId'),
             commodityId: commodityId,
-            // commodityName: name,
-            commodityNum: quantity
-            // commodityPrice: price
-            // status: null
+            commodityNum: quantity,
+            status: '有效'
           })
           .then((response) => {
             console.log(response)
@@ -170,6 +180,30 @@ export default {
         console.log(error)
       }
     },
+    // NOTE: 直接购买商品
+    PunchaseDirect(commodityId) {
+      this.$confirm('确定要直接购买吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          // TODO: 这里的数据怎么传，以及需要用到create接口
+          this.$router.push('/home/orduser/order/create')
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消购买'
+          })
+        })
+    },
+    // async fetchImages() {
+    //   // 从后端获取图片URL并存储在imageUrls数组中
+    //   const response = await fetch('/api/images');
+    //   const data = await response.json();
+    //   this.imageUrls = data.imageUrls;
+    // },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
       if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
