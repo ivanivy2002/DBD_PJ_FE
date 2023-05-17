@@ -14,6 +14,9 @@
       <el-menu-item index="4"
         ><el-icon><Money /></el-icon>查看资金</el-menu-item
       >
+      <el-menu-item index="5"
+        ><el-icon><Position /></el-icon>收货地址管理</el-menu-item
+      >
     </el-menu>
   </div>
   <div class="personal-center">
@@ -104,12 +107,80 @@
         </el-form-item>
       </el-form>
     </div>
+    <div v-if="activeSelect == 5" class="addressManage">
+      <el-button type="primary" class="add-address-btn" @click="showAddAddressDialog"
+        >添加收货地址</el-button
+      >
+      <el-table :data="addressList" style="width: 100%">
+        <el-table-column prop="name" label="收货人姓名"></el-table-column>
+        <el-table-column prop="phone" label="手机号码"></el-table-column>
+        <el-table-column prop="address" label="收货地址"></el-table-column>
+        <el-table-column prop="postcode" label="邮政编码"></el-table-column>
+        <el-table-column label="操作">
+          <template #default="{ row }">
+            <el-button type="text" @click="showEditAddressDialog(row)">编辑</el-button>
+            <el-button type="text" @click="deleteAddress(row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-dialog :visible.sync="addAddressDialogVisible" title="添加收货地址" width="30%">
+        <el-form
+          :model="addAddressForm"
+          :rules="addAddressFormRules"
+          ref="addAddressForm"
+          label-width="80px"
+        >
+          <el-form-item label="收货人姓名" prop="name">
+            <el-input v-model="addAddressForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="addAddressForm.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="收货地址" prop="address">
+            <el-input v-model="addAddressForm.address"></el-input>
+          </el-form-item>
+          <el-form-item label="邮政编码" prop="postcode">
+            <el-input v-model="addAddressForm.postcode"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="addAddressDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addAddress">确 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog :visible.sync="editAddressDialogVisible" title="编辑收货地址" width="30%">
+        <el-form
+          :model="editAddressForm"
+          :rules="editAddressFormRules"
+          ref="editAddressForm"
+          label-width="80px"
+        >
+          <el-form-item label="收货人姓名" prop="name">
+            <el-input v-model="editAddressForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="手机号码" prop="phone">
+            <el-input v-model="editAddressForm.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="收货地址" prop="address">
+            <el-input v-model="editAddressForm.address"></el-input>
+          </el-form-item>
+          <el-form-item label="邮政编码" prop="postcode">
+            <el-input v-model="editAddressForm.postcode"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="editAddressDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="editAddress">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+//? 下面这句话为什么用不到啊
 // import { User, Edit, WarningFilled, Money } from '@element-plus/icons-vue'
 
 export default {
