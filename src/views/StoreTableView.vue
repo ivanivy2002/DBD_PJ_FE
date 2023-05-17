@@ -11,34 +11,43 @@
                         shadow="hover"
                         @click="navigateToActivity(activity.id)"
                 >
-                    <div class="card-header">
-                        <div class="card-title">活动 {{ activity.id }}</div>
+                    <div class="activity-card-header">
+                        <!--              活动 {{ activity.id }}-->
+                        <div class="activity-card-title">{{ activity.activityName }}</div>
                     </div>
-<!--                    <div class="card-content">活动状态：{{ activity.status }}</div>-->
-                    <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>
-                    <div class="card-content">活动商品：{{ activity.categories }}</div>
+                    <!--                    <div class="activity-card-content">活动状态：{{ activity.status }}</div>-->
+                    <div class="activity-card-content">{{ calRemainTime(activity) }}</div>
+                    <div class="activity-card-content">
+                        <!--                        <span class="category-title">活动商品：</span>-->
+                        <div class="category-list">
+              <span v-for="(category, index) in activity.categories" :key="index" class="category-span">
+                  {{
+                  category.category
+                  }}</span>
+                        </div>
+                    </div>
                 </el-card>
             </el-carousel-item>
         </el-carousel>
     </div>
-<!--    <div class="activity-board">-->
-<!--        <el-row gutter="24">-->
-<!--            <el-col class="activity-col" v-for="activity in activities" :key="activity.id">-->
-<!--                &lt;!&ndash;              :xs="24" :sm="12" :md="8"  :lg="20"&ndash;&gt;-->
-<!--                <el-card-->
-<!--                        class="animated-card-activity"-->
-<!--                        shadow="hover"-->
-<!--                        @click="navigateToActivity(activity.id)"-->
-<!--                >-->
-<!--                    <div class="card-header">-->
-<!--                        <div class="card-title">活动 {{ activity.id }}</div>-->
-<!--                    </div>-->
-<!--                    <div class="card-content">活动状态：{{ activity.status }}</div>-->
-<!--                    <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>-->
-<!--                </el-card>-->
-<!--            </el-col>-->
-<!--        </el-row>-->
-<!--    </div>-->
+  <!--    <div class="activity-board">-->
+  <!--        <el-row gutter="24">-->
+  <!--            <el-col class="activity-col" v-for="activity in activities" :key="activity.id">-->
+  <!--                &lt;!&ndash;              :xs="24" :sm="12" :md="8"  :lg="20"&ndash;&gt;-->
+  <!--                <el-card-->
+  <!--                        class="animated-card-activity"-->
+  <!--                        shadow="hover"-->
+  <!--                        @click="navigateToActivity(activity.id)"-->
+  <!--                >-->
+  <!--                    <div class="card-header">-->
+  <!--                        <div class="card-title">活动 {{ activity.id }}</div>-->
+  <!--                    </div>-->
+  <!--                    <div class="card-content">活动状态：{{ activity.status }}</div>-->
+  <!--                    <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>-->
+  <!--                </el-card>-->
+  <!--            </el-col>-->
+  <!--        </el-row>-->
+  <!--    </div>-->
     <div class="store-board" style="z-index: -1">
         <el-row gutter="24">
             <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
@@ -80,6 +89,7 @@ export default {
             stores: [],
             activities: [
                 {
+                    activityName: '活动0',
                     id: 1,
                     lastTime: 999,
                     activityFund: 999999,
@@ -91,7 +101,7 @@ export default {
                     status: '开启成功',
                     createTime: '2023-05-12 20:16:46',
                     originFund: 2000,
-                    categories:[],
+                    categories: []
                     // remainTimeString: '',
                 }
             ]
@@ -149,8 +159,8 @@ export default {
 
         //TODO: setInterval Disabled, 以下三行
         // setInterval(() => {
-        //   this.fetchActivity()
-        // }, 1000)
+        //     this.fetchActivity()
+        // }, 2000)
 
         // this.startTimer()
     },
@@ -196,6 +206,7 @@ export default {
                 createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime,
                 0
             )
+            this.checkStop(remainTime, activity)
             const second = remainTime % 60
             let minute = Math.floor(remainTime / 60)
             // const hour = Math.floor(remainTime / 3600)
@@ -210,15 +221,32 @@ export default {
             // const dayString = String(day).padStart(2, "0");
             return `${day}天${hourString}小时${minuteString}分钟${secondString}秒`
         },
-        startTimer() {
-            // 每秒钟更新一次 remainTime 的值
-            this.timer = setInterval(() => {
-                // eslint-disable-next-line no-self-assign
-                this.activities = this.activities
-            }, 1000)
-        },
-        stopTimer() {
-            clearInterval(this.timer) // 销毁定时器
+        // startTimer() {
+        //     // 每秒钟更新一次 remainTime 的值
+        //     this.timer = setInterval(() => {
+        //         // eslint-disable-next-line no-self-assign
+        //         this.activities = this.activities
+        //     }, 1000)
+        // },
+        // stopTimer() {
+        //     clearInterval(this.timer) // 销毁定时器
+        // },
+        checkStop(remainTime, activity) {
+            // console.log(remainTime)
+            if (remainTime === 0) {
+                //TODO:BUG 500 ERR
+                console.log(remainTime + ' ' + activity.activityName + ' to off')
+                // const activityId = activity.id;
+                // try {
+                //     axios.put('/api/activity/stop', null, {
+                //         params: {
+                //             activityId: activity.id
+                //         }
+                //     })
+                // } catch (error) {
+                //     console.log(error)
+                // }
+            }
         },
         splitByComma(str) {
             return str.split(',').map((category) => category.trim())
@@ -241,6 +269,7 @@ export default {
                 // console.log(response.data)
                 this.activities = response.data.data.map((activity) => {
                     const remainTimeString = this.calRemainTime(activity)
+                    this.fetchCategories(activity.id)
                     return {
                         id: activity.id,
                         lastTime: activity.lastTime,
@@ -253,7 +282,8 @@ export default {
                         status: activity.status,
                         createTime: activity.createTime,
                         originFund: activity.originFund,
-                        remainTimeString: remainTimeString
+                        remainTimeString: remainTimeString,
+                        activityName: activity.activityName,
                     }
                 })
                 return response.data
@@ -261,6 +291,22 @@ export default {
                 console.log(error)
                 throw error
             }
+        },
+        fetchCategories(activityId) {
+            axios
+                .get('/api/category/getActivityCategory', {
+                    params: {
+                        activityId: activityId
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data.data)
+                    const activity = this.activities.find(item => item.id === activityId);
+                    if (activity) {
+                        activity.categories = response.data.data;
+                    }
+                    return activity.categories
+                })
         },
         navigateToCommodity(shopId) {
             localStorage.setItem('showShopId', shopId) // 注意：将showShopId存入localStorage
@@ -311,18 +357,34 @@ export default {
     min-height: 100vh;
 }
 
-.animated-card {
-    background-color: #26d6cd;
-    opacity: 100%;
-    border-radius: 4px;
-    padding: 24px;
-    margin-bottom: 24px;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+.card-header {
+    display: flex;
+    justify-content: space-between;
+}
 
-    /* 添加渐变动画和阴影效果 */
-    background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+.card-title {
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Microsoft YaHei', Arial, Helvetica, sans-serif;
+    margin-bottom: 12px;
+    cursor: pointer;
+    /* 鼠标悬停时显示手型 */
+    color: #e3f0f0;
+}
+
+.card-content {
+    font-size: 24px;
+    color: #ffffff;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.card-intro {
+    font-size: 24px;
+    color: #ffffff;
+    margin-top: 12px;
+    font-family: 'songti', serif;
 }
 
 /*//activity*/
@@ -342,7 +404,7 @@ export default {
 .animated-card-activity {
     /*margin: 0 auto;*/
     /*display: block;*/
-    background-color: #26d6cd;
+    /*background-color: #26d6cd;*/
     opacity: 100%;
     border-radius: 13px;
     /*padding: 100px;*/
@@ -360,6 +422,7 @@ export default {
 }
 
 .activity-col {
+    display: flex;
     width: 100%;
 }
 
@@ -368,31 +431,50 @@ export default {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
+.animated-card {
+    background-color: #26d6cd;
+    opacity: 100%;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+
+    /* 添加渐变动画和阴影效果 */
+    background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.card-title {
-    font-size: 28px;
+.activity-card-header {
+    display: flex;
+    /*justify-content: space-between;*/
+    justify-content: center;
+}
+
+.activity-card-title {
+    font-size: 40px;
     font-weight: bold;
     font-family: 'Microsoft YaHei', Arial, Helvetica, sans-serif;
+    /*font-family: 'Microsoft YaHei', Arial, Helvetica, serif;*/
+    /*font-family: SimSun,serif;*/
+
     margin-bottom: 12px;
     cursor: pointer;
     /* 鼠标悬停时显示手型 */
     color: #e3f0f0;
+    justify-content: center;
 }
 
-.card-content {
+.activity-card-content {
     font-size: 24px;
     color: #ffffff;
-}
-
-.card-content {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    /*text-align: center;*/
+    justify-content: center;
 }
+
 
 .category-title {
     margin-right: 5px;
@@ -404,32 +486,32 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    /*background-color: rgba(69, 18, 238, 0.7);*/
+    /*background-color: #4f46e5;*/
+    /*color: #4f46e5;*/
 }
 
 .category-list span {
     margin-right: 5px;
-    background-color: #19cde9;
+    background-color: rgba(18, 29, 238, 0.3);
     border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 14px;
-    color: #333;
-}
-
-.card-intro {
-    font-size: 24px;
+    /*padding: 5px 10px;*/
+    font-size: 18px;
     color: #ffffff;
-    margin-top: 12px;
-    font-family: 'songti';
 }
-.activity-carousel{
+
+
+.activity-carousel {
 
 }
+
 .el-carousel__item .el-card {
+    height: 100vh;
     color: #475669;
     opacity: 0.75;
-    line-height: 150px;
+    /*line-height: 100px;*/
     margin: 0;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .el-carousel__item:nth-child(2n) {
@@ -439,4 +521,10 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
     background-color: #d3dce6;
 }
+
+.category-span {
+    background-color: #4f46e5;
+    color: #1D1D1D;
+}
+
 </style>
