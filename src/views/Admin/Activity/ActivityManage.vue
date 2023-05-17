@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-table :data="state.tableData" style="width: 100%">
+    <el-table :data="state.tableData" style="width: 100%" height="400px">
       <el-table-column prop="id" label="活动编号" width="100px"></el-table-column>
       <el-table-column prop="lastTime" label="持续时间" width="100px"></el-table-column>
       <el-table-column prop="activityFund" label="活动资金" width="100px"></el-table-column>
