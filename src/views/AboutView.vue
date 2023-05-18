@@ -57,7 +57,7 @@
   /*justify-content: center;*/
   align-items: center;
   flex-direction: row;
-  background: linear-gradient(to bottom left, #177f7f, #32c8b2);
+ background: linear-gradient(to bottom right,  #b1e8f4, #87e7f8);
   color: white;
   /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;

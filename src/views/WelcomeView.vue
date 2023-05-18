@@ -1,5 +1,7 @@
 <template>
+
   <div class="center" @mouseenter="isHover = true" @mouseleave="isHover = false">
+    <div class="content">
     <h1>Welcome!</h1>
     <h1 id="title" @click="showConfetti">GanSui Mall</h1>
     <br />
@@ -10,6 +12,8 @@
       <el-divider direction="vertical" border-style="solid" />
       <RouterLink to="/login">Login</RouterLink>
     </nav>
+      <!-- <img src="../assets/images/test.jpg" class="image" /> -->
+    </div>
   </div>
 </template>
 
@@ -34,22 +38,35 @@ export default {
 @import url(../assets/css/welcome.css);
 
 body {
-  margin: 0;
+  margin: 4;
 }
 
 .center {
   /* 视口高度的100%*/
   min-height: 100vh;
+  
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(to bottom right, #177f7f, #32c8b2);
+  background: linear-gradient(to bottom right,  #c2e7ef, #abe5ef);
   color: white;
   /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;
 }
-
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #88d3dd;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 750px;
+  height: 500px;
+}
 /* .center:hover {
   background: linear-gradient(to bottom right, #177f7f, #21c0c0);
 } */
@@ -86,7 +103,7 @@ nav {
   margin: 0 1em;
   padding: 0.75em 1.5em;
   border-radius: 2em;
-  background: #21c0c0;
+  background: #6ea7d8;
   color: white;
   text-decoration: none;
   text-transform: uppercase;
@@ -94,7 +111,14 @@ nav {
   font-weight: bold;
   transition: transform 0.2s ease-in-out;
 }
-
+/* .image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  height: auto;
+  margin: 20px;
+} */
 .routerText a:hover {
   transform: scale(1.1);
 }
