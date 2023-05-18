@@ -20,7 +20,27 @@
     </el-menu>
   </div>
   <div class="personal-center">
-    <div v-if="activeSelect === '1'" class="personal-info">
+    <!-- <div> -->
+    <div v-if="activeSelect === '1'" class="personal-info-display">
+      <h2>个人信息</h2>
+      <div class="info-item">
+        <span class="label">用户名: </span>
+        <strong class="value">{{ userInfoForm.userName }}</strong>
+      </div>
+      <div class="info-item">
+        <span class="label">邮箱: </span>
+        <strong class="value">{{ userInfoForm.email }}</strong>
+      </div>
+      <div class="info-item">
+        <span class="label">身份证号: </span>
+        <strong class="value">{{ userInfoForm.idNumber }}</strong>
+      </div>
+      <div class="info-item">
+        <span class="label">手机号: </span>
+        <strong class="value">{{ userInfoForm.phoneNumber }}</strong>
+      </div>
+    </div>
+    <div v-if="activeSelect === '2'" class="personal-info-display">
       <h2>修改个人信息</h2>
       <el-form
         :model="userInfoForm"
@@ -124,7 +144,18 @@
           <el-button @click="deleteAddress(index)" style="float: right" type="danger"
             >删除</el-button
           >
-          <el-button @click="editAddress(address.id)" style="float: right" type="primary"
+          <el-button
+            @click="
+              editAddress(
+                address.id,
+                address.name,
+                address.phoneNumber,
+                address.address,
+                address.ifDefault
+              )
+            "
+            style="float: right"
+            type="primary"
             >修改</el-button
           >
         </div>
@@ -200,7 +231,6 @@
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { Edit } from '@element-plus/icons-vue'
 //? 下面这句话为什么用不到啊
 // import { User, Edit, WarningFilled, Money } from '@element-plus/icons-vue'
 
@@ -225,10 +255,12 @@ export default {
       },
       addresses: [],
       addressForm: {
+        id: '',
         userId: '',
         name: '',
         phoneNumber: '',
-        address: ''
+        address: '',
+        ifDefault: ''
       },
       defaultAddress: '',
       // NOTE: 以下为前端输入格式检查
@@ -544,9 +576,13 @@ export default {
     deleteAddress(index) {
       // this.addresses.splice(index, 1);
     },
-    editAddress(id) {
+    editAddress(id, name, phoneNumber, address, ifDefault) {
       this.dialogVisible = true
       this.addressForm.id = id
+      this.addressForm.name = name
+      this.addressForm.phoneNumber = phoneNumber
+      this.addressForm.address = address
+      this.addressForm.ifDefault = ifDefault
       // this.form = { ...this.addresses[index] }
       // this.editIndex = index
     },
@@ -592,24 +628,28 @@ export default {
   background-color: #2d2d2d;
   font-family: Arial, sans-serif;
 } */
-
-.personal-center {
-  margin-top: 50px; /* 顶栏的高度 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 50px;
-  color: #ffffff;
+.info-item {
+  margin-top: 10px;
 }
 
 .personal-info,
+.personal-modify {
+  margin-top: 50px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin: 50px;
+  color: #ffffff; */
+}
+
+.personal-info-display,
 .personal-balance,
 .change-password {
   background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   margin-bottom: 20px;
   width: 100%;
   max-width: 600px;

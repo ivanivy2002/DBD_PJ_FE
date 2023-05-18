@@ -48,8 +48,10 @@
 </template>
 
 <script>
+import AddressManage from '../../../components/OrdUserComponents/AddressManage.vue'
 export default {
   name: 'OrderCreateView',
+  components: { AddressManage },
   data() {
     return {
       addressForm: {
