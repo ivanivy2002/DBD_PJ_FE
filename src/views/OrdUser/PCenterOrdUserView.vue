@@ -141,7 +141,7 @@
           <span
             ><div class="address-name">{{ address.name }}</div></span
           >
-          <el-button @click="deleteAddress(index)" style="float: right" type="danger"
+          <el-button @click="deleteAddress(address.id)" style="float: right" type="danger"
             >删除</el-button
           >
           <el-button
@@ -573,8 +573,43 @@ export default {
     createAddress() {
       this.dialogVisible = true
     },
-    deleteAddress(index) {
-      // this.addresses.splice(index, 1);
+    deleteAddress(id) {
+      this.$confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          axios
+            .put('/api/address/remove', null, {
+              params: {
+                addressId: id
+              }
+            })
+            .then((response) => {
+              if (response.data.code === 200) {
+                ElMessage({
+                  showClose: true,
+                  type: 'success',
+                  message: '删除成功'
+                })
+                this.getAddressInfo() //刷新信息
+              } else {
+                ElMessage({
+                  showClose: true,
+                  type: 'error',
+                  message: '删除失败:' + response.data.msg
+                })
+              }
+            })
+        })
+        .catch(() => {
+          ElMessage({
+            showClose: true,
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     editAddress(id, name, phoneNumber, address, ifDefault) {
       this.dialogVisible = true
