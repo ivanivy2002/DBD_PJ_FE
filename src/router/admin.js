@@ -11,7 +11,7 @@ import CashFlowRecordView from '@/views/Admin/CashFlowRecordView.vue'
 import ActivityManage from '@/views/Admin/Activity/ActivityManage.vue'
 import PresetFormView from '@/views/Admin/Activity/PresetFormView.vue'
 import ManageStoreActivityView from '@/views/Admin/Activity/ManageStoreActivityView.vue'
-import AdminActivity from "@/views/Admin/Activity/AdminActivity.vue";
+import AdminActivity from '@/views/Admin/Activity/AdminActivity.vue'
 
 export default [
   {
