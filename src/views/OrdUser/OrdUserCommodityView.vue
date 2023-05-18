@@ -58,7 +58,7 @@
               <el-input-number
                 v-model="commodityNum"
                 :min="1"
-                :max="10"
+                :max="10000"
                 label="数量"
                 controls-position="right"
                 style="width: 120px"
@@ -66,11 +66,7 @@
               <el-button color="#626aef" @click="PunchaseDirect(commodity.id)">
                 直接购买
               </el-button>
-              <el-button
-                type="primary"
-                @click="
-                  addToCart(commodity.id, commodity.commodityName, commodityNum, commodity.price)
-                "
+              <el-button type="primary" @click="addToCart(commodity.id, commodityNum)"
                 ><el-icon><ShoppingCart /></el-icon
               ></el-button>
             </div>
@@ -149,18 +145,17 @@ export default {
       }
     },
     // NOTE: 添加商品到购物车
-    addToCart(commodityId, name, quantity, price) {
+    addToCart(commodityId, quantity) {
       try {
         const response = axios
           .post('/api/shoppingCart/addCommodity/', {
             // NOTE: 传一个body
-            // id: null,
+            id: null,
             userId: localStorage.getItem('userId'),
+            shopId: localStorage.getItem('showShopId'),
             commodityId: commodityId,
-            // commodityName: name,
-            commodityNum: quantity
-            // commodityPrice: price
-            // status: null
+            commodityNum: quantity,
+            status: '有效'
           })
           .then((response) => {
             console.log(response)

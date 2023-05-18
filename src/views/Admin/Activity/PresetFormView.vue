@@ -1,8 +1,11 @@
 <template>
-  <div class="sign-form">
+  <div class="preset-form">
     <!--        <div class="form-header">活动新开</div>-->
     <div class="form-container">
       <el-form ref="form" :model="presetForm" label-width="125px" :rules="rules">
+        <el-form-item label="活动名称" prop="activityName">
+          <el-input v-model="presetForm.activityName"></el-input>
+        </el-form-item>
         <el-form-item label="持续时间" prop="lastTime">
           <el-input v-model="presetForm.lastTime"></el-input>
         </el-form-item>
@@ -30,9 +33,9 @@
         <el-form-item label="月销量阈值" prop="monthlyAmount">
           <el-input v-model="presetForm.monthlyAmount"></el-input>
         </el-form-item>
-        <el-form-item label="初始活动资金" prop="originFund">
-          <el-input v-model="presetForm.originFund"></el-input>
-        </el-form-item>
+        <!--        <el-form-item label="初始活动资金" prop="originFund">-->
+        <!--          <el-input v-model="presetForm.originFund"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item label="参加商品类别" prop="category">
           <!--   这里的categoriesSend 是什么？？是绑定的数据去向-->
           <el-checkbox-group v-model="categoriesSend">
@@ -95,8 +98,9 @@ export default {
         categoryData: []
       },
       presetForm: {
+        activityName: '活动' + Date.now(),
         activityFund: 10,
-        lastTime: 1,
+        lastTime: 2,
         x: 0,
         y: 0,
         regFund: 10,
@@ -274,6 +278,7 @@ export default {
           // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑
+          this.presetForm.originFund = this.presetForm.activityFund
           console.log('申请提交', this.presetForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           // this.presetForm.categories = this.joinWithComma(this.categories) //* 将多个单词用+拼起来
@@ -390,7 +395,7 @@ export default {
   color: #ffffff;
 }
 
-.sign-form {
+.preset-form {
   max-width: 600px;
   margin: 0 auto;
   background-image: linear-gradient(
@@ -402,7 +407,7 @@ export default {
   border-radius: 10px;
 }
 
-/*.sign-form__title {*/
+/*.preset-form__title {*/
 /*  font-size: 24px;*/
 /*  text-align: center;*/
 /*  margin-bottom: 20px;*/

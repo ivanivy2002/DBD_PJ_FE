@@ -8,6 +8,8 @@ import OrderCreateView from '@/views/OrdUser/Order/OrderCreateView'
 import OrderDisplayView from '@/views/Orduser/Order/OrderDisplayView'
 import OrderPayView from '@/views/Orduser/Order/OrderPayView'
 import OrderDetailView from '@/views/Orduser/Order/OrderDetailView'
+import ActivityCommodity from '@/views/OrdUser/ActivityCommodityView.vue'
+import ActivityCommodityView from '@/views/OrdUser/ActivityCommodityView.vue'
 
 export default [
   {
@@ -57,6 +59,11 @@ export default [
         path: '/home/orduser/order/detail',
         name: 'OrderDetailView',
         component: OrderDetailView
+      },
+      {
+        path: '/home/orduser/activityCommodity',
+        name: 'ActivityCommodityView',
+        component: ActivityCommodityView
       }
     ]
   }

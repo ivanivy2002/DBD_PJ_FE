@@ -35,7 +35,7 @@
                       <el-input-number
                         v-model="commodityNum"
                         :min="1"
-                        :max="10"
+                        :max="10000"
                         label="数量"
                         controls-position="right"
                         style="width: 120px"

@@ -202,7 +202,7 @@ img {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #00ff7f;
+  background-color: #aedcf0;
   animation: pulse 2s infinite;
 }
 
@@ -220,7 +220,7 @@ img {
   margin-top: 20px;
 }
 
-@keyframes pulse {
+/* @keyframes pulse {
   0% {
     background-color: #00ff7f;
   }
@@ -230,5 +230,5 @@ img {
   100% {
     background-color: #00ff7f;
   }
-}
+} */
 </style>

@@ -14,10 +14,33 @@
       <el-menu-item index="4"
         ><el-icon><Money /></el-icon>查看资金</el-menu-item
       >
+      <el-menu-item index="5"
+        ><el-icon><Position /></el-icon>收货地址管理</el-menu-item
+      >
     </el-menu>
   </div>
   <div class="personal-center">
-    <div v-if="activeSelect === '1'" class="personal-info">
+    <!-- <div> -->
+    <div v-if="activeSelect === '1'" class="personal-info-display">
+      <h2>个人信息</h2>
+      <div class="info-item">
+        <span class="label">用户名: </span>
+        <strong class="value">{{ userInfoForm.userName }}</strong>
+      </div>
+      <div class="info-item">
+        <span class="label">邮箱: </span>
+        <strong class="value">{{ userInfoForm.email }}</strong>
+      </div>
+      <div class="info-item">
+        <span class="label">身份证号: </span>
+        <strong class="value">{{ userInfoForm.idNumber }}</strong>
+      </div>
+      <div class="info-item">
+        <span class="label">手机号: </span>
+        <strong class="value">{{ userInfoForm.phoneNumber }}</strong>
+      </div>
+    </div>
+    <div v-if="activeSelect === '2'" class="personal-info-display">
       <h2>修改个人信息</h2>
       <el-form
         :model="userInfoForm"
@@ -104,17 +127,117 @@
         </el-form-item>
       </el-form>
     </div>
+    <div v-if="activeSelect == 5" class="addressManage">
+      <div class="create-address">
+        <el-button type="success" @click="createAddress" plain>新增收货地址</el-button>
+        <br />
+        <br />
+      </div>
+      <el-card class="box-card" v-for="(address, index) in addresses" :key="index">
+        <div slot="header" class="clearfix">
+          <div class="defaultAddress" v-if="address.ifDefault == true">
+            <span>默认地址</span>
+          </div>
+          <span
+            ><div class="address-name">{{ address.name }}</div></span
+          >
+          <el-button @click="deleteAddress(index)" style="float: right" type="danger"
+            >删除</el-button
+          >
+          <el-button
+            @click="
+              editAddress(
+                address.id,
+                address.name,
+                address.phoneNumber,
+                address.address,
+                address.ifDefault
+              )
+            "
+            style="float: right"
+            type="primary"
+            >修改</el-button
+          >
+        </div>
+
+        <div class="text item">
+          <strong>联系电话：</strong>
+          {{ address.phoneNumber }}
+        </div>
+        <div class="text item">
+          <strong>详细地址：</strong>
+          {{ address.address }}
+        </div>
+      </el-card>
+
+      <el-dialog title="编辑地址" v-model="dialogVisible">
+        <el-form ref="addressForm" :model="addressForm" label-width="120px">
+          <el-form-item
+            label="姓名"
+            prop="name"
+            :rules="{ required: true, message: '请输入姓名', trigger: 'blur' }"
+          >
+            <el-input v-model="addressForm.name"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="手机号"
+            prop="phoneNumber"
+            :rules="{ required: true, validator: validatePhoneNumber, trigger: 'blur' }"
+          >
+            <el-input v-model="addressForm.phoneNumber"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="地址"
+            prop="address"
+            :rules="{ required: true, message: '请输入地址', trigger: 'blur' }"
+          >
+            <el-input v-model="addressForm.address"></el-input>
+          </el-form-item>
+          <el-form-item label="是否为默认地址">
+            <el-radio-group v-model="addressForm.ifDefault">
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="saveAddress">确定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+    <!-- <div v-if="activeSelect == 5" class="addressManage">
+      <el-card v-for="address in addresses" :key="address.id" class="address-card">
+      <div slot="header">{{ address.name }}</div>
+      <el-form :model="address" :rules="rules" ref="addressForm" label-width="80px">
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="address.name"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone">
+          <el-input v-model="address.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="具体地址" prop="address">
+          <el-input v-model="address.address"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveAddress(address)">保存</el-button>
+          <el-button type="danger" @click="deleteAddress(address)">删除</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card></div> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+//? 下面这句话为什么用不到啊
 // import { User, Edit, WarningFilled, Money } from '@element-plus/icons-vue'
 
 export default {
   data() {
     return {
+      dialogVisible: false,
       activeSelect: '1',
       userInfoForm: {
         userName: 'gan',
@@ -130,6 +253,16 @@ export default {
         newPassword: '',
         confirmPassword: ''
       },
+      addresses: [],
+      addressForm: {
+        id: '',
+        userId: '',
+        name: '',
+        phoneNumber: '',
+        address: '',
+        ifDefault: ''
+      },
+      defaultAddress: '',
       // NOTE: 以下为前端输入格式检查
       validateUserName: (rule, value, callback) => {
         if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
@@ -166,6 +299,8 @@ export default {
     // 获取用户信息和余额
     this.getUserInfo()
     this.getBalance()
+    this.getAddressInfo()
+    this.addressForm.userId = localStorage.getItem('userId')
   },
   computed: {
     //* 使用 required: true 规定该输入框是必填的，如果用户未输入用户名，则会弹出一个提示信息：“请输入用户名”。
@@ -415,13 +550,67 @@ export default {
         }
       })
     },
-    // confirmPasswordValidator(rule, value, callback) {
-    //   if (value !== this.password.newPassword) {
-    //     callback(new Error('两次输入的密码不一致'))
-    //   } else {
-    //     callback()
-    //   }
-    // },
+    async getAddressInfo() {
+      // 拿地址的数据
+      await axios
+        .get('/api/address/display', {
+          params: {
+            userId: localStorage.getItem('userId') //获取cookie中的id
+          }
+        })
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.addresses = response.data.data
+          } else {
+            ElMessage({
+              showClose: true,
+              type: 'error', //如果失败输出状态码
+              message: '获取地址失败:' + response.data.msg
+            })
+          }
+        })
+    },
+    createAddress() {
+      this.dialogVisible = true
+    },
+    deleteAddress(index) {
+      // this.addresses.splice(index, 1);
+    },
+    editAddress(id, name, phoneNumber, address, ifDefault) {
+      this.dialogVisible = true
+      this.addressForm.id = id
+      this.addressForm.name = name
+      this.addressForm.phoneNumber = phoneNumber
+      this.addressForm.address = address
+      this.addressForm.ifDefault = ifDefault
+      // this.form = { ...this.addresses[index] }
+      // this.editIndex = index
+    },
+    saveAddress() {
+      this.$refs.addressForm.validate((valid) => {
+        if (valid) {
+          axios.post('/api/address/createOrUpdate', this.addressForm).then((response) => {
+            if (response.data.code === 200) {
+              ElMessage({
+                showClose: true,
+                type: 'success',
+                message: '操作成功'
+              })
+              this.getAddressInfo() //刷新信息
+            } else {
+              ElMessage({
+                showClose: true,
+                type: 'error', //如果失败输出状态码
+                message: '操作失败:' + response.data.msg
+              })
+            }
+          })
+          this.dialogVisible = false
+        } else {
+          return false
+        }
+      })
+    },
     resetForm() {
       //* 重置表单
       this.$refs.userInfo.resetFields()
@@ -439,24 +628,28 @@ export default {
   background-color: #2d2d2d;
   font-family: Arial, sans-serif;
 } */
-
-.personal-center {
-  margin-top: 50px; /* 顶栏的高度 */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 50px;
-  color: #ffffff;
+.info-item {
+  margin-top: 10px;
 }
 
 .personal-info,
+.personal-modify {
+  margin-top: 50px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* margin: 50px;
+  color: #ffffff; */
+}
+
+.personal-info-display,
 .personal-balance,
 .change-password {
   background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   margin-bottom: 20px;
   width: 100%;
   max-width: 600px;
@@ -547,6 +740,37 @@ h2 {
 .aside {
   border: 1px solid #ebeef5;
   background-color: #fff;
+}
+
+.box-card {
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+  width: 600px;
+  max-width: 600px;
+}
+
+.address-name {
+  /* font-family: 'songti'; */
+  font-size: 25px;
+  font-weight: 500;
+  font-style: normal;
+  color: #000000;
+}
+.defaultAddress {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+.defaultAddress span {
+  margin-right: 4px;
 }
 </style>
 
