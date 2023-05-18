@@ -6,6 +6,7 @@
 
                 <el-form-item label="参加商品类别" prop="category">
                     <!--   这里的categoriesSend 是什么？？是绑定的数据去向-->
+<!--                    -->
                     <el-checkbox-group v-model="categoriesSend">
                         <el-checkbox v-for="category in categoryVector" :label="category" :key="category"
                         >{{ category }}
