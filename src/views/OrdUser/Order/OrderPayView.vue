@@ -76,7 +76,7 @@ export default {
         console.log('支付成功！')
         // userBalance -= orderPrice;
         axios
-          .put('/api/order/pay', {
+          .put('/api/order/pay', null, {
             params: {
               orderId: localStorage.getItem('orderId')
             }
@@ -89,14 +89,22 @@ export default {
                 type: 'success',
                 message: '支付成功！'
               })
-              axios.post('/api/user/recharge', null, {
-                params: {
-                  userId: localStorage.getItem('userId'), //获取cookie中的id
-                  // userId: 20,
-                  amount: this.orderPrice * -1 // 传一个负的"充值金额"，实现扣款
-                  // TODO: 这里amount和balance的命名和关系
-                }
-              })
+              axios
+                .post('/api/user/recharge', null, {
+                  params: {
+                    userId: localStorage.getItem('userId'), //获取cookie中的id
+                    // userId: 20,
+                    amount: this.orderPrice * -1 // 传一个负的"充值金额"，实现扣款
+                    // TODO: 这里amount和balance的命名和关系
+                  }
+                })
+                .then((response) => {
+                  console.log(response.data)
+                  console.log('扣款成功！')
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
             } else {
               ElMessage({
                 showClose: true,
