@@ -56,6 +56,9 @@ export default {
     // <!--/category/getCategoryList-->
     data() {
         return {
+            categoryState: {
+                categoryData: []
+            },
             joinForm: {
                 activityName: '活动' + Date.now(),
                 activityFund: 10,
@@ -220,6 +223,23 @@ export default {
     },
 
     methods: {
+        fetchCategory: async function () {
+            try {
+                const response = await axios.get('/api/category/getCategoryList')
+                console.log(response.data.data)
+                this.categoryState.categoryData = response.data.data.map((row) => {
+                    console.log(row)
+                    return row
+                })
+                // 使用 map 方法提取 category 字段，生成一个包含所有 category 值的向量
+                this.categoryVector = this.categoryState.categoryData.map((item) => item.category)
+                // 输出 categoryVector，可以看到它包含了所有 category 值
+                console.log(this.categoryVector)
+                console.log(this.categoryState.categoryData)
+            } catch (error) {
+                console.log(error)
+            }
+        },
         joinActivity() {
             try {
                 const response = axios.put('/api/shop/joinActivity', null, {
