@@ -10,18 +10,19 @@
         <h1>Welcome to GanSui Mall!</h1>
       </div>
     </div>
-    <el-tabs type="card" v-model="activeTab">
-      <el-tab-pane label="登录" name="login">
+    <div class="parent-element">
+      <el-tabs type="card" v-model="activeTab">
+      <el-tab-pane label="登录" id="login1">
         <el-form :model="loginForm" :label-width="label_width">
           <!--          wrapper-width="200"-->
-          <el-form-item label="用户名">
+          <el-form-item label="用户名" id="login2">
             <el-input
               v-model="loginForm.userName"
               placeholder="请输入您的用户名"
               onfocus="if (this.placeholder == this.value) this.value = ''"
             ></el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" class="login">
             <el-input
               v-model="loginForm.password"
               type="password"
@@ -29,7 +30,7 @@
               onfocus="if (this.placeholder == this.value) this.value = ''"
             ></el-input>
           </el-form-item>
-          <el-form-item label="管理员">
+          <el-form-item label="管理员" id="login3">
             <el-radio-group v-model="loginForm.role">
               <el-radio label="1" size="large">是</el-radio>
               <el-radio label="0" size="large">否</el-radio>
@@ -89,6 +90,7 @@
                 type="password"
                 placeholder="请输入您的密码"
                 onfocus="if (this.placeholder == this.value) this.value = ''"
+                :show-password="true"
               ></el-input>
             </el-form-item>
             <el-form-item label="确认密码" prop="confirmPassword">
@@ -97,6 +99,7 @@
                 type="password"
                 placeholder="请再次输入您的密码"
                 onfocus="if (this.placeholder == this.value) this.value = ''"
+                :show-password="true"
               ></el-input>
             </el-form-item>
             <el-form-item>
@@ -107,6 +110,7 @@
         </el-form>
       </el-tab-pane>
     </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -461,7 +465,7 @@ export default {
 <style scoped>
 #background {
   height: 100vh;
-  background: linear-gradient(to bottom right, #177f7f, #32c8b2);
+   background: linear-gradient(to bottom right,  #c2e7ef, #abe5ef);
   /* background: url("https://images.unsplash.com/photo-1523875969136-392c28a97f81?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80") no-repeat center center fixed; */
   /* -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -475,11 +479,14 @@ export default {
 }
 
 .title-text h1 {
-  background: linear-gradient(to right, #20d5b7, #17c063);
+  background: linear-gradient(to right, #6fcde5, #6cdbe8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: scroll 10s linear infinite;
+  /* animation: scroll 10s linear infinite; */
   white-space: nowrap;
+
+  position: relative;
+  top: -60px;
 }
 
 @keyframes scroll {
@@ -490,19 +497,31 @@ export default {
     transform: translateX(-100%);
   }
 }
-
+#login1,
+#login2 {
+  margin-top: 30px;
+}
+ .parent-element {
+    position: relative;
+    top:-35px;
+  }
+  el-tabs {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 .center {
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 45vw;
-  height: fit-content;
+   width: 650px;
+  height: 600px;
   padding: 20px;
   background-color: #ffffff;
   /* background: linear-gradient(to bottom right, #177f7f, #32c8b2); */
-  border-radius: 15px;
+  border-radius: 20px;
 }
 
 /*.el-tabs__header {*/

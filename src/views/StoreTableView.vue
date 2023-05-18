@@ -6,6 +6,7 @@
     <el-carousel height="300px">
       <el-carousel-item class="activity-col" v-for="activity in activities" :key="activity.id">
         <!--              :xs="24" :sm="12" :md="8"  :lg="20"-->
+        <div class="parent">
         <el-card
           class="animated-card-activity"
           shadow="hover"
@@ -415,7 +416,10 @@ export default {
   margin: 20px;
   width: 100%;
 }
-
+.parent {
+  display: flex;
+  flex-wrap: wrap;
+}
 .animated-card-activity {
   /*margin: 0 auto;*/
   /*display: block;*/
@@ -427,13 +431,18 @@ export default {
   /*padding-right: 100px;*/
   /*padding-inline: 20px;*/
   /*margin-bottom: 10px;*/
-  width: 100%;
+  width: 30%;
+  display:inline-block;
+  
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  background-image: linear-gradient(-45deg, #4120d0, #6c19d2);
+  background-image: linear-gradient(-45deg, #209bd0, #6e97d7);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
+  flex-basis: calc((100% - 1px) / 2); /* 计算每个卡片的基本宽度 */
+  
+  margin-bottom: -1px; /* 去掉卡片之间的间隔 */
 }
 
 .activity-col {
