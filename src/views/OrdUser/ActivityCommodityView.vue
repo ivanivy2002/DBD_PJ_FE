@@ -1,13 +1,9 @@
-<template>
-展示包含这些标签的商品
-</template>
+<template>展示包含这些标签的商品</template>
 
 <script>
 export default {
-    name: "ActivityCommodityView"
+  name: 'ActivityCommodityView'
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
