@@ -71,7 +71,7 @@ import axios from 'axios'
 // import AdminAside from '@/components/AdminComponents/AdminAside.vue'
 
 export default {
-  name: 'CashFlowRecord',
+  name: 'vendorCashFlowView',
   components: {
     // AdminAside
   },
@@ -81,6 +81,7 @@ export default {
       activeTab: 'Receipt',
       tableReceiptData: [],
       tableExpenseData: [],
+      shopId: '',
       profitAccount: {
         balance: 10000
       },
@@ -122,56 +123,80 @@ export default {
     fetchData() {
       //根据选择的不同拿取数据
       if (this.activeTime == 1) {
-        this.displayMallReceiptLastMonth()
-        this.displayMallExpenseLastMonth()
+        this.displayShopReceiptLastMonth()
+        this.displayShopExpenseLastMonth()
       } else {
-        this.displayMallReceiptLastWeek()
-        this.displayMallExpenseLastWeek()
+        this.displayShopReceiptLastWeek()
+        this.displayShopExpenseLastWeek()
       }
     },
-    displayMallReceiptLastMonth() {
-      console.log('displayMallReceiptLastMonth')
-      axios.get('/api/cashFlow/displayMallReceiptLastMonth').then((response) => {
-        console.log(response)
-        if (response.data.code == 200) {
-          this.tableReceiptData = response.data.data
-        } else {
-          console.log('获取数据失败')
-        }
-      })
+    displayShopReceiptLastMonth() {
+      console.log('displayShopReceiptLastMonth')
+      axios
+        .get('/api/cashFlow/displayShopReceiptLastMonth', {
+          params: {
+            shopId: this.shopId
+          }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            this.tableReceiptData = response.data.data
+          } else {
+            console.log('获取数据失败')
+          }
+        })
     },
-    displayMallExpenseLastMonth() {
-      console.log('displayMallExpenseLastMonth')
-      axios.get('/api/cashFlow/displayMallExpenseLastMonth').then((response) => {
-        console.log(response)
-        if (response.data.code == 200) {
-          this.tableExpenseData = response.data.data
-        } else {
-          console.log('获取数据失败')
-        }
-      })
+    displayShopExpenseLastMonth() {
+      console.log('displayShopExpenseLastMonth')
+      axios
+        .get('/api/cashFlow/displayShopExpenseLastMonth', {
+          params: {
+            shopId: this.shopId
+          }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            this.tableExpenseData = response.data.data
+          } else {
+            console.log('获取数据失败')
+          }
+        })
     },
-    displayMallReceiptLastWeek() {
-      console.log('displayMallReceiptLastWeek')
-      axios.get('/api/cashFlow/displayMallReceiptLastWeek').then((response) => {
-        console.log(response)
-        if (response.data.code == 200) {
-          this.tableReceiptData = response.data.data
-        } else {
-          console.log('获取数据失败')
-        }
-      })
+    displayShopReceiptLastWeek() {
+      console.log('displayShopReceiptLastWeek')
+      axios
+        .get('/api/cashFlow/displayShopReceiptLastWeek', {
+          params: {
+            shopId: this.shopId
+          }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            this.tableReceiptData = response.data.data
+          } else {
+            console.log('获取数据失败')
+          }
+        })
     },
-    displayMallExpenseLastWeek() {
-      console.log('displayMallExpenseLastWeek')
-      axios.get('/api/cashFlow/displayMallExpenseLastWeek').then((response) => {
-        console.log(response)
-        if (response.data.code == 200) {
-          this.tableExpenseData = response.data.data
-        } else {
-          console.log('获取数据失败')
-        }
-      })
+    displayShopExpenseLastWeek() {
+      console.log('displayShopExpenseLastWeek')
+      axios
+        .get('/api/cashFlow/displayShopExpenseLastWeek', {
+          params: {
+            shopId: this.shopId
+          }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            this.tableExpenseData = response.data.data
+          } else {
+            console.log('获取数据失败')
+          }
+        })
     },
     handleSelect(index) {
       this.activeTime = index // 根据点击的菜单项更新显示的栏目
@@ -181,6 +206,7 @@ export default {
   mounted() {
     // 获取信息和余额
     this.fetchData()
+    this.shopId = localStorage.getItem('shopId')
   }
 }
 </script>

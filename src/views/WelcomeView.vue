@@ -1,17 +1,16 @@
 <template>
-
   <div class="center" @mouseenter="isHover = true" @mouseleave="isHover = false">
     <div class="content">
-    <h1>Welcome!</h1>
-    <h1 id="title" @click="showConfetti">GanSui Mall</h1>
-    <br />
-    <nav class="routerText">
-      <RouterLink to="/about">About</RouterLink>
-      <el-divider direction="vertical" border-style="solid" />
-      <RouterLink to="/fun">HaveFun</RouterLink>
-      <el-divider direction="vertical" border-style="solid" />
-      <RouterLink to="/login">Login</RouterLink>
-    </nav>
+      <h1>Welcome!</h1>
+      <h1 id="title" @click="showConfetti">GanSui Mall</h1>
+      <br />
+      <nav class="routerText">
+        <RouterLink to="/about">About</RouterLink>
+        <el-divider direction="vertical" border-style="solid" />
+        <RouterLink to="/fun">HaveFun</RouterLink>
+        <el-divider direction="vertical" border-style="solid" />
+        <RouterLink to="/login">Login</RouterLink>
+      </nav>
       <!-- <img src="../assets/images/test.jpg" class="image" /> -->
     </div>
   </div>
@@ -44,12 +43,12 @@ body {
 .center {
   /* 视口高度的100%*/
   min-height: 100vh;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(to bottom right,  #c2e7ef, #abe5ef);
+  background: linear-gradient(to bottom right, #c2e7ef, #abe5ef);
   color: white;
   /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;

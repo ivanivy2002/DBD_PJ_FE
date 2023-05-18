@@ -12,104 +12,104 @@
     </div>
     <div class="parent-element">
       <el-tabs type="card" v-model="activeTab">
-      <el-tab-pane label="登录" id="login1">
-        <el-form :model="loginForm" :label-width="label_width">
-          <!--          wrapper-width="200"-->
-          <el-form-item label="用户名" id="login2">
-            <el-input
-              v-model="loginForm.userName"
-              placeholder="请输入您的用户名"
-              onfocus="if (this.placeholder == this.value) this.value = ''"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="密码" class="login">
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              placeholder="请输入您的密码"
-              onfocus="if (this.placeholder == this.value) this.value = ''"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="管理员" id="login3">
-            <el-radio-group v-model="loginForm.role">
-              <el-radio label="1" size="large">是</el-radio>
-              <el-radio label="0" size="large">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="login">登录</el-button>
-          </el-form-item>
-        </el-form>
-      </el-tab-pane>
-      <el-tab-pane label="注册" name="register">
-        <el-form ref="form" :model="registerForm" :label-width="label_width" :rules="rules">
-          <!--   size="large"-->
-          <!-- 以下为单选框 -->
-          <div>
-            <el-radio-group v-model="registerForm.role">
-              <el-radio label="1" size="large" border>普通用户</el-radio>
-              <el-radio label="2" size="large" border>商户</el-radio>
-            </el-radio-group>
-          </div>
-          <br />
-          <!-- NOTE: 默认有文字，开始输入之后文字消失 使用 JavaScript 在 focus 事件中设置输入框的 value 属性为空 -->
-          <div class="input-reader-name">
-            <el-form-item label="用户名" prop="userName">
+        <el-tab-pane label="登录" id="login1" name="login">
+          <el-form :model="loginForm" :label-width="label_width">
+            <!--          wrapper-width="200"-->
+            <el-form-item label="用户名" id="login2">
               <el-input
-                v-model="registerForm.userName"
+                v-model="loginForm.userName"
                 placeholder="请输入您的用户名"
                 onfocus="if (this.placeholder == this.value) this.value = ''"
               ></el-input>
             </el-form-item>
-            <el-form-item label="手机号" prop="phoneNumber">
+            <el-form-item label="密码" class="login">
               <el-input
-                v-model="registerForm.phoneNumber"
-                placeholder="请输入您的手机号"
-                onfocus="if (this.placeholder == this.value) this.value = ''"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="身份证号" prop="idNumber">
-              <el-input
-                v-model="registerForm.idNumber"
-                type="text"
-                placeholder="请输入您的身份证号"
-                onfocus="if (this.placeholder == this.value) this.value = ''"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="邮箱" prop="email">
-              <el-input
-                v-model="registerForm.email"
-                type="email"
-                placeholder="请输入您的邮箱"
-                onfocus="if (this.placeholder == this.value) this.value = ''"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input
-                v-model="registerForm.password"
+                v-model="loginForm.password"
                 type="password"
                 placeholder="请输入您的密码"
                 onfocus="if (this.placeholder == this.value) this.value = ''"
-                :show-password="true"
               ></el-input>
             </el-form-item>
-            <el-form-item label="确认密码" prop="confirmPassword">
-              <el-input
-                v-model="registerForm.confirmPassword"
-                type="password"
-                placeholder="请再次输入您的密码"
-                onfocus="if (this.placeholder == this.value) this.value = ''"
-                :show-password="true"
-              ></el-input>
+            <el-form-item label="管理员" id="login3">
+              <el-radio-group v-model="loginForm.role">
+                <el-radio label="1" size="large">是</el-radio>
+                <el-radio label="0" size="large">否</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="register">注册</el-button>
-              <el-button type="default" @click="resetForm">重置</el-button>
+              <el-button type="primary" @click="login">登录</el-button>
             </el-form-item>
-          </div>
-        </el-form>
-      </el-tab-pane>
-    </el-tabs>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="注册" name="register">
+          <el-form ref="form" :model="registerForm" :label-width="label_width" :rules="rules">
+            <!--   size="large"-->
+            <!-- 以下为单选框 -->
+            <div>
+              <el-radio-group v-model="registerForm.role">
+                <el-radio label="1" size="large" border>普通用户</el-radio>
+                <el-radio label="2" size="large" border>商户</el-radio>
+              </el-radio-group>
+            </div>
+            <br />
+            <!-- NOTE: 默认有文字，开始输入之后文字消失 使用 JavaScript 在 focus 事件中设置输入框的 value 属性为空 -->
+            <div class="input-reader-name">
+              <el-form-item label="用户名" prop="userName">
+                <el-input
+                  v-model="registerForm.userName"
+                  placeholder="请输入您的用户名"
+                  onfocus="if (this.placeholder == this.value) this.value = ''"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="手机号" prop="phoneNumber">
+                <el-input
+                  v-model="registerForm.phoneNumber"
+                  placeholder="请输入您的手机号"
+                  onfocus="if (this.placeholder == this.value) this.value = ''"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="身份证号" prop="idNumber">
+                <el-input
+                  v-model="registerForm.idNumber"
+                  type="text"
+                  placeholder="请输入您的身份证号"
+                  onfocus="if (this.placeholder == this.value) this.value = ''"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="邮箱" prop="email">
+                <el-input
+                  v-model="registerForm.email"
+                  type="email"
+                  placeholder="请输入您的邮箱"
+                  onfocus="if (this.placeholder == this.value) this.value = ''"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input
+                  v-model="registerForm.password"
+                  type="password"
+                  placeholder="请输入您的密码"
+                  onfocus="if (this.placeholder == this.value) this.value = ''"
+                  :show-password="true"
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码" prop="confirmPassword">
+                <el-input
+                  v-model="registerForm.confirmPassword"
+                  type="password"
+                  placeholder="请再次输入您的密码"
+                  onfocus="if (this.placeholder == this.value) this.value = ''"
+                  :show-password="true"
+                ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="register">注册</el-button>
+                <el-button type="default" @click="resetForm">重置</el-button>
+              </el-form-item>
+            </div>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -465,7 +465,7 @@ export default {
 <style scoped>
 #background {
   height: 100vh;
-   background: linear-gradient(to bottom right,  #c2e7ef, #abe5ef);
+  background: linear-gradient(to bottom right, #c2e7ef, #abe5ef);
   /* background: url("https://images.unsplash.com/photo-1523875969136-392c28a97f81?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80") no-repeat center center fixed; */
   /* -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -501,22 +501,22 @@ export default {
 #login2 {
   margin-top: 30px;
 }
- .parent-element {
-    position: relative;
-    top:-35px;
-  }
-  el-tabs {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+.parent-element {
+  position: relative;
+  top: -35px;
+}
+el-tabs {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .center {
   position: absolute;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-   width: 650px;
+  width: 650px;
   height: 600px;
   padding: 20px;
   background-color: #ffffff;

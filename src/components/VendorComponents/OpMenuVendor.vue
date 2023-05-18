@@ -20,8 +20,11 @@
     <el-menu-item index="2-5" @click="gotoOrderManage">
       <button class="btn btn-outline-primary">查看订单</button>
     </el-menu-item>
-    <el-menu-item index="2-5" @click="gotoActivity">
+    <el-menu-item index="2-6" @click="gotoActivity">
       <button class="btn btn-outline-primary">活动</button>
+    </el-menu-item>
+    <el-menu-item index="2-7" @click="gotoCashFlow">
+      <button class="btn btn-outline-primary">查看流水</button>
     </el-menu-item>
   </el-sub-menu>
 </template>
@@ -59,6 +62,9 @@ export default {
     },
     gotoActivity() {
       this.$router.push('/home/vendor/activity')
+    },
+    gotoCashFlow() {
+      this.$router.push('/home/vendor/cashflow')
     }
   },
   data() {
