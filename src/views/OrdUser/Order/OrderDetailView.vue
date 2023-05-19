@@ -30,7 +30,7 @@
       >
         <strong>订单状态：</strong>
         <el-steps :active="order.status" align-center>
-          <el-step title="待付款"></el-step>
+          <el-step title="待支付"></el-step>
           <el-step title="待发货"></el-step>
           <el-step title="待收货"></el-step>
           <el-step title="已完成"></el-step>
@@ -159,7 +159,7 @@ export default {
     },
     setStatusNum(status) {
       switch (status) {
-        case '待付款':
+        case '待支付':
           return 1
         case '待发货':
           return 2
@@ -202,7 +202,7 @@ img {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #00ff7f;
+  background-color: #aedcf0;
   animation: pulse 2s infinite;
 }
 
@@ -220,7 +220,7 @@ img {
   margin-top: 20px;
 }
 
-@keyframes pulse {
+/* @keyframes pulse {
   0% {
     background-color: #00ff7f;
   }
@@ -230,5 +230,5 @@ img {
   100% {
     background-color: #00ff7f;
   }
-}
+} */
 </style>
