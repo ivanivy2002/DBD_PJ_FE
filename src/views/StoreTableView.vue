@@ -6,32 +6,30 @@
     <el-carousel height="300px">
       <el-carousel-item class="activity-col" v-for="activity in activities" :key="activity.id">
         <!--              :xs="24" :sm="12" :md="8"  :lg="20"-->
-        <div class="parent">
-          <el-card
-            class="animated-card-activity"
-            shadow="hover"
-            @click="navigateToActivity(activity.id)"
-          >
-            <div class="activity-card-header">
-              <!--              活动 {{ activity.id }}-->
-              <div class="activity-card-title">{{ activity.activityName }}</div>
+        <el-card
+          class="animated-card-activity"
+          shadow="hover"
+          @click="navigateToActivity(activity.id)"
+        >
+          <div class="activity-card-header">
+            <!--              活动 {{ activity.id }}-->
+            <div class="activity-card-title">{{ activity.activityName }}</div>
+          </div>
+          <!--                    <div class="activity-card-content">活动状态：{{ activity.status }}</div>-->
+          <div class="activity-card-content">{{ calRemainTime(activity) }}</div>
+          <div class="activity-card-content">
+            <!--                        <span class="category-title">活动商品：</span>-->
+            <div class="category-list">
+              <span
+                v-for="(category, index) in activity.categories"
+                :key="index"
+                class="category-span"
+              >
+                {{ category.category }}</span
+              >
             </div>
-            <!--                    <div class="activity-card-content">活动状态：{{ activity.status }}</div>-->
-            <div class="activity-card-content">{{ calRemainTime(activity) }}</div>
-            <div class="activity-card-content">
-              <!--                        <span class="category-title">活动商品：</span>-->
-              <div class="category-list">
-                <span
-                  v-for="(category, index) in activity.categories"
-                  :key="index"
-                  class="category-span"
-                >
-                  {{ category.category }}</span
-                >
-              </div>
-            </div>
-          </el-card>
-        </div>
+          </div>
+        </el-card>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -455,10 +453,7 @@ export default {
   margin: 20px;
   width: 100%;
 }
-.parent {
-  display: flex;
-  flex-wrap: wrap;
-}
+
 .animated-card-activity {
   /*margin: 0 auto;*/
   /*display: block;*/
@@ -470,18 +465,13 @@ export default {
   /*padding-right: 100px;*/
   /*padding-inline: 20px;*/
   /*margin-bottom: 10px;*/
-  width: 30%;
-  display: inline-block;
-
+  width: 100%;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  background-image: linear-gradient(-45deg, #209bd0, #6e97d7);
+  background-image: linear-gradient(-45deg, #4120d0, #6c19d2);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
-  flex-basis: calc((100% - 1px) / 2); /* 计算每个卡片的基本宽度 */
-
-  margin-bottom: -1px; /* 去掉卡片之间的间隔 */
 }
 
 .activity-col {
