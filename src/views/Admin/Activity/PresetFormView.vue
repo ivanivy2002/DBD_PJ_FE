@@ -92,7 +92,7 @@ export default {
     return {
       // dialogFormVisible: false,
       activeTab: 'presetSend',
-      categoriesSend: [],
+
       activityId: null,
       categoryState: {
         categoryData: []
@@ -116,6 +116,7 @@ export default {
         type: 0,
         category: null
       },
+      categoriesSend: [],
       categoryVector: [],
       loading: false,
       disabled: false,

@@ -33,6 +33,7 @@
       </el-carousel-item>
     </el-carousel>
   </div>
+  <!--  //origin Card Activity-->
   <!--    <div class="activity-board">-->
   <!--        <el-row gutter="24">-->
   <!--            <el-col class="activity-col" v-for="activity in activities" :key="activity.id">-->
@@ -63,7 +64,9 @@
           <div class="card-content">
             <span class="category-title">商品类别：</span>
             <div class="category-list">
-              <span v-for="(category, index) in store.categories" :key="index">{{ category }}</span>
+              <span v-for="(category, index) in store.categories" :key="index">{{
+                category.category
+              }}</span>
             </div>
           </div>
           <div class="card-content card-intro">
@@ -110,67 +113,6 @@ export default {
       ]
     }
   },
-  async mounted() {
-    // Store
-    try {
-      const storesResponse = await this.fetchData()
-      console.log(storesResponse.data)
-      // storesData = storesResponse.data //* 无须重新赋值
-      // this.removeZerosInObjectArray(storesData)
-      this.stores = storesResponse.data.map((store) => ({
-        id: store.id,
-        shopName: store.shopName,
-        // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
-        // TODO: 目前categories字段的值不能为NULL，否则会报错
-        // categories: store.categories.split(',').map((category) => category.trim()),
-        //TODO: categories is removed from the chart..
-        // categories: this.splitByComma(store.categories),
-        intro: store.intro
-      }))
-      // console.log(store.categories)
-    } catch (error) {
-      console.log(error)
-    }
-    // Activity
-    await this.fetchActivity()
-    // try {
-    //     const activityResponse = await this.fetchActivity()
-    //     // console.log("activity: \n")
-    //     // console.log(activityResponse.data)
-    //     this.activities = activityResponse.data.map((activity) => {
-    //         const remainTimeString = this.calRemainTime(activity);
-    //             return {
-    //                 id: activity.id,
-    //                 lastTime: activity.lastTime,
-    //                 activityFund: activity.activityFund,
-    //                 x: activity.x,
-    //                 y: activity.y,
-    //                 regFund: activity.regFund,
-    //                 monthlySales: activity.monthlySales,
-    //                 monthlyAmount: activity.monthlyAmount,
-    //                 status: activity.status,
-    //                 createTime: activity.createTime,
-    //                 originFund: activity.originFund,
-    //                 remainTimeString: remainTimeString
-    //             };
-    //         }
-    //     )
-    //
-    // } catch (error) {
-    //     console.log(error)
-    // }
-
-    //TODO: setInterval Disabled, 以下三行
-    // setInterval(() => {
-    //     this.fetchActivity()
-    // }, 2000)
-
-    // this.startTimer()
-  },
-  // beforeUnmount(){
-  //     this.stopTimer();
-  //     clearInterval(this.timer);  // 销毁定时器
-  // },
   computed: {
     // calRemainTime() {
     //     return (endTime, activities) => {
@@ -254,13 +196,29 @@ export default {
     splitByComma(str) {
       return str.split(',').map((category) => category.trim())
     },
-    async fetchData() {
+    async fetchStore() {
       try {
         // TODO: 相对路径（'api/home/display'）访问出错，这个问题应该和路由相关
         const response = await axios.get('/api/home/displayShop')
         // const response = await axios.get('api/home/display')
-        console.log(response.data)
-        return response.data
+        console.log(response.data.data)
+        this.stores = response.data.data.map((store) => {
+          console.log('what')
+          this.fetchShopCategories(store.id)
+          return {
+            id: store.id,
+            shopName: store.shopName,
+            // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
+            // TODO: 目前categories字段的值不能为NULL，否则会报错
+            // categories: store.categories.split(',').map((category) => category.trim()),
+            //TODO: categories is removed from the chart..
+            // categories: this.splitByComma(store.categories),
+
+            intro: store.intro
+          }
+        })
+        // /category/getShopCategory
+        return response.data.data
       } catch (error) {
         console.log(error)
         throw error
@@ -289,7 +247,7 @@ export default {
             activityName: activity.activityName
           }
         })
-        return response.data
+        return response.data.data
       } catch (error) {
         console.log(error)
         throw error
@@ -309,6 +267,22 @@ export default {
             activity.categories = response.data.data
           }
           return activity.categories
+        })
+    },
+    fetchShopCategories(id) {
+      axios
+        .get('/api/category/getShopCategory', {
+          params: {
+            shopId: id
+          }
+        })
+        .then((response) => {
+          console.log(response.data.data)
+          const store = this.stores.find((item) => item.id === id)
+          if (store) {
+            store.categories = response.data.data
+          }
+          return store.categories
         })
     },
     navigateToCommodity(shopId) {
@@ -340,13 +314,77 @@ export default {
         })
       }
     }
-  }
+  },
   // filters: {
   //     formatTime(value) {
   //         const hours = Math.floor(value / 60);
   //         const minutes = value % 60;
   //         return `${hours}小时${minutes}分钟`;
   //     },
+  // },
+  async mounted() {
+    // Store
+    // try {
+    //     const storesResponse = await this.fetchStore()
+    //     console.log(storesResponse.data)
+    //     // storesData = storesResponse.data //* 无须重新赋值
+    //     // this.removeZerosInObjectArray(storesData)
+    //     this.stores = storesResponse.data.map((store) => (
+    //         {
+    //             id: store.id,
+    //             shopName: store.shopName,
+    //             // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
+    //             // TODO: 目前categories字段的值不能为NULL，否则会报错
+    //             // categories: store.categories.split(',').map((category) => category.trim()),
+    //             //TODO: categories is removed from the chart..
+    //             // categories: this.splitByComma(store.categories),
+    //
+    //             intro: store.intro
+    //         }))
+    //     // console.log(store.categories)
+    // } catch (error) {
+    //     console.log(error)
+    // }
+    // Activity
+    await this.fetchStore()
+    await this.fetchActivity()
+    // try {
+    //     const activityResponse = await this.fetchActivity()
+    //     // console.log("activity: \n")
+    //     // console.log(activityResponse.data)
+    //     this.activities = activityResponse.data.map((activity) => {
+    //         const remainTimeString = this.calRemainTime(activity);
+    //             return {
+    //                 id: activity.id,
+    //                 lastTime: activity.lastTime,
+    //                 activityFund: activity.activityFund,
+    //                 x: activity.x,
+    //                 y: activity.y,
+    //                 regFund: activity.regFund,
+    //                 monthlySales: activity.monthlySales,
+    //                 monthlyAmount: activity.monthlyAmount,
+    //                 status: activity.status,
+    //                 createTime: activity.createTime,
+    //                 originFund: activity.originFund,
+    //                 remainTimeString: remainTimeString
+    //             };
+    //         }
+    //     )
+    //
+    // } catch (error) {
+    //     console.log(error)
+    // }
+
+    //TODO: setInterval Disabled, 以下三行
+    // setInterval(() => {
+    //     this.fetchActivity()
+    // }, 2000)
+
+    // this.startTimer()
+  }
+  // beforeUnmount(){
+  //     this.stopTimer();
+  //     clearInterval(this.timer);  // 销毁定时器
   // },
 }
 </script>
