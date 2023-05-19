@@ -5,8 +5,27 @@
     <br />
     <div class="order-create">
       <div class="address">
-        <h3>选择收货地址</h3>
-        <el-divider></el-divider>
+        <h3>收货地址</h3>
+        <el-button v-if="selectAddress == false" @click="turnOnAddress">选择收货地址</el-button>
+        <div v-if="selectAddress == true">
+          <address-manage @select-address="handleSelectAddress"></address-manage>
+        </div>
+        <div v-if="ifselectedAddress == true">
+          <el-card>
+            <div slot="header">
+              <strong>姓名： </strong>
+              {{ selectAddressInfo.name }}
+            </div>
+            <div><strong>手机号： </strong>{{ selectAddressInfo.phoneNumber }}</div>
+            <div><strong>地址： </strong>{{ selectAddressInfo.address }}</div>
+          </el-card>
+        </div>
+
+        <!-- <div>
+          <address-selector @close-select-address="handleCloseSelectAddress"></address-selector>
+        </div> -->
+
+        <!-- <el-divider></el-divider>
         <el-form :model="addressForm" :rules="addressRules" ref="addressForm" label-width="80px">
           <el-form-item label="收货人" prop="name">
             <el-input v-model="addressForm.name"></el-input>
@@ -20,7 +39,7 @@
           <el-form-item label="邮政编码" prop="zipCode">
             <el-input v-model="addressForm.zipCode"></el-input>
           </el-form-item>
-        </el-form>
+        </el-form> -->
       </div>
       <div class="order-detail">
         <h3>订单详情</h3>
@@ -48,24 +67,19 @@
 </template>
 
 <script>
+import axios from 'axios'
 import AddressManage from '../../../components/OrdUserComponents/AddressManage.vue'
+import { ElMessage } from 'element-plus'
 export default {
   name: 'OrderCreateView',
   components: { AddressManage },
   data() {
     return {
-      addressForm: {
-        name: '',
-        phone: '',
-        address: '',
-        zipCode: ''
-      },
-      addressRules: {
-        name: [{ required: true, message: '请输入收货人姓名', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
-        address: [{ required: true, message: '请输入收货地址', trigger: 'blur' }],
-        zipCode: [{ required: true, message: '请输入邮政编码', trigger: 'blur' }]
-      },
+      selectAddress: false, // 还没开始选择的时候会设置成false
+      ifselectedAddress: false, // 如果选好了，会设置成true
+      selectAddressId: '',
+      selectAddressInfo: {},
+      commodityArray: [],
       tableData: [
         {
           name: '商品1',
@@ -91,7 +105,45 @@ export default {
       return total
     }
   },
+  mounted() {
+    this.commodityArray = JSON.parse(localStorage.getItem('commodityArray'))
+    console.log(this.commodityArray)
+  },
   methods: {
+    turnOnAddress() {
+      this.selectAddress = true
+    },
+    handleSelectAddress(addressId) {
+      // 接受子组件传来的地址ID
+      console.log('Selected address ID:', addressId)
+      this.selectAddress = false
+      this.selectAddressId = addressId
+      this.ifselectedAddress = true
+      console.log('11111')
+      this.getSelectAddressInfo() //​根据选择的地址ID获取地址信息
+    },
+    async getSelectAddressInfo() {
+      // 根据选择的地址ID获取地址信息
+      console.log('22222')
+      await axios
+        .get('/api/address/displayAddressInfo', {
+          params: {
+            addressId: this.selectAddressId
+          }
+        })
+        .then((response) => {
+          if (response.data.code == 200) {
+            console.log('获取信息成功')
+            this.selectAddressInfo = response.data.data
+          } else {
+            ElMessage({
+              showClose: true,
+              type: 'error', //如果失败输出状态码
+              message: '获取信息失败:' + response.data.msg
+            })
+          }
+        })
+    },
     submitOrder() {
       this.$refs.addressForm.validate((valid) => {
         if (valid) {
@@ -144,5 +196,28 @@ export default {
   margin-bottom: 20px;
   width: 600px;
   max-width: 600px;
+}
+/* 这里是你的Vue.js组件的样式 */
+.el-card {
+  border-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.el-card__header {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 16px;
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #ebeef5;
+}
+
+.el-card__body {
+  padding: 16px;
+}
+
+.el-card__footer {
+  padding: 16px;
+  background-color: #f5f7fa;
+  border-top: 1px solid #ebeef5;
 }
 </style>

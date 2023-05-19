@@ -15,6 +15,7 @@
         <el-table-column prop="intro" label="介绍" width="150" />
         <el-table-column prop="price" label="价格" width="120" />
         <el-table-column prop="commodityNum" label="数量" width="80" />
+        <el-table-column prop="activityId" label="活动" width="80" />
         <el-table-column label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.status === '有效' ? 'success' : 'danger'">{{ row.status }}</el-tag>
@@ -131,8 +132,8 @@ export default {
         cartItem.commodityName = commodityInfo.commodityName
         cartItem.price = commodityInfo.price
         cartItem.intro = commodityInfo.intro
+        cartItem.activityId = commodityInfo.activityId //!
         cartItem.imagePath = commodityInfo.imagePath
-        cartItem.activityId = commodityInfo.activityId
         cartItem.shopName = shopInfo.shopName
         // this.$set(this.cartItems, i, cartItem)
         this.cartItems[i] = { ...cartItem } // 将cartItem对象复制到cartItems数组的第i个位置
@@ -196,6 +197,7 @@ export default {
       const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
+    async getActivityInfo() {},
     // TODO: 参数还没写完
     submitOrder() {
       const commodityArray = this.selectedItems.map((item) => item) //* 这里将多选框选中的商品的commodityId提取出来，拼成一个数组

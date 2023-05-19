@@ -30,7 +30,7 @@
       >
         <strong>订单状态：</strong>
         <el-steps :active="order.status" align-center>
-          <el-step title="待付款"></el-step>
+          <el-step title="待支付"></el-step>
           <el-step title="待发货"></el-step>
           <el-step title="待收货"></el-step>
           <el-step title="已完成"></el-step>
@@ -159,7 +159,7 @@ export default {
     },
     setStatusNum(status) {
       switch (status) {
-        case '待付款':
+        case '待支付':
           return 1
         case '待发货':
           return 2

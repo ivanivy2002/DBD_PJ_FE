@@ -1,5 +1,5 @@
 <template>
-  <div v-if="activeSelect == 5" class="addressManage">
+  <div class="addressManage">
     <div class="create-address">
       <el-button type="success" @click="createAddress" plain>新增收货地址</el-button>
       <br />
@@ -13,8 +13,21 @@
         <span
           ><div class="address-name">{{ address.name }}</div></span
         >
-        <el-button @click="deleteAddress(index)" style="float: right" type="danger">删除</el-button>
-        <el-button @click="editAddress(address.id)" style="float: right" type="primary"
+        <el-button @click="deleteAddress(address.id)" style="float: right" type="danger"
+          >删除</el-button
+        >
+        <el-button
+          @click="
+            editAddress(
+              address.id,
+              address.name,
+              address.phoneNumber,
+              address.address,
+              address.ifDefault
+            )
+          "
+          style="float: right"
+          type="primary"
           >修改</el-button
         >
       </div>
@@ -27,6 +40,7 @@
         <strong>详细地址：</strong>
         {{ address.address }}
       </div>
+      <el-button @click="selectAddress(address.id)">选择</el-button>
     </el-card>
 
     <el-dialog title="编辑地址" v-model="dialogVisible">
@@ -68,11 +82,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'AddressManage',
   data() {
     return {
       dialogVisible: false,
+      selectAddressId: '',
       addresses: [],
       addressForm: {
         userId: '',
@@ -106,6 +122,23 @@ export default {
     }
   },
   methods: {
+    selectAddress(addressId) {
+      this.$confirm('确定选择改地址吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$emit('select-address', addressId)
+          // this.$emit('close-select-address')
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消选择'
+          })
+        })
+    },
     async getAddressInfo() {
       // 拿地址的数据
       await axios
@@ -129,12 +162,51 @@ export default {
     createAddress() {
       this.dialogVisible = true
     },
-    deleteAddress(index) {
-      // this.addresses.splice(index, 1);
+    deleteAddress(id) {
+      this.$confirm('确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          axios
+            .put('/api/address/remove', null, {
+              params: {
+                addressId: id
+              }
+            })
+            .then((response) => {
+              if (response.data.code === 200) {
+                ElMessage({
+                  showClose: true,
+                  type: 'success',
+                  message: '删除成功'
+                })
+                this.getAddressInfo() //刷新信息
+              } else {
+                ElMessage({
+                  showClose: true,
+                  type: 'error',
+                  message: '删除失败:' + response.data.msg
+                })
+              }
+            })
+        })
+        .catch(() => {
+          ElMessage({
+            showClose: true,
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
-    editAddress(id) {
+    editAddress(id, name, phoneNumber, address, ifDefault) {
       this.dialogVisible = true
       this.addressForm.id = id
+      this.addressForm.name = name
+      this.addressForm.phoneNumber = phoneNumber
+      this.addressForm.address = address
+      this.addressForm.ifDefault = ifDefault
       // this.form = { ...this.addresses[index] }
       // this.editIndex = index
     },
@@ -297,7 +369,7 @@ h2 {
   border-radius: 5px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
   margin-bottom: 20px;
-  width: 600px;
+  width: 500px;
   max-width: 600px;
 }
 
