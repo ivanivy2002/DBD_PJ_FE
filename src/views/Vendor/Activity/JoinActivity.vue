@@ -307,7 +307,7 @@ export default {
     },
     joinActivity() {
       try {
-          // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         const response = axios.put('/api/shop/joinActivity', null, {
           params: {
             shopId: localStorage.getItem('shopId'),
