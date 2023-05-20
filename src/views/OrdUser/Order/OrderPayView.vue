@@ -27,18 +27,21 @@
 
 <script>
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 export default {
   data() {
     return {
       userBalance: 0,
       orderPrice: 0,
-      orderId: 0
+      orderId: 0,
+      orderIdArray: []
     }
   },
   mounted() {
     this.getUserBalance()
     this.orderPrice = localStorage.getItem('orderPrice')
-    // this.orderId = localStorage.getItem('orderId')
+    this.orderIdArray = JSON.parse(localStorage.getItem('orderIdArray'))
+    console.log(this.orderIdArray)
     // this.getOrderPrice()
   },
   methods: {
@@ -72,58 +75,69 @@ export default {
       // if (parseFloat(this.userBalance) >= parseFloat(this.order.price)) {
       //   console.log('支付成功！');
       //   this.userBalance -= this.order.price;
-      if (this.userBalance >= this.orderPrice) {
-        console.log('支付成功！')
-        // userBalance -= orderPrice;
-        axios
-          .put('/api/order/pay', null, {
-            params: {
-              orderId: localStorage.getItem('orderId')
-            }
-          })
-          .then((res) => {
-            if (res.data.code == 200) {
-              console.log(res.data)
-              ElMessage({
-                showClose: true,
-                type: 'success',
-                message: '支付成功！'
+      this.$confirm('确定支付吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(111)
+        console.log(this.orderIdArray)
+        if (this.userBalance >= this.orderPrice) {
+          console.log('余额充足！')
+          // userBalance -= orderPrice;
+          this.orderIdArray.forEach((orderId) => {
+            axios
+              .put('/api/order/pay', null, {
+                params: {
+                  orderId: orderId
+                }
               })
-              axios
-                .post('/api/user/recharge', null, {
-                  params: {
-                    userId: localStorage.getItem('userId'), //获取cookie中的id
-                    // userId: 20,
-                    amount: this.orderPrice * -1 // 传一个负的"充值金额"，实现扣款
-                    // TODO: 这里amount和balance的命名和关系
-                  }
-                })
-                .then((response) => {
-                  console.log(response.data)
-                  console.log('扣款成功！')
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-            } else {
-              ElMessage({
-                showClose: true,
-                type: 'error',
-                message: '支付失败: ' + res.data.msg
+              .then((res) => {
+                if (res.data.code == 200) {
+                  console.log('支付成功')
+                  axios
+                    .post('/api/user/recharge', null, {
+                      params: {
+                        userId: localStorage.getItem('userId'), //获取cookie中的id
+                        // userId: 20,
+                        amount: this.orderPrice * -1 // 传一个负的"充值金额"，实现扣款
+                        // TODO: 这里amount和balance的命名和关系
+                      }
+                    })
+                    .then((response) => {
+                      console.log(response.data)
+                      console.log('扣款成功！')
+                    })
+                    .catch((err) => {
+                      console.log(err)
+                    })
+                } else {
+                  ElMessage({
+                    showClose: true,
+                    type: 'error',
+                    message: '支付失败: ' + res.data.msg
+                  })
+                }
               })
-            }
+              .catch((err) => {
+                console.log(err)
+              })
           })
-          .catch((err) => {
-            console.log(err)
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: '支付成功！'
           })
-      } else {
-        ElMessage({
-          showClose: true,
-          type: 'error',
-          message: '余额不足'
-        })
-        console.log('余额不足！')
-      }
+          this.getUserBalance()
+        } else {
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: '余额不足'
+          })
+          console.log('余额不足！')
+        }
+      })
     }
   }
 }

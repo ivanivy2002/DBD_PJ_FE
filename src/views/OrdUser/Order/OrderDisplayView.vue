@@ -259,7 +259,8 @@ export default {
       // })
       //   .then(() => {
       localStorage.setItem('orderPrice', row.paidAmount) // 将订单价格存入localStorage
-      localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+      // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+      localStorage.setItem('orderIdArray', JSON.stringify(row.id)) // 将订单id存入localStorage
       this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
       // })
       // .catch(() => {

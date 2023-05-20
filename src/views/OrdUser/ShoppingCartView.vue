@@ -12,21 +12,25 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column prop="commodityName" label="商品名称" width="120" />
-        <el-table-column prop="intro" label="介绍" width="150" />
-        <el-table-column prop="price" label="价格" width="120" />
-        <el-table-column label="数量" width="80">
+        <el-table-column prop="intro" label="介绍" width="80" />
+        <el-table-column prop="price" label="价格" width="70" />
+        <el-table-column label="数量" width="170">
           <template #default="{ row }">
             <el-button-group>
               <el-button
                 type="primary"
                 icon="Minus"
-                @click="updateNum(row.shoppingCartId, row.commodityNum - 1)"
+                size="small"
+                plain
+                @click="updateNum(row.id, row.commodityNum - 1)"
               ></el-button>
-              <el-text>{{ row.commodityNum }}</el-text>
+              <el-button size="small">{{ row.commodityNum }}</el-button>
               <el-button
                 type="primary"
                 icon="Plus"
-                @click="updateNum(row.shoppingCartId, row.commodityNum + 1)"
+                size="small"
+                plain
+                @click="updateNum(row.id, row.commodityNum + 1)"
               ></el-button>
             </el-button-group>
           </template>
@@ -134,10 +138,19 @@ export default {
       this.selectedItems = selection
     },
     updateNum(shoppingCartId, num) {
-      axios.put('/api/shoppingCart/update', {
-        commodityNum: num,
-        shoppingCartId: shoppingCartId
-      })
+      axios
+        .put('/api/shoppingCart/update', null, {
+          params: {
+            commodityNum: num,
+            shoppingCartId: shoppingCartId
+          }
+        })
+        .then((response) => {
+          if (response.data.code == 200) {
+            console.log('修改成功')
+            this.fetchData()
+          }
+        })
     },
     joinWithComma(categories) {
       if (!Array.isArray(categories)) {

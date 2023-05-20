@@ -63,7 +63,7 @@
                 controls-position="right"
                 style="width: 120px"
               ></el-input-number>
-              <el-button color="#626aef" @click="PunchaseDirect(commodity.id)">
+              <el-button color="#626aef" @click="PunchaseDirect(commodity.id, commodityNum)">
                 直接购买
               </el-button>
               <el-button type="primary" @click="addToCart(commodity.id, commodityNum)"
@@ -110,7 +110,8 @@ export default {
         }
       },
       shopId: '', // 假设shopId已经从localStorage中获取
-      commodities: []
+      commodities: [],
+      commodityInfoArray: []
       // commodityNum: 0 // 购物车数量
     }
   },
@@ -181,26 +182,29 @@ export default {
       }
     },
     // NOTE: 直接购买商品
-    PunchaseDirect(commodityId) {
+    PunchaseDirect(commodityId, Num) {
       this.$confirm('确定要直接购买吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
+      }).then(() => {
+        this.getCommodityInfo(commodityId, Num)
+
+        // this.$nextTick(() => {
+        //   console.log(commodityInfo)
+        //   localStorage.setItem('commodityArray', JSON.stringify(commodityInfo))
+        //   this.$router.push('/home/orduser/order/create')
+        // })
       })
-        .then(() => {
-          const commodityInfo = this.getCommodityInfo(commodityId)
-          localStorage.setItem('commodityArray', JSON.stringify(commodityInfo))
-          this.$router.push('/home/orduser/order/create')
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消购买'
-          })
-        })
+      // .catch(() => {
+      //   // this.$message({
+      //   //   type: 'info',
+      //   //   message: '已取消购买'
+      //   // })
+      // })
     },
     // NOTE: 通过commodityId查询commodity的各个属性
-    async getCommodityInfo(commodityId) {
+    async getCommodityInfo(commodityId, Num) {
       let commodityInfo = {}
       await axios
         .get('/api/commodity/displayInfo', {
@@ -212,6 +216,11 @@ export default {
             console.log('成功获取商品信息')
             console.log(response.data.data)
             commodityInfo = response.data.data
+            commodityInfo.commodityNum = Num
+            // console.log(commodityInfo)
+            this.commodityInfoArray.push(commodityInfo)
+            localStorage.setItem('commodityArray', JSON.stringify(this.commodityInfoArray))
+            this.$router.push('/home/orduser/order/create')
           } else {
             console.log('获取商品信息失败')
             commodityInfo = {} // 返回一个空对象

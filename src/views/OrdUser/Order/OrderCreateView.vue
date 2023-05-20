@@ -97,6 +97,7 @@ export default {
     }
   },
   mounted() {
+    this.commodityArray = JSON.parse(localStorage.getItem('commodityArray')) // 从localStorage里面取出商品信息
     this.displayCommodityInfo()
   },
   methods: {
@@ -135,7 +136,6 @@ export default {
         })
     },
     async displayCommodityInfo() {
-      this.commodityArray = JSON.parse(localStorage.getItem('commodityArray')) // 从localStorage里面取出商品信息
       console.log(this.commodityArray)
       this.getActivityInfo() // 获取活动信息
       // this.calculateReduction() // 获取商品信息
@@ -200,57 +200,57 @@ export default {
       let activityDiscounts = this.activityArray
       console.log(activityDiscounts)
       // 按照活动ID对商品进行分组
-// 按照活动ID对商品进行分组
-let activities = {};
-commodities.forEach(commodity => {
-  let { activityId } = commodity;
-  if (!activities[activityId]) {
-    activities[activityId] = [];
-  }
-  activities[activityId].push(commodity);
-});
-
-// 对每个活动内的商品进行满减计算
-for (let activityId in activities) {
-  let commodities = activities[activityId];
-  let total = commodities.reduce((sum, commodity) => sum + commodity.price * commodity.commodityNum, 0);
-  let activityDiscount = activityDiscounts.find(discount => discount.id == activityId);
-  if (activityDiscount) {
-    // 只有在存在满减策略时才进行满减计算
-    let { x, y } = activityDiscount;
-    if (total >= x) {
-      // 满足满减门槛条件才进行满减
-      let discountSum = Math.floor(total / x) * y; // 总的满减金额
-
+      // 按照活动ID对商品进行分组
+      let activities = {};
       commodities.forEach(commodity => {
-        let ratio = (commodity.price * commodity.commodityNum) / total;
-        let reductionAmount = discountSum * ratio;
-        reductionAmount = Math.round(reductionAmount * 100) / 100; // 保留两位小数
-        let paidAmount = commodity.price * commodity.commodityNum - reductionAmount;
-        paidAmount = Math.round(paidAmount * 100) / 100; // 保留两位小数
-        commodity.paidAmount = paidAmount;
-        commodity.reductionAmount = reductionAmount;
+        let { activityId } = commodity;
+        if (!activities[activityId]) {
+          activities[activityId] = [];
+        }
+        activities[activityId].push(commodity);
       });
-    } else {
-      // 不满足满减门槛，商品原价付款，无满减金额
-      commodities.forEach(commodity => {
-        commodity.paidAmount = commodity.price * commodity.commodityNum;
-        commodity.reductionAmount = 0;
-      });
-    }
-  } else {
-    // 不存在满减策略，商品原价付款，无满减金额
-    commodities.forEach(commodity => {
-      commodity.paidAmount = commodity.price * commodity.commodityNum;
-      commodity.reductionAmount = 0;
-    });
-  }
-}
 
-// 输出每个商品的预估到手价和满减金额
-commodities.forEach((commodity, i) => {
-  console.log(`商品${i + 1}的预估到手价为：${commodity.paidAmount}，满减金额为：${commodity.reductionAmount}`);
-});
+      // 对每个活动内的商品进行满减计算
+      for (let activityId in activities) {
+        let commodities = activities[activityId];
+        let total = commodities.reduce((sum, commodity) => sum + commodity.price * commodity.commodityNum, 0);
+        let activityDiscount = activityDiscounts.find(discount => discount.id == activityId);
+        if (activityDiscount) {
+          // 只有在存在满减策略时才进行满减计算
+          let { x, y } = activityDiscount;
+          if (total >= x) {
+            // 满足满减门槛条件才进行满减
+            let discountSum = Math.floor(total / x) * y; // 总的满减金额
+
+            commodities.forEach(commodity => {
+              let ratio = (commodity.price * commodity.commodityNum) / total;
+              let reductionAmount = discountSum * ratio;
+              reductionAmount = Math.round(reductionAmount * 100) / 100; // 保留两位小数
+              let paidAmount = commodity.price * commodity.commodityNum - reductionAmount;
+              paidAmount = Math.round(paidAmount * 100) / 100; // 保留两位小数
+              commodity.paidAmount = paidAmount;
+              commodity.reductionAmount = reductionAmount;
+            });
+          } else {
+            // 不满足满减门槛，商品原价付款，无满减金额
+            commodities.forEach(commodity => {
+              commodity.paidAmount = commodity.price * commodity.commodityNum;
+              commodity.reductionAmount = 0;
+            });
+          }
+        } else {
+          // 不存在满减策略，商品原价付款，无满减金额
+          commodities.forEach(commodity => {
+            commodity.paidAmount = commodity.price * commodity.commodityNum;
+            commodity.reductionAmount = 0;
+          });
+        }
+      }
+
+      // 输出每个商品的预估到手价和满减金额
+      commodities.forEach((commodity, i) => {
+        console.log(`商品${i + 1}的预估到手价为：${commodity.paidAmount}，满减金额为：${commodity.reductionAmount}`);
+      });
 
       this.commodityArray = commodities
       console.log(this.commodityArray)
@@ -346,15 +346,18 @@ commodities.forEach((commodity, i) => {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        const promises = [] // 用于存储所有的Promise对象
         this.$message({
           type: 'success',
           message: '提交成功'
         })    
         this.commodityArray.forEach((commodity) => {
-          axios.post('/api/order/create', commodity).then((response) => {
+          const promise = axios.post('/api/order/create', commodity).then((response) => {
             if(response.data.code == 200) {
               console.log('成功创建订单')
-
+              console.log(response.data)
+              this.orderIdArray.push(response.data.data);
+              console.log(this.orderIdArray)
             }
             else {
               this.$message({
@@ -363,11 +366,21 @@ commodities.forEach((commodity, i) => {
               })
             }
           })
-        
+          promises.push(promise) // 将Promise对象存储到数组中
         })
-        localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
-        // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
-        this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
+        // NOTE: 控制执行逻辑
+        Promise.all(promises).then(() => {
+          console.log('所有订单创建成功')
+          console.log(this.orderIdArray)
+          localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
+          localStorage.setItem('orderIdArray', JSON.stringify(this.orderIdArray)) // 将订单id存入localStorage
+          // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+          this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
+        })
+        // localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
+        // localStorage.setItem('orderIdArray', JSON.stringify(this.orderIdArray)) // 将订单id存入localStorage
+        // // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+        // this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
       }).catch(() => {
         // 点击取消按钮
         this.$message({
