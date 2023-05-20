@@ -70,6 +70,14 @@
               <el-form-item label="商品价格" prop="price">
                 <el-input v-model="signForm.price"></el-input>
               </el-form-item>
+              <el-form-item label="商品类别" prop="category">
+                <!--   这里的categoriesSend 是什么？？是绑定的数据去向-->
+                <el-radio-group v-model="categoriesSend">
+                  <el-radio v-for="category in categoryVector" :label="category" :key="category"
+                    >{{ category }}
+                  </el-radio>
+                </el-radio-group>
+              </el-form-item>
               <el-form-item label="上传图片" label-align="center">
                 <input type="file" multiple @change="onFileChange" />
               </el-form-item>
@@ -200,6 +208,11 @@ export default {
   },
   data() {
     return {
+      categoriesSend: [],
+      categoryVector: [],
+      categoryState: {
+        categoryData: []
+      },
       files: [],
       // picUrls: [],
       stateQualified: {
@@ -221,6 +234,7 @@ export default {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
         id: null,
         commodityName: null,
+        category: null,
         shopId: 0,
         intro: null,
         price: 0,
@@ -322,6 +336,35 @@ export default {
     }
   },
   methods: {
+    fetchCategory: async function () {
+      try {
+        const response = await axios
+          .get('/api/category/getShopCategory', {
+            params: {
+              shopId: localStorage.getItem('shopId')
+            }
+          })
+          .then((response) => {
+            if (response.data.code === 200) {
+              this.categoriesSend = response.data.data
+              // const response = await axios.get('/api/home/getActivity')
+              console.log(response.data.data)
+              this.categoryState.categoryData = response.data.data.map((row) => {
+                console.log(row)
+                return row
+              })
+              // 使用 map 方法提取 category 字段，生成一个包含所有 category 值的向量
+              this.categoryVector = this.categoryState.categoryData.map((item) => item.category)
+              // 输出 categoryVector，可以看到它包含了所有 category 值
+              console.log(this.categoryVector)
+              console.log(1111)
+              console.log(this.categoryState.categoryData)
+            }
+          })
+      } catch (error) {
+        console.log(error)
+      }
+    },
     onFileChange(event) {
       // 选中文件时的回调
       this.files = event.target.files
@@ -338,10 +381,10 @@ export default {
       //* 申请上架商品
       // NOTE: 前端检查是否符合规范
       this.signForm.shopId = localStorage.getItem('shopId')
+      this.signForm.category = this.categoriesSend
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
-          // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.signForm) // 控制台输出信息
@@ -354,6 +397,8 @@ export default {
             .then((res) => {
               console.log(res)
               if (res.code == 200) {
+                console.log('申请提交成功')
+
                 ElMessage({
                   showClose: true,
                   type: 'success',
@@ -592,6 +637,7 @@ export default {
     this.fetchDataRegRecord()
     this.fetchDataChangeInfoRecord()
     this.fetchDataQualified()
+    this.fetchCategory()
   }
 }
 </script>

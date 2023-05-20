@@ -11,9 +11,9 @@
           <address-manage @select-address="handleSelectAddress"></address-manage>
         </div>
         <div v-if="ifselectedAddress == true">
-<!--            slot="header"-->
+          <!--            slot="header"-->
           <el-card>
-            <div >
+            <div>
               <strong>姓名： </strong>
               {{ selectAddressInfo.name }}
             </div>
@@ -29,8 +29,8 @@
         <el-divider></el-divider>
         <div>
           <el-card v-for="(commodity, index) in commodityArray" :key="index">
-<!--              slot="header"-->
-            <div >
+            <!--              slot="header"-->
+            <div>
               <div class="commodity-name">{{ commodity.commodityName }}</div>
             </div>
             <div class="commodity-info">
@@ -51,7 +51,7 @@
                   :src="imageUrl"
                 />
               </div>
-<!--                //TODO:这里出现了我的编译器报错,不知道为什么,我加了一个<p>-->
+              <!--                //TODO:这里出现了我的编译器报错,不知道为什么,我加了一个<p>-->
               <p></p>
             </div>
           </el-card>
