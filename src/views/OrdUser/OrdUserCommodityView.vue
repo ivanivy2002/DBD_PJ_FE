@@ -99,7 +99,6 @@ export default {
   data() {
     return {
       imageUrls: [],
-      imageUrls: [],
       swiperOptions: {
         pagination: {
           el: '.swiper-pagination'

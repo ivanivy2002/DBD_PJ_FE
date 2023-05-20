@@ -317,7 +317,9 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     navigateToActivity(activityId) {
-      localStorage.setItem('activityId', activityId) // 注意：将showShopId存入localStorage
+      // TODO: 这下面可能还要修正一下，统一命名
+      localStorage.setItem('showActivityId', activityId) // 注意：将showActivityId存入localStorage
+      localStorage.setItem('activityId', activityId)
       if (localStorage.getItem('role') == '3') {
         this.$router.push({ path: `/home/admin/activity` })
       }
