@@ -127,104 +127,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="activeSelect == 5" class="addressManage">
-      <div class="create-address">
-        <el-button type="success" @click="createAddress" plain>新增收货地址</el-button>
-        <br />
-        <br />
-      </div>
-      <el-card class="box-card" v-for="(address, index) in addresses" :key="index">
-        <div slot="header" class="clearfix">
-          <div class="defaultAddress" v-if="address.ifDefault == true">
-            <span>默认地址</span>
-          </div>
-          <span
-            ><div class="address-name">{{ address.name }}</div></span
-          >
-          <el-button @click="deleteAddress(address.id)" style="float: right" type="danger"
-            >删除</el-button
-          >
-          <el-button
-            @click="
-              editAddress(
-                address.id,
-                address.name,
-                address.phoneNumber,
-                address.address,
-                address.ifDefault
-              )
-            "
-            style="float: right"
-            type="primary"
-            >修改</el-button
-          >
-        </div>
-
-        <div class="text item">
-          <strong>联系电话：</strong>
-          {{ address.phoneNumber }}
-        </div>
-        <div class="text item">
-          <strong>详细地址：</strong>
-          {{ address.address }}
-        </div>
-      </el-card>
-
-      <el-dialog title="编辑地址" v-model="dialogVisible">
-        <el-form ref="addressForm" :model="addressForm" label-width="120px">
-          <el-form-item
-            label="姓名"
-            prop="name"
-            :rules="{ required: true, message: '请输入姓名', trigger: 'blur' }"
-          >
-            <el-input v-model="addressForm.name"></el-input>
-          </el-form-item>
-          <el-form-item
-            label="手机号"
-            prop="phoneNumber"
-            :rules="{ required: true, validator: validatePhoneNumber, trigger: 'blur' }"
-          >
-            <el-input v-model="addressForm.phoneNumber"></el-input>
-          </el-form-item>
-          <el-form-item
-            label="地址"
-            prop="address"
-            :rules="{ required: true, message: '请输入地址', trigger: 'blur' }"
-          >
-            <el-input v-model="addressForm.address"></el-input>
-          </el-form-item>
-          <el-form-item label="是否为默认地址">
-            <el-radio-group v-model="addressForm.ifDefault">
-              <el-radio :label="true">是</el-radio>
-              <el-radio :label="false">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="saveAddress">确定</el-button>
-        </div>
-      </el-dialog>
-    </div>
-    <!-- <div v-if="activeSelect == 5" class="addressManage">
-      <el-card v-for="address in addresses" :key="address.id" class="address-card">
-      <div slot="header">{{ address.name }}</div>
-      <el-form :model="address" :rules="rules" ref="addressForm" label-width="80px">
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="address.name"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码" prop="phone">
-          <el-input v-model="address.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="具体地址" prop="address">
-          <el-input v-model="address.address"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="saveAddress(address)">保存</el-button>
-          <el-button type="danger" @click="deleteAddress(address)">删除</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card></div> -->
   </div>
 </template>
 
@@ -681,7 +583,7 @@ export default {
 .personal-info-display,
 .personal-balance,
 .change-password {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  /* background-color: linear-gradient(-45deg, #a0c7ca, #83e6e1); */
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
@@ -778,7 +680,7 @@ h2 {
 }
 
 .box-card {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  background-color: linear-gradient(-45deg, #a0c7ca, #83e6e1);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;

@@ -142,9 +142,10 @@ export default {
 }
 
 .btn-outline-primary {
+  width: 100%;
   background-color: transparent;
-  color: #2de9ef;
-  border-color: #13cbd1;
+  color: #65f0f5;
+  /* border-color: #13cbd1; */
   font-weight: bold;
 }
 

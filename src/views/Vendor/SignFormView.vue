@@ -337,9 +337,10 @@ export default {
 
 <style scoped>
 .form-header {
-  font-family: '黑体';
-  font-size: 30px;
-  color: #ffffff;
+  font-family: '华文宋体';
+  font-size: 25px;
+
+  color: #6a8789;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -350,9 +351,12 @@ export default {
 }
 
 .sign-form {
+  position: relative;
+  top: 50px;
   max-width: 600px;
   margin: 0 auto;
-  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  background-color: #f0f2f4;
+  /* background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca); */
   padding: 30px;
   border-radius: 10px;
 }

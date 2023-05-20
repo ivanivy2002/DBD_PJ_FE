@@ -1,6 +1,19 @@
 <template>
   <div class="info">
-    <!--    <h1>商店页面</h1>-->
+    <span class="search">&#x1F50D;</span>
+    <input type="text" placeholder="搜索..." />
+  </div>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+
+  <div class="classify">
+    <h1>分类</h1>
+    <h1 class="category"><i class="fas fa-shoe-prints"></i>女鞋 / 男鞋 / 箱包</h1>
+    <h1 class="category"><i class="fas fa-utensils"></i>食品 / 生鲜 / 母婴</h1>
+    <h1 class="category"><i class="fas fa-magic"></i>美妆 / 饰品 / 洗护</h1>
   </div>
   <div class="activity-carousel">
     <el-carousel height="300px">
@@ -11,22 +24,25 @@
           shadow="hover"
           @click="navigateToActivity(activity.id)"
         >
-          <div class="activity-card-header">
-            <!--              活动 {{ activity.id }}-->
-            <div class="activity-card-title">{{ activity.activityName }}</div>
-          </div>
-          <!--                    <div class="activity-card-content">活动状态：{{ activity.status }}</div>-->
-          <div class="activity-card-content">{{ calRemainTime(activity) }}</div>
-          <div class="activity-card-content">
-            <!--                        <span class="category-title">活动商品：</span>-->
-            <div class="category-list">
-              <span
-                v-for="(category, index) in activity.categories"
-                :key="index"
-                class="category-span"
-              >
-                {{ category.category }}</span
-              >
+          <div class="activity-parent">
+            <div class="activity-card-header">
+              <!--              活动 {{ activity.id }}-->
+              <div class="activity-card-title">{{ activity.activityName }}</div>
+            </div>
+            <div class="activity-card-content">满{{ activity.x }}减{{ activity.y }}</div>
+            <!--                    <div class="activity-card-content">活动状态：{{ activity.status }}</div>-->
+            <div class="activity-card-content">{{ calRemainTime(activity) }}</div>
+            <div class="activity-card-content">
+              <!--                        <span class="category-title">活动商品：</span>-->
+              <div class="category-list">
+                <span
+                  v-for="(category, index) in activity.categories"
+                  :key="index"
+                  class="category-span"
+                >
+                  {{ category.category }}</span
+                >
+              </div>
             </div>
           </div>
         </el-card>
@@ -393,18 +409,58 @@ export default {
 .info {
   width: 100%;
 }
+.info input[type='text'] {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  width: 300px;
+  /* height: 200px; */
+  position: relative;
+  top: 50px;
+  left: 500px;
+  outline: none;
+}
+.classify {
+  background-color: #e3e6eb;
+  width: 20%;
+  height: 250px;
+  position: relative;
+  top: 70px;
+  left: 10px;
+}
+.activity-parent {
+  position: relative;
+  top: 40px;
+}
+h1 {
+  color: #8a9193;
+}
+.category {
+  font-size: 15pt;
 
-.info h1 {
-  font-size: 40px;
-  color: #4befc3;
-  /* 蓝绿色 */
-  text-transform: uppercase;
-  /* 全部大写 */
-  text-align: center;
-  /* 居中 */
+  color: #8a9193;
+  margin: 20px 0;
+}
+.category i {
+  margin-right: 15px;
+  font-size: 1em;
 }
 
+.info input[type='text']:focus {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.search {
+  position: relative;
+  top: 50px;
+  left: 860px;
+  font-size: 24px;
+  color: #333;
+}
 .store-board {
+  position: relative;
+  top: 500px;
   padding: 24px;
   background-color: #ffffff;
   min-height: 100vh;
@@ -458,8 +514,9 @@ export default {
   /*margin: 0 auto;*/
   /*display: block;*/
   /*background-color: #26d6cd;*/
-  opacity: 100%;
-  border-radius: 13px;
+  /* opacity: 100%; */
+  /* border: 1px solid #ccc; /* 添加边框 */
+  border-radius: 20px;
   /*padding: 100px;*/
   /*padding-left: 100px;*/
   /*padding-right: 100px;*/
@@ -469,8 +526,8 @@ export default {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  background-image: linear-gradient(-45deg, #4120d0, #6c19d2);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(-45deg, #b7ced4, #7dbac3);
+  /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); */
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
 }
 
@@ -553,6 +610,12 @@ export default {
 }
 
 .activity-carousel {
+  position: relative;
+  top: -220px;
+  left: 330px;
+  width: 60%;
+  /* border: 1px solid rgb(172, 235, 235); //添加边框 */
+  border-radius: 20px; /* 设置圆角 */
 }
 
 .el-carousel__item .el-card {

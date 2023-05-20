@@ -43,7 +43,7 @@ export default {
 .btn-76 {
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: button;
-  background-color: #31d1bd;
+  background-color: #b4e7ea;
   background-image: none;
   color: #ffffff;
   cursor: pointer;
@@ -70,12 +70,12 @@ export default {
   display: none;
 }
 .btn-76 {
-  --neon: #1bedca;
+  --neon: #b4e7ea;
   box-sizing: border-box;
   display: block;
   font-weight: 900;
   -webkit-mask-image: none;
-  outline: 4px solid #31d1bd;
+  outline: 4px solid #b4e7ea;
   outline-offset: -4px;
   overflow: hidden;
   padding: 1.2rem 3rem;

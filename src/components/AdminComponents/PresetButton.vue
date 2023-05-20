@@ -41,6 +41,8 @@ export default {
 .btn-76 {
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: button;
+  position: relative;
+  top: 50px;
   background-color: #31d1bd;
   background-image: none;
   color: #ffffff;

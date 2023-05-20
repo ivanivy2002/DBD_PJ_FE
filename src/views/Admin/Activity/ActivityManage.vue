@@ -238,6 +238,8 @@ export default {
 /*    border-radius: 10px;*/
 /*}*/
 .container {
+  position: relative;
+  top: 40px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;

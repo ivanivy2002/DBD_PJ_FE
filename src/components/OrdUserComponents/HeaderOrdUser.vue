@@ -121,7 +121,7 @@ export default {
 }
 
 .header .el-menu {
-  background-image: linear-gradient(to right, #32c8b2, #30d4c0);
+  background-color: #b4e7ea;
   border: none;
   min-height: 100%;
 }
@@ -134,7 +134,7 @@ export default {
 .header-logo {
   font-size: 40px;
   font-weight: bold;
-  color: #2bbb9e;
+  background-color: #b4e7ea;
   margin-right: 15px;
 }
 
