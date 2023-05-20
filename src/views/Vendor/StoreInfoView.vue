@@ -126,7 +126,8 @@ export default {
       return () => {
         if (
           this.shopInfoForm.removeStatus == '待审核' ||
-          this.shopInfoForm.removeStatus == '未申请'
+          this.shopInfoForm.removeStatus == '未申请' ||
+          this.shopInfoForm.removeStatus == '已拒绝'
         ) {
           return false
         } else {

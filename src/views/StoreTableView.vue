@@ -68,7 +68,7 @@
   <!--            </el-col>-->
   <!--        </el-row>-->
   <!--    </div>-->
-  <div class="store-board" style="z-index: -1">
+  <div class="store-board" style="z-index: 1">
     <el-row gutter="24">
       <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
         <el-card class="animated-card" shadow="hover" @click="navigateToCommodity(store.id)">
