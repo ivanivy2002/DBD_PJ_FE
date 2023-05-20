@@ -58,7 +58,7 @@ export default {
       this.$router.push('/home/admin/manageMoney')
     },
     gotoCashFlowRecordPage() {
-      this.$router.push('/home/admin/cashFlowRecord')
+      this.$router.push('/home/admin/cashflow')
     },
     gotoActivityPage() {
       this.$router.push('/home/admin/activityManage')
