@@ -318,11 +318,28 @@ export default {
     // NOTE: 和分页有关的方法
     handleSizeChange(val) {
       this.pageSize = val
-      this.getOrderData()
+      // 计算当前页的起始和结束下标
+      const startIndex = (this.currentPage - 1) * this.pageSize
+      const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
+      // 获取当前页的订单数据
+      const orders = this.allOrders.slice(startIndex, endIndex)
+      // 更新总订单数
+      this.totalOrders = this.allOrders.length
+      // 更新当前页的订单数据
+      this.orderData = orders
+      // this.getAllOrders()
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      this.getOrderData()
+      // 计算当前页的起始和结束下标
+      const startIndex = (this.currentPage - 1) * this.pageSize
+      const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
+      // 获取当前页的订单数据
+      const orders = this.allOrders.slice(startIndex, endIndex)
+      // 更新总订单数
+      this.totalOrders = this.allOrders.length
+      // 更新当前页的订单数据
+      this.orderData = orders
     },
     statusSelect(status) {
       switch (status) {

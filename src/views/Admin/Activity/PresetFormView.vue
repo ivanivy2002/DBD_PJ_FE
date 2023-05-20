@@ -339,6 +339,7 @@ export default {
                         message: '活动预设成功'
                       })
                       this.$refs.form.resetFields() // 重置表单
+                      this.$router.push('/home/admin/activityManage') // 跳转到活动管理页面
                       // this.dialogFormVisible = false
                     }
                   })

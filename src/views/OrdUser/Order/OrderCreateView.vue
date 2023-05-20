@@ -11,14 +11,15 @@
           <address-manage @select-address="handleSelectAddress"></address-manage>
         </div>
         <div v-if="ifselectedAddress == true">
+          <!--            slot="header"-->
           <el-card>
-            <div slot="header">
+            <div>
               <strong>姓名： </strong>
               {{ selectAddressInfo.name }}
             </div>
-            <br/>
+            <br />
             <div><strong>手机号： </strong>{{ selectAddressInfo.phoneNumber }}</div>
-            <br/>
+            <br />
             <div><strong>地址： </strong>{{ selectAddressInfo.address }}</div>
           </el-card>
         </div>
@@ -28,22 +29,30 @@
         <el-divider></el-divider>
         <div>
           <el-card v-for="(commodity, index) in commodityArray" :key="index">
-            <div slot="header"><div class="commodity-name">{{ commodity.commodityName }}</div></div>
+            <!--              slot="header"-->
+            <div>
+              <div class="commodity-name">{{ commodity.commodityName }}</div>
+            </div>
             <div class="commodity-info">
               <p class="commodity-num">商品数量：{{ commodity.commodityNum }}</p>
               <p class="paid-amount">实付金额：{{ commodity.paidAmount }}</p>
-              <p class="reduction" v-if="commodity.reductionAmount != 0">优惠金额：{{ commodity.reductionAmount }}</p>
-              <p class="shop-name">店铺名称：{{ commodity.shopName }}</p>
-              <p class="activity-name" v-if="commodity.activityName != null">活动：{{ commodity.activityName }}</p>
-              <p class="photo">
-                <div class="commodity-image">
-                  <img
-                    v-for="imageUrl in getImageUrls(commodity.imagePath)"
-                    :key="imageUrl"
-                    :src="imageUrl"
-                  />
-                </div>
+              <p class="reduction" v-if="commodity.reductionAmount != 0">
+                优惠金额：{{ commodity.reductionAmount }}
               </p>
+              <p class="shop-name">店铺名称：{{ commodity.shopName }}</p>
+              <p class="activity-name" v-if="commodity.activityName != null">
+                活动：{{ commodity.activityName }}
+              </p>
+              <p class="photo"></p>
+              <div class="commodity-image">
+                <img
+                  v-for="imageUrl in getImageUrls(commodity.imagePath)"
+                  :key="imageUrl"
+                  :src="imageUrl"
+                />
+              </div>
+              <!--                //TODO:这里出现了我的编译器报错,不知道为什么,我加了一个<p>-->
+              <p></p>
             </div>
           </el-card>
         </div>
@@ -79,7 +88,7 @@ export default {
       commodityArray: [],
       activityArray: [],
       tableData: [],
-      orderIdArray: [],
+      orderIdArray: []
     }
   },
   computed: {
@@ -111,7 +120,7 @@ export default {
       this.selectAddressId = addressId
       this.ifselectedAddress = true
       console.log('11111')
-      this.getSelectAddressInfo() //​根据选择的地址ID获取地址信息
+      this.getSelectAddressInfo() //根据选择的地址ID获取地址信息
     },
     async getSelectAddressInfo() {
       // 根据选择的地址ID获取地址信息
@@ -150,28 +159,30 @@ export default {
           console.log('该商品没有活动')
         } else {
           console.log(`商品${commodity.commodityName}的活动ID为${commodity.activityId}`)
-          const promise = axios.get('/api/activity/display', {
-            params: {
-              activityId: commodity.activityId
-            }
-          }).then((response) => {
-            if (response.data.code == 200) {
-              console.log(`获取活动信息${response.data.data.activityName}成功`)
-              commodity.activityName = response.data.data.activityName
-              this.activityArray.push(response.data.data) // 将返回的数据存储到数组中 用push
-            } else {
-              ElMessage({
-                showClose: true,
-                type: 'error', //如果失败输出状态码
-                message: '获取信息失败:' + response.data.msg
-              })
-            }
-          })
+          const promise = axios
+            .get('/api/activity/display', {
+              params: {
+                activityId: commodity.activityId
+              }
+            })
+            .then((response) => {
+              if (response.data.code == 200) {
+                console.log(`获取活动信息${response.data.data.activityName}成功`)
+                commodity.activityName = response.data.data.activityName
+                this.activityArray.push(response.data.data) // 将返回的数据存储到数组中 用push
+              } else {
+                ElMessage({
+                  showClose: true,
+                  type: 'error', //如果失败输出状态码
+                  message: '获取信息失败:' + response.data.msg
+                })
+              }
+            })
           promises.push(promise) // 将Promise对象存储到数组中
         }
       })
       //NOTE： 该Promise对象在所有的Promise对象都成功完成后才会被解析
-      Promise.all(promises).then(() => {  
+      Promise.all(promises).then(() => {
         console.log('所有活动信息获取完毕')
         console.log(this.activityArray)
         this.calculateReduction() // 在这里调用是为了保证顺序执行
@@ -201,56 +212,63 @@ export default {
       console.log(activityDiscounts)
       // 按照活动ID对商品进行分组
       // 按照活动ID对商品进行分组
-      let activities = {};
-      commodities.forEach(commodity => {
-        let { activityId } = commodity;
+      let activities = {}
+      commodities.forEach((commodity) => {
+        let { activityId } = commodity
         if (!activities[activityId]) {
-          activities[activityId] = [];
+          activities[activityId] = []
         }
-        activities[activityId].push(commodity);
-      });
+        activities[activityId].push(commodity)
+      })
 
       // 对每个活动内的商品进行满减计算
       for (let activityId in activities) {
-        let commodities = activities[activityId];
-        let total = commodities.reduce((sum, commodity) => sum + commodity.price * commodity.commodityNum, 0);
-        let activityDiscount = activityDiscounts.find(discount => discount.id == activityId);
+        let commodities = activities[activityId]
+        let total = commodities.reduce(
+          (sum, commodity) => sum + commodity.price * commodity.commodityNum,
+          0
+        )
+        let activityDiscount = activityDiscounts.find((discount) => discount.id == activityId)
         if (activityDiscount) {
           // 只有在存在满减策略时才进行满减计算
-          let { x, y } = activityDiscount;
+          let { x, y } = activityDiscount
           if (total >= x) {
             // 满足满减门槛条件才进行满减
-            let discountSum = Math.floor(total / x) * y; // 总的满减金额
+            let discountSum = Math.floor(total / x) * y // 总的满减金额
 
-            commodities.forEach(commodity => {
-              let ratio = (commodity.price * commodity.commodityNum) / total;
-              let reductionAmount = discountSum * ratio;
-              reductionAmount = Math.round(reductionAmount * 100) / 100; // 保留两位小数
-              let paidAmount = commodity.price * commodity.commodityNum - reductionAmount;
-              paidAmount = Math.round(paidAmount * 100) / 100; // 保留两位小数
-              commodity.paidAmount = paidAmount;
-              commodity.reductionAmount = reductionAmount;
-            });
+            commodities.forEach((commodity) => {
+              let ratio = (commodity.price * commodity.commodityNum) / total
+              let reductionAmount = discountSum * ratio
+              reductionAmount = Math.round(reductionAmount * 100) / 100 // 保留两位小数
+              let paidAmount = commodity.price * commodity.commodityNum - reductionAmount
+              paidAmount = Math.round(paidAmount * 100) / 100 // 保留两位小数
+              commodity.paidAmount = paidAmount
+              commodity.reductionAmount = reductionAmount
+            })
           } else {
             // 不满足满减门槛，商品原价付款，无满减金额
-            commodities.forEach(commodity => {
-              commodity.paidAmount = commodity.price * commodity.commodityNum;
-              commodity.reductionAmount = 0;
-            });
+            commodities.forEach((commodity) => {
+              commodity.paidAmount = commodity.price * commodity.commodityNum
+              commodity.reductionAmount = 0
+            })
           }
         } else {
           // 不存在满减策略，商品原价付款，无满减金额
-          commodities.forEach(commodity => {
-            commodity.paidAmount = commodity.price * commodity.commodityNum;
-            commodity.reductionAmount = 0;
-          });
+          commodities.forEach((commodity) => {
+            commodity.paidAmount = commodity.price * commodity.commodityNum
+            commodity.reductionAmount = 0
+          })
         }
       }
 
       // 输出每个商品的预估到手价和满减金额
       commodities.forEach((commodity, i) => {
-        console.log(`商品${i + 1}的预估到手价为：${commodity.paidAmount}，满减金额为：${commodity.reductionAmount}`);
-      });
+        console.log(
+          `商品${i + 1}的预估到手价为：${commodity.paidAmount}，满减金额为：${
+            commodity.reductionAmount
+          }`
+        )
+      })
 
       this.commodityArray = commodities
       console.log(this.commodityArray)
@@ -330,8 +348,9 @@ export default {
       const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
-    submitOrder() { // 提交订单
-      if(this.ifselectedAddress == false) {
+    submitOrder() {
+      // 提交订单
+      if (this.ifselectedAddress == false) {
         this.$message({
           type: 'warning',
           message: '请选择收货地址'
@@ -345,49 +364,50 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        const promises = [] // 用于存储所有的Promise对象
-        this.$message({
-          type: 'success',
-          message: '提交成功'
-        })    
-        this.commodityArray.forEach((commodity) => {
-          const promise = axios.post('/api/order/create', commodity).then((response) => {
-            if(response.data.code == 200) {
-              console.log('成功创建订单')
-              console.log(response.data)
-              this.orderIdArray.push(response.data.data);
-              console.log(this.orderIdArray)
-            }
-            else {
-              this.$message({
-                type: 'error',
-                message: '提交失败: ' + response.data.message
-              })
-            }
-          })
-          promises.push(promise) // 将Promise对象存储到数组中
-        })
-        // NOTE: 控制执行逻辑
-        Promise.all(promises).then(() => {
-          console.log('所有订单创建成功')
-          console.log(this.orderIdArray)
-          localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
-          localStorage.setItem('orderIdArray', JSON.stringify(this.orderIdArray)) // 将订单id存入localStorage
-          // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
-          this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
-        })
-        // localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
-        // localStorage.setItem('orderIdArray', JSON.stringify(this.orderIdArray)) // 将订单id存入localStorage
-        // // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
-        // this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
-      }).catch(() => {
-        // 点击取消按钮
-        this.$message({
-          type: 'info',
-          message: '已取消提交'
-        })
       })
+        .then(() => {
+          const promises = [] // 用于存储所有的Promise对象
+          this.$message({
+            type: 'success',
+            message: '提交成功'
+          })
+          this.commodityArray.forEach((commodity) => {
+            const promise = axios.post('/api/order/create', commodity).then((response) => {
+              if (response.data.code == 200) {
+                console.log('成功创建订单')
+                console.log(response.data)
+                this.orderIdArray.push(response.data.data)
+                console.log(this.orderIdArray)
+              } else {
+                this.$message({
+                  type: 'error',
+                  message: '提交失败: ' + response.data.message
+                })
+              }
+            })
+            promises.push(promise) // 将Promise对象存储到数组中
+          })
+          // NOTE: 控制执行逻辑
+          Promise.all(promises).then(() => {
+            console.log('所有订单创建成功')
+            console.log(this.orderIdArray)
+            localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
+            localStorage.setItem('orderIdArray', JSON.stringify(this.orderIdArray)) // 将订单id存入localStorage
+            // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+            this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
+          })
+          // localStorage.setItem('orderPrice', this.totalPrice) // 将订单价格存入localStorage
+          // localStorage.setItem('orderIdArray', JSON.stringify(this.orderIdArray)) // 将订单id存入localStorage
+          // // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
+          // this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
+        })
+        .catch(() => {
+          // 点击取消按钮
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          })
+        })
     }
   }
 }

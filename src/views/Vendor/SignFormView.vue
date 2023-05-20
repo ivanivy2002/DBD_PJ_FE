@@ -107,6 +107,7 @@ export default {
       // dialogFormVisible: false,
       activeTab: 'signin',
       categories: [],
+      shopId: 0,
       signForm: {
         // TODO: userName之后需要改掉, 用sessionStorage来存储
         // userName: '',
@@ -261,8 +262,6 @@ export default {
       this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
-          // this.AddArray() //* 将categories数组增加10个空元素
-          // this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
           if (this.categories.length === 0) {
             this.$message({
               message: '请选择至少一个商品类别',
@@ -270,26 +269,62 @@ export default {
             })
             return
           }
+          // this.categories = this.signForm.categories
+          console.log(this.categories)
+          // delete this.signForm.categories // 删除categories属性
+          // this.AddArray() //* 将categories数组增加10个空元素
+          // this.signForm.categories.push(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
           // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
           //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
           // NOTE: 处理注册逻辑
           console.log('申请提交', this.signForm) // 控制台输出信息
-          this.loading = true // 开启 loading 动画
-          this.signForm.categories = this.joinWithComma(this.categories) //* 将多个单词用+拼起来
+          // this.loading = true // 开启 loading 动画
+          // this.signForm.categories = this.joinWithComma(this.categories) //* 将多个单词用+拼起来
           axios
             .post('/api/shop/reg', this.signForm)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功
               if (response.data.code == 200) {
-                console.log('申请提交成功')
-                ElMessage({
-                  //用于弹出消息提示
-                  showClose: true,
-                  type: 'success', //如果成功
-                  message: '申请提交成功'
+                console.log('申请第一步提交成功')
+                // ElMessage({
+                //   //用于弹出消息提示
+                //   showClose: true,
+                //   type: 'success', //如果成功
+                //   message: '申请提交成功'
+                // })
+                this.shopId = response.data.shopId
+                // NOTE: 将 categoriesSend 数组中的每个元素添加到 URLSearchParams 对象中
+                const params = new URLSearchParams()
+                this.categories.forEach((category) => {
+                  params.append('categories', category)
                 })
+                // 添加 activityId 到 URLSearchParams 对象中
+                params.append('shopId', this.shopId)
+                axios
+                  .post('/api/category/saveShopCategory?' + params.toString())
+                  .then((response) => {
+                    console.log(response.data)
+                    if (response.data.code == 200) {
+                      console.log('申请第二步提交成功')
+                      ElMessage({
+                        //用于弹出消息提示
+                        showClose: true,
+                        type: 'success', //如果成功
+                        message: '申请提交成功'
+                      })
+                      this.$router.push('/home/vendor/profile')
+                    } else {
+                      console.error('申请提交失败，请重试！')
+                      ElMessage({
+                        showClose: true,
+                        type: 'error', //如果失败输出状态码
+                        message: '申请提交失败:' + response.data.msg
+                      })
+                    }
+                  })
                 this.$refs.form.resetFields() // 重置表单
+
                 // this.dialogFormVisible = false
               } else {
                 console.error('申请提交失败，请重试！')

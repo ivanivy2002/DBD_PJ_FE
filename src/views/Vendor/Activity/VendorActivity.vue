@@ -9,7 +9,7 @@
           @click="navigateToActivity(activity.id)"
         >
           <div class="card-header">
-            <div class="card-title">活动 {{ activity.id }}</div>
+            <div class="card-title">{{ activity.activityName }}</div>
           </div>
           <div class="card-content">活动状态：{{ activity.status }}</div>
           <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>
@@ -100,6 +100,7 @@ export default {
           const remainTimeString = this.calRemainTime(activity)
           return {
             id: activity.id,
+            activityName: activity.activityName,
             lastTime: activity.lastTime,
             activityFund: activity.activityFund,
             x: activity.x,

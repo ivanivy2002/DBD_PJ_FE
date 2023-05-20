@@ -17,7 +17,7 @@
             {{ orderPrice }}
           </div>
           <div class="button-container">
-            <el-button type="primary" @click="payOrder">支付订单</el-button>
+            <el-button type="primary" @click="payOrder" :disabled="disabled">支付订单</el-button>
           </div>
         </el-col>
       </el-row>
@@ -31,6 +31,7 @@ import { ElMessage } from 'element-plus'
 export default {
   data() {
     return {
+      disabled: false,
       userBalance: 0,
       orderPrice: 0,
       orderId: 0,
@@ -129,6 +130,8 @@ export default {
             message: '支付成功！'
           })
           this.getUserBalance()
+          this.disabled = true
+          this.$router.push('/home/orduser')
         } else {
           ElMessage({
             showClose: true,

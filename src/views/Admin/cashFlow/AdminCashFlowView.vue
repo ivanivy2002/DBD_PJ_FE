@@ -3,10 +3,10 @@
     <el-menu :default-active="activeSelect" class="el-menu-vertical-demo" @select="handleSelect">
       <el-menu-item index="1">
         <el-icon><HomeFilled /></el-icon>
-        商店账户
+        中间账户
       </el-menu-item>
       <el-menu-item index="2">
-        <el-icon><WalletFilled /></el-icon>个人账户</el-menu-item
+        <el-icon><WalletFilled /></el-icon>商城利润账户</el-menu-item
       >
     </el-menu>
   </div>
@@ -36,15 +36,6 @@
           <el-table-column prop="operationTime" label="时间"></el-table-column>
           <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
         </el-table>
-        <!-- <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 10, 20, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalWeekRecords"
-          ></el-pagination> -->
       </el-tab-pane>
       <el-tab-pane label="近一月" name="Month">
         <div class="displayMoney">
@@ -69,15 +60,6 @@
           <el-table-column prop="operationTime" label="时间"></el-table-column>
           <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
         </el-table>
-        <!-- <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 10, 20, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalMonthRecords"
-          ></el-pagination> -->
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -106,15 +88,6 @@
           <el-table-column prop="operationTime" label="时间"></el-table-column>
           <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
         </el-table>
-        <!-- <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 10, 20, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalWeekRecords"
-          ></el-pagination> -->
       </el-tab-pane>
       <el-tab-pane label="近一月" name="Month">
         <div class="displayMoney">
@@ -139,15 +112,6 @@
           <el-table-column prop="operationTime" label="时间"></el-table-column>
           <!-- NOTE:使用了解构赋值语法，将 row 对象从插槽数据中解构出来，然后使用它的 status 属性来决定 el-tag 标签的样式 -->
         </el-table>
-        <!-- <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 10, 20, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalMonthRecords"
-          ></el-pagination> -->
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -155,7 +119,6 @@
 
 <script>
 import axios from 'axios'
-// import { th } from 'element-plus/es/locale'
 // import { ElMessage } from 'element-plus'
 // import AdminAside from '@/components/AdminComponents/AdminAside.vue'
 
@@ -166,10 +129,6 @@ export default {
   },
   data() {
     return {
-      totalWeekRecords: 0,
-      totalMonthRecords: 0,
-      currentPage: 1,
-      pageSize: 10,
       activeSelect: '1',
       activeAccount: '1',
       activeTab: 'Week',
@@ -202,10 +161,6 @@ export default {
   },
   methods: {
     fetchData() {
-      this.currentPage = 1 // 重新设置 currentPage 变量
-      this.pageSize = 10 // 重新设置 pageSize 变量
-      this.totalMonthRecords = 0
-      this.totalWeekRecords = 0
       //根据选择的不同拿取数据
       this.receiptMonthMoney = 0
       this.expenseMonthMoney = 0
@@ -214,63 +169,52 @@ export default {
       this.tableMonthData = []
       this.tableWeekData = []
       if (this.activeAccount == 1) {
-        this.displayShopWeek()
-        this.displayShopMonth()
+        this.displayMiddleWeek()
+        this.displayMiddleMonth()
       } else {
-        this.displayVendorWeek()
-        this.displayVendorMonth()
+        this.displayProfitWeek()
+        this.displayProfitMonth()
       }
-      console.log('22222')
-      console.log(this.tableMonthData)
-      // this.totalWeekRecords = this.tableWeekData.length
-      // this.totalMonthRecords = this.tableMonthData.length
     },
-    displayShopWeek() {
-      console.log('displayShopWeek')
-      this.displayShopReceipt(7)
-      this.displayShopExpense(7)
-      // this.totalWeekRecords = this.tableWeekData.length
+    displayMiddleWeek() {
+      console.log('displayMiddleWeek')
+      this.displayMiddleReceipt(7)
+      this.displayMiddleExpense(7)
     },
-    displayShopMonth() {
-      console.log('displayShopMonth')
-      this.displayShopReceipt(30)
-      this.displayShopExpense(30)
-      // this.totalMonthRecords = this.tableMonthData.length
+    displayMiddleMonth() {
+      console.log('displayMiddleMonth')
+      this.displayMiddleReceipt(30)
+      this.displayMiddleExpense(30)
     },
-    displayVendorWeek() {
-      console.log('displayVendorWeek')
-      this.displayVendorReceipt(7)
-      this.displayVendorExpense(7)
-      // this.totalWeekRecords = this.tableWeekData.length
+    displayProfitWeek() {
+      console.log('displayProfitWeek')
+      this.displayProfitReceipt(7)
+      this.displayProfitExpense(7)
     },
-    displayVendorMonth() {
-      console.log('displayVendorMonth')
-      this.displayVendorReceipt(30)
-      this.displayVendorExpense(30)
-      // this.totalMonthRecords = this.tableMonthData.length
+    displayProfitMonth() {
+      console.log('displayProfitMonth')
+      this.displayProfitReceipt(30)
+      this.displayProfitExpense(30)
     },
-    displayShopReceipt(time) {
-      console.log('displayShopReceipt')
+    displayMiddleReceipt(time) {
+      console.log('displayMiddleReceipt')
       axios
-        .get('/api/cashFlow/displayShopReceipt', {
+        .get('/api/cashFlow/displayMiddleReceipt', {
           params: {
             days: time,
-            destId: localStorage.getItem('shopId')
+            destId: 1
           }
         })
         .then((response) => {
           console.log(response)
           if (response.data.code == 200) {
             response.data.data.forEach((item) => {
-              this.totalRecords = response.data.data.length
               if (time == 7) {
                 this.tableWeekData.push(item)
                 this.receiptWeekMoney += item.amount
-                this.totalWeekRecords += 1
               } else {
                 this.tableMonthData.push(item)
                 this.receiptMonthMoney += item.amount
-                this.totalMonthRecords += 1
               }
             })
           } else {
@@ -278,28 +222,25 @@ export default {
           }
         })
     },
-    displayShopExpense(time) {
-      console.log('displayShopExpense')
+    displayMiddleExpense(time) {
+      console.log('displayMiddleExpense')
       axios
-        .get('/api/cashFlow/displayShopExpense', {
+        .get('/api/cashFlow/displayMiddleExpense', {
           params: {
             days: time,
-            sourceId: localStorage.getItem('shopId')
+            sourceId: 1
           }
         })
         .then((response) => {
           console.log(response)
           if (response.data.code == 200) {
-            this.totalRecords = response.data.data.length
             response.data.data.forEach((item) => {
               if (time == 7) {
                 this.tableWeekData.push(item)
                 this.expenseWeekMoney += item.amount
-                this.totalWeekRecords += 1
               } else {
                 this.tableMonthData.push(item)
                 this.expenseMonthMoney += item.amount
-                this.totalMonthRecords += 1
               }
             })
           } else {
@@ -307,28 +248,25 @@ export default {
           }
         })
     },
-    displayVendorReceipt(time) {
-      console.log('displayVendorReceipt')
+    displayProfitReceipt(time) {
+      console.log('displayProfitReceipt')
       axios
-        .get('/api/cashFlow/displayVendorReceipt', {
+        .get('/api/cashFlow/displayProfitReceipt', {
           params: {
             days: time,
-            destId: localStorage.getItem('userId')
+            destId: 2
           }
         })
         .then((response) => {
           console.log(response)
           if (response.data.code == 200) {
-            this.totalRecords = response.data.data.length
             response.data.data.forEach((item) => {
               if (time == 7) {
                 this.tableWeekData.push(item)
                 this.receiptWeekMoney += item.amount
-                this.totalWeekRecords += 1
               } else {
                 this.tableMonthData.push(item)
                 this.receiptMonthMoney += item.amount
-                this.totalMonthRecords += 1
               }
             })
             console.log(1111)
@@ -338,53 +276,31 @@ export default {
           }
         })
     },
-    displayVendorExpense(time) {
-      console.log('displayVendorExpense')
+    displayProfitExpense(time) {
+      console.log('displayProfitExpense')
       axios
-        .get('/api/cashFlow/displayVendorExpense', {
+        .get('/api/cashFlow/displayProfitExpense', {
           params: {
             days: time,
-            sourceId: localStorage.getItem('userId')
+            sourceId: 2
           }
         })
         .then((response) => {
           console.log(response)
           if (response.data.code == 200) {
-            this.totalRecords = response.data.data.length
             response.data.data.forEach((item) => {
               if (time == 7) {
                 this.tableWeekData.push(item)
                 this.expenseWeekMoney += item.amount
-                this.totalWeekRecords += 1
               } else {
                 this.tableMonthData.push(item)
                 this.expenseMonthMoney += item.amount
-                this.totalMonthRecords += 1
               }
             })
           } else {
             console.log('获取数据失败')
           }
         })
-    },
-    // NOTE: 和分页有关的方法
-    handleSizeChange(val) {
-      this.pageSize = val
-      const startIndex = (this.currentPage - 1) * this.pageSize
-      const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
-      const records = this.allOrders.slice(startIndex, endIndex)
-      this.tableMonthData = records
-      this.tableWeekData = records
-      // this.fetchData()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      const startIndex = (this.currentPage - 1) * this.pageSize
-      const endIndex = Math.min(startIndex + this.pageSize, this.allOrders.length)
-      const records = this.allOrders.slice(startIndex, endIndex)
-      this.tableMonthData = records
-      this.tableWeekData = records
-      // this.fetchData()
     },
     handleSelect(index) {
       this.activeAccount = index // 根据点击的菜单项更新显示的栏目
