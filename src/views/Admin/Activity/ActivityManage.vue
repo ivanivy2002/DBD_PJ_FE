@@ -155,10 +155,17 @@ export default {
             }
           })
           if (response.data.code == 200) {
+            console.log(response.data)
             ElMessage.success('已开启')
             await this.fetchData()
           } else if (response.data.code == 400) {
-            ElMessage.error('开启失败')
+            console.log(response.data)
+            // ElMessage.error('开启失败')
+            ElMessage({
+              showClose: true,
+              type: 'error',
+              message: '开启失败:' + response.data.msg
+            })
             await this.fetchData()
           }
         }
