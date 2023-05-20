@@ -14,7 +14,23 @@
         <el-table-column prop="commodityName" label="商品名称" width="120" />
         <el-table-column prop="intro" label="介绍" width="150" />
         <el-table-column prop="price" label="价格" width="120" />
-        <el-table-column prop="commodityNum" label="数量" width="80" />
+        <el-table-column label="数量" width="80">
+          <template #default="{ row }">
+            <el-button-group>
+              <el-button
+                type="primary"
+                icon="Minus"
+                @click="updateNum(row.shoppingCartId, row.commodityNum - 1)"
+              ></el-button>
+              <el-text>{{ row.commodityNum }}</el-text>
+              <el-button
+                type="primary"
+                icon="Plus"
+                @click="updateNum(row.shoppingCartId, row.commodityNum + 1)"
+              ></el-button>
+            </el-button-group>
+          </template>
+        </el-table-column>
         <el-table-column prop="activityId" label="活动" width="80" />
         <el-table-column label="状态" width="80">
           <template #default="{ row }">
@@ -42,6 +58,7 @@
 <script>
 import { ElTable, ElTableColumn, ElTag, ElButton, ElCard, ElMessage } from 'element-plus'
 import axios from 'axios'
+import { Minus, Plus } from '@element-plus/icons-vue'
 
 export default {
   components: {
@@ -115,6 +132,12 @@ export default {
     },
     handleSelectionChange(selection) {
       this.selectedItems = selection
+    },
+    updateNum(shoppingCartId, num) {
+      axios.put('/api/shoppingCart/update', {
+        commodityNum: num,
+        shoppingCartId: shoppingCartId
+      })
     },
     joinWithComma(categories) {
       if (!Array.isArray(categories)) {
@@ -287,5 +310,13 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+}
+
+@font-face {
+  font-family: 'element-icons';
+  src: url('path/to/element-icons.woff') format('woff'),
+    url('path/to/element-icons.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 </style>

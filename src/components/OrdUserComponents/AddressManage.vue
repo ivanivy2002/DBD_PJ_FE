@@ -123,21 +123,21 @@ export default {
   },
   methods: {
     selectAddress(addressId) {
-      this.$confirm('确定选择改地址吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$emit('select-address', addressId)
-          // this.$emit('close-select-address')
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消选择'
-          })
-        })
+      // this.$confirm('确定选择改地址吗？', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // })
+      //   .then(() => {
+      this.$emit('select-address', addressId)
+      // this.$emit('close-select-address')
+      // })
+      // .catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消选择'
+      //   })
+      // })
     },
     async getAddressInfo() {
       // 拿地址的数据

@@ -188,7 +188,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          // TODO: 这里的数据怎么传，以及需要用到create接口
+          const commodityInfo = this.getCommodityInfo(commodityId)
+          localStorage.setItem('commodityArray', JSON.stringify(commodityInfo))
           this.$router.push('/home/orduser/order/create')
         })
         .catch(() => {
@@ -197,6 +198,30 @@ export default {
             message: '已取消购买'
           })
         })
+    },
+    // NOTE: 通过commodityId查询commodity的各个属性
+    async getCommodityInfo(commodityId) {
+      let commodityInfo = {}
+      await axios
+        .get('/api/commodity/displayInfo', {
+          params: { commodityId: commodityId }
+        })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            console.log('成功获取商品信息')
+            console.log(response.data.data)
+            commodityInfo = response.data.data
+          } else {
+            console.log('获取商品信息失败')
+            commodityInfo = {} // 返回一个空对象
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          commodityInfo = {} // 返回一个空对象
+        })
+      return commodityInfo
     },
     // async fetchImages() {
     //   // 从后端获取图片URL并存储在imageUrls数组中

@@ -8,10 +8,10 @@
             <strong>您的账户余额：</strong>
             {{ userBalance }}
           </div>
-          <div class="detail-item">
+          <!-- <div class="detail-item">
             <strong>订单号：</strong>
             {{ orderId }}
-          </div>
+          </div> -->
           <div class="detail-item">
             <strong>订单价格：</strong>
             {{ orderPrice }}
@@ -38,7 +38,7 @@ export default {
   mounted() {
     this.getUserBalance()
     this.orderPrice = localStorage.getItem('orderPrice')
-    this.orderId = localStorage.getItem('orderId')
+    // this.orderId = localStorage.getItem('orderId')
     // this.getOrderPrice()
   },
   methods: {
