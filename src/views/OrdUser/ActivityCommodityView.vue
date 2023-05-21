@@ -245,17 +245,21 @@ export default {
 }
 
 .commodity-view {
+  position:relative;
+  top:30px;
   margin: 24px;
 }
 
 .animated-card {
-  background-color: #26d6cd;
+
   border-radius: 4px;
   padding: 24px;
   margin-bottom: 24px;
   cursor: default;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  /* background-image: linear-gradient(-45deg, #63d5cd, #50b9b0); */
+  background:  #63d5cd;
+
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
