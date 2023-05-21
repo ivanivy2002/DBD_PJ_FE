@@ -150,7 +150,7 @@ export default {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  background-image: linear-gradient(-45deg, #5f45d3, #813fde);
+  background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
   border-radius: 15px;

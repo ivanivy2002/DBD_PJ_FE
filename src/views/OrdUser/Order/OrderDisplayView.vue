@@ -1,6 +1,7 @@
 <template>
+<div class="container">
   <el-container>
-    <el-header>
+    <el-header >
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>订单管理</el-breadcrumb-item>
         <el-breadcrumb-item>所有订单</el-breadcrumb-item>
@@ -114,6 +115,7 @@
       </el-row>
     </el-main>
   </el-container>
+  </div>
 </template>
 
 <script>
@@ -474,6 +476,10 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900');
 
+.container{
+  position:relative;
+  top:35px;
+}
 img {
   width: 50px;
   height: 50px;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <el-tabs type="border-card" v-model="activeTab">
       <el-tab-pane label="已上架商品" name="displayQualified">
         <div>
@@ -643,6 +643,10 @@ export default {
 </script>
 
 <style scoped>
+.container{
+  position:relative;
+  top:30px;
+}
 .el-table {
   color: #2c3e50;
   border-collapse: separate;
