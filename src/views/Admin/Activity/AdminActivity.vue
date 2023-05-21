@@ -155,16 +155,16 @@ export default {
       if (remainTime === 0) {
         //TODO:BUG 500 ERR
         console.log(remainTime + ' ' + activity.activityName + ' to off')
-        // const activityId = activity.id;
-        // try {
-        //     axios.put('/api/activity/stop', null, {
-        //         params: {
-        //             activityId: activity.id
-        //         }
-        //     })
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        const activityId = activity.id
+        try {
+          axios.put('/api/activity/stop', null, {
+            params: {
+              activityId: activity.id
+            }
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     splitByComma(str) {

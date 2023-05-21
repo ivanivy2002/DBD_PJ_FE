@@ -30,7 +30,7 @@
           <el-col :span="18">
             <el-table :data="orderData" stripe style="width: 100%">
               <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
-              <el-table-column prop="shopName" label="店铺"> </el-table-column>
+              <el-table-column prop="shopName" label="店铺" style="width: 70px"> </el-table-column>
               <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
               <el-table-column prop="imagePath" label="商品图片">
                 <template #default="{ row }">
@@ -42,8 +42,8 @@
                 </template>
               </el-table-column>
               <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
-              <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
-              <el-table-column prop="status" label="状态" width="120">
+              <el-table-column prop="commodityNum" label="数量" width="50px"> </el-table-column>
+              <el-table-column prop="status" label="状态" width="100">
                 <template #default="{ row }">
                   <el-tag :type="statusTagType(row.status)" disable-transitions>{{
                     row.status
@@ -51,7 +51,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="createTime" label="下单时间" width="180"> </el-table-column>
-              <el-table-column label="操作" width="180">
+              <el-table-column label="操作" width="320">
                 <template #default="{ row }">
                   <el-button
                     v-if="activeStatus === '所有订单'"

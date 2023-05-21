@@ -34,6 +34,7 @@
               <div class="commodity-name">{{ commodity.commodityName }}</div>
             </div>
             <div class="commodity-info">
+              <p class="price">商品单价：{{ commodity.price }}</p>
               <p class="commodity-num">商品数量：{{ commodity.commodityNum }}</p>
               <p class="paid-amount">实付金额：{{ commodity.paidAmount }}</p>
               <p class="reduction" v-if="commodity.reductionAmount != 0">
