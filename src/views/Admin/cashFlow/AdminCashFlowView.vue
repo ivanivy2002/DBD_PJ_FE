@@ -15,19 +15,19 @@
     <el-tabs type="border-card" v-model="activeTab">
       <el-tab-pane label="近一周" name="Week">
         <div class="displayMoney">
-          <strong
-            >周入账金额
-            <div>{{ receiptWeekMoney | formatMoney }}</div></strong
-          >
-          <strong
-            >周出账金额
-            <div>{{ expenseWeekMoney | formatMoney }}</div></strong
-          >
-          <strong class="netProfit"
-            >周净利润
-            <div>{{ (receiptWeekMoney - expenseWeekMoney) | formatMoney }}</div></strong
-          >
+          <div class="receipt">
+           <div style="display: inline-block;">周入账金额：</div>
+        <div style="display: inline-block;">{{ receiptWeekMoney | formatMoney }}</div>
         </div>
+          <div class="expense">
+           <div style="display: inline-block;">周出账金额：</div>
+          <div style="display: inline-block;">{{ expenseWeekMoney | formatMoney }}</div>
+          </div>
+          <div class="profit">
+           <div style="display: inline-block;">周净利润：</div>
+         <div style="display: inline-block;">{{ receiptWeekMoney- expenseWeekMoney | formatMoney }}</div>
+         </div>
+         </div>
         <el-table :data="tableWeekData" style="width: 800px">
           <el-table-column prop="operateType" label="操作类型"></el-table-column>
           <el-table-column prop="sourceName" label="转出方"></el-table-column>
@@ -39,19 +39,19 @@
       </el-tab-pane>
       <el-tab-pane label="近一月" name="Month">
         <div class="displayMoney">
-          <strong
-            >月入账金额
-            <div>{{ receiptMonthMoney | formatMoney }}</div></strong
-          >
-          <strong
-            >月出账金额
-            <div>{{ expenseMonthMoney | formatMoney }}</div></strong
-          >
-          <strong class="netProfit"
-            >月净利润
-            <div>{{ (receiptMonthMoney - expenseMonthMoney) | formatMoney }}</div></strong
-          >
+          <div class="receipt">
+           <div style="display: inline-block;">月入账金额：</div>
+        <div style="display: inline-block;">{{ receiptMonthMoney | formatMoney }}</div>
         </div>
+          <div class="expense">
+           <div style="display: inline-block;">月出账金额：</div>
+          <div style="display: inline-block;">{{ expenseMonthMoney | formatMoney }}</div>
+          </div>
+          <div class="profit">
+           <div style="display: inline-block;">月净利润：</div>
+         <div style="display: inline-block;">{{ receiptMonthMoney- expenseMonthMoney | formatMoney }}</div>
+         </div>
+         </div>
         <el-table :data="tableMonthData" style="width: 800px">
           <el-table-column prop="operateType" label="操作类型"></el-table-column>
           <el-table-column prop="sourceName" label="转出方"></el-table-column>
@@ -67,19 +67,19 @@
     <el-tabs type="border-card" v-model="activeTab">
       <el-tab-pane label="近一周" name="Week">
         <div class="displayMoney">
-          <strong
-            >周入账金额
-            <div>{{ receiptWeekMoney | formatMoney }}</div></strong
-          >
-          <strong
-            >周出账金额
-            <div>{{ expenseWeekMoney | formatMoney }}</div></strong
-          >
-          <strong class="netProfit"
-            >周净利润
-            <div>{{ (receiptWeekMoney - expenseWeekMoney) | formatMoney }}</div></strong
-          >
+          <div class="receipt">
+           <div style="display: inline-block;">周入账金额：</div>
+        <div style="display: inline-block;">{{ receiptWeekMoney | formatMoney }}</div>
         </div>
+          <div class="expense">
+           <div style="display: inline-block;">周出账金额：</div>
+          <div style="display: inline-block;">{{ expenseWeekMoney | formatMoney }}</div>
+          </div>
+          <div class="profit">
+           <div style="display: inline-block;">周净利润：</div>
+         <div style="display: inline-block;">{{ receiptWeekMoney- expenseWeekMoney | formatMoney }}</div>
+         </div>
+         </div>
         <el-table :data="tableWeekData" style="width: 800px">
           <el-table-column prop="operateType" label="操作类型"></el-table-column>
           <el-table-column prop="sourceName" label="转出方"></el-table-column>
@@ -90,20 +90,20 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="近一月" name="Month">
-        <div class="displayMoney">
-          <strong
-            >月入账金额
-            <div>{{ receiptMonthMoney | formatMoney }}</div></strong
-          >
-          <strong
-            >月出账金额
-            <div>{{ expenseMonthMoney | formatMoney }}</div></strong
-          >
-          <strong class="netProfit"
-            >月净利润
-            <div>{{ (receiptMonthMoney - expenseMonthMoney) | formatMoney }}</div></strong
-          >
+         <div class="displayMoney">
+          <div class="receipt">
+           <div style="display: inline-block;">月入账金额：</div>
+        <div style="display: inline-block;">{{ receiptMonthMoney | formatMoney }}</div>
         </div>
+          <div class="expense">
+           <div style="display: inline-block;">月出账金额：</div>
+          <div style="display: inline-block;">{{ expenseMonthMoney | formatMoney }}</div>
+          </div>
+          <div class="profit">
+           <div style="display: inline-block;">月净利润：</div>
+         <div style="display: inline-block;">{{ receiptMonthMoney- expenseMonthMoney | formatMoney }}</div>
+         </div>
+         </div>
         <el-table :data="tableMonthData" style="width: 800px">
           <el-table-column prop="operateType" label="操作类型"></el-table-column>
           <el-table-column prop="sourceName" label="转出方"></el-table-column>
@@ -311,9 +311,32 @@ export default {
 </script>
 
 <style scoped>
+.aside,
+.container{
+  position:relative;
+  top:30px;
+}
 .netProfit {
   font-size: 30px;
-  color: #37b9d9;
+  color: #5693a3;
+}
+.displayMoney{
+  /* position:relative;
+  top:50px;
+  left:30px; */
+  font-size:20px;
+  color:rgb(148, 142, 142)
+}
+.receipt,
+.expense{
+  color:rgb(148, 142, 142);
+  font-size: 20px;
+  font-weight: bold;
+}
+.profit{
+    font-size: 27px;
+  color: #5693a3;
+   font-weight: bold;
 }
 .account-management {
   margin: 20px;
