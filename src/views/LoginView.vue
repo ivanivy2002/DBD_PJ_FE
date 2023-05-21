@@ -28,6 +28,7 @@
                 type="password"
                 placeholder="请输入您的密码"
                 onfocus="if (this.placeholder == this.value) this.value = ''"
+                :show-password="true"
               ></el-input>
             </el-form-item>
             <el-form-item label="管理员" id="login3">

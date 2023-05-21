@@ -11,7 +11,8 @@
           <div class="card-header">
             <div class="card-title">{{ activity.activityName }}</div>
           </div>
-          <div class="card-content">活动状态：{{ activity.status }}</div>
+          <!--这里应该不用展示活动状态-->
+          <!-- <div class="card-content">活动状态：{{ activity.status }}</div> -->
           <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>
           <div class="card-content">商品类别：{{ activity.category }}</div>
           <div class="ActivityButton" @click="navigateToActivity(activity.id)">
@@ -150,7 +151,7 @@ export default {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  background-image: linear-gradient(-45deg, #5f45d3, #813fde);
+  background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
   border-radius: 15px;
@@ -164,7 +165,11 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
+.ActivityButton{
+  position:relative;
+  top:-50px;
+  left:420px;
+}
 .card-title {
   font-size: 28px;
   font-weight: bold;

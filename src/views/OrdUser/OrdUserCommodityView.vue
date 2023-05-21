@@ -1,8 +1,8 @@
 <template>
-  <div class="info">
-    <!-- TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
-    <h1>商品页面</h1>
-  </div>
+  <!-- <div class="info">
+     TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
+    <!-- <h1>商品页面</h1>
+  </div> --> 
   <div class="commodity-view">
     <el-row gutter="24">
       <el-col
@@ -252,7 +252,7 @@ export default {
 </script>
 
 <style scoped>
-.info {
+/* .info {
   width: 100%;
 }
 
@@ -261,9 +261,11 @@ export default {
   color: #4befc3;
   text-transform: uppercase;
   text-align: center;
-}
+} */
 
 .commodity-view {
+  position:relative;
+  top:30px;
   margin: 24px;
 }
 
@@ -274,7 +276,8 @@ export default {
   margin-bottom: 24px;
   cursor: default;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  /* background-image: linear-gradient(-45deg, #24b8c6, #26d6cd); */
+    background:  #63d5cd;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
