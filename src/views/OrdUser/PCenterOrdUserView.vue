@@ -681,7 +681,7 @@ export default {
 .personal-info-display,
 .personal-balance,
 .change-password {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  background-image: linear-gradient(-45deg, #c5eaed, #d6e2e2);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
