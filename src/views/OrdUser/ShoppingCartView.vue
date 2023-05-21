@@ -315,14 +315,13 @@ export default {
   color: red;
 }
 .shopping-cart {
-  position:relative;
-  top:30px;
+  position: relative;
+  top: 30px;
   padding: 24px;
   background-color: #ffffff;
 }
 
 .card-header {
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
