@@ -185,9 +185,6 @@ export default {
       await this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
-          // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
-          //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
-          // NOTE: 处理注册逻辑
           this.joinForm.originFund = this.joinForm.activityFund
           console.log('申请提交', this.joinForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画

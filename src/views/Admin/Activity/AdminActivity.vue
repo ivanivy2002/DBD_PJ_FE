@@ -73,9 +73,9 @@ export default {
     await this.fetchActivity()
 
     //TODO: setInterval Disabled, 以下三行
-    // setInterval(() => {
-    //     this.fetchActivity()
-    // }, 2000)
+    setInterval(() => {
+      this.fetchActivity()
+    }, 1000)
 
     // this.startTimer()
   },

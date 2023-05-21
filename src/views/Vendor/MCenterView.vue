@@ -1,43 +1,42 @@
 <template>
   <div class="shop-center">
-   
-      <!--      <el-form-->
-      <!--        :model="shopInfoForm"-->
-      <!--        :rules="rules"-->
-      <!--        ref="shopInfo"-->
-      <!--        label-width="120px"-->
-      <!--        class="shop-form"-->
-      <!--      >-->
-      <!--        &lt;!&ndash; BUG: 输入值之后移开鼠标再点击不会变成原来的值 &ndash;&gt;-->
-      <!--        <el-form-item label="商店名称" prop="shopName">-->
-      <!--          <el-input-->
-      <!--            v-model="shopInfoForm.shopName"-->
-      <!--            :placeholder="shopInfoForm.shopName"-->
-      <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-      <!--          ></el-input>-->
-      <!--        </el-form-item>-->
-      <!--        <el-form-item label="商店简介" prop="intro">-->
-      <!--          <el-input-->
-      <!--            v-model="shopInfoForm.intro"-->
-      <!--            :placeholder="shopInfoForm.intro"-->
-      <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-      <!--          ></el-input>-->
-      <!--        </el-form-item>-->
-      <!--        &lt;!&ndash; NOTE: 身份证号不可修改 &ndash;&gt;-->
-      <!--        <el-form-item label="备案地址" prop="vendorId">-->
-      <!--          <el-input-->
-      <!--            v-model="shopInfoForm.vendorId"-->
-      <!--            :placeholder="shopInfoForm.vendorId"-->
-      <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
-      <!--            disabled-->
-      <!--          ></el-input>-->
-      <!--        </el-form-item>-->
-      <!--        <el-form-item>-->
-      <!--          <el-button type="primary" @click="changeInfo">提交</el-button>-->
-      <!--          <el-button @click="resetForm">重置</el-button>-->
-      <!--        </el-form-item>-->
-      <!--      </el-form>-->
- 
+    <!--      <el-form-->
+    <!--        :model="shopInfoForm"-->
+    <!--        :rules="rules"-->
+    <!--        ref="shopInfo"-->
+    <!--        label-width="120px"-->
+    <!--        class="shop-form"-->
+    <!--      >-->
+    <!--        &lt;!&ndash; BUG: 输入值之后移开鼠标再点击不会变成原来的值 &ndash;&gt;-->
+    <!--        <el-form-item label="商店名称" prop="shopName">-->
+    <!--          <el-input-->
+    <!--            v-model="shopInfoForm.shopName"-->
+    <!--            :placeholder="shopInfoForm.shopName"-->
+    <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+    <!--          ></el-input>-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item label="商店简介" prop="intro">-->
+    <!--          <el-input-->
+    <!--            v-model="shopInfoForm.intro"-->
+    <!--            :placeholder="shopInfoForm.intro"-->
+    <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+    <!--          ></el-input>-->
+    <!--        </el-form-item>-->
+    <!--        &lt;!&ndash; NOTE: 身份证号不可修改 &ndash;&gt;-->
+    <!--        <el-form-item label="备案地址" prop="vendorId">-->
+    <!--          <el-input-->
+    <!--            v-model="shopInfoForm.vendorId"-->
+    <!--            :placeholder="shopInfoForm.vendorId"-->
+    <!--            onfocus="if (this.placeholder == this.value) this.value = ''"-->
+    <!--            disabled-->
+    <!--          ></el-input>-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item>-->
+    <!--          <el-button type="primary" @click="changeInfo">提交</el-button>-->
+    <!--          <el-button @click="resetForm">重置</el-button>-->
+    <!--        </el-form-item>-->
+    <!--      </el-form>-->
+
     <div class="shop-balance">
       <h2>商店资金</h2>
       <p>当前余额: {{ balance }}</p>

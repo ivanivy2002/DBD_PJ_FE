@@ -155,9 +155,9 @@ export default {
   },
   async mounted() {
     // TODO: setInterval Disabled, 以下三行
-    // setInterval(() => {
-    //   this.fetchActivity()
-    // }, 1000)
+    setInterval(() => {
+      this.fetchActivity()
+    }, 1000)
 
     await this.fetchActivity()
     await this.fetchRecommendData()
@@ -251,16 +251,16 @@ export default {
       if (remainTime === 0) {
         //TODO:BUG 500 ERR
         console.log(remainTime + ' ' + activity.activityName + ' to off')
-        // const activityId = activity.id;
-        // try {
-        //     axios.put('/api/activity/stop', null, {
-        //         params: {
-        //             activityId: activity.id
-        //         }
-        //     })
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        const activityId = activity.id
+        try {
+          axios.put('/api/activity/stop', null, {
+            params: {
+              activityId: activity.id
+            }
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     async fetchActivity() {
@@ -344,40 +344,44 @@ export default {
     doSearch(value) {
       console.log(value)
       // 具体搜索逻辑...
-      axios.get('/api/commodity/findByCommodityName', {
-        params: {
-          name: value
-        }
-      }).then((response) => {
-        console.log(response.data)
-        this.searchCommodityName = response.data.data
-        if(this.searchCommodityName.length > 0) {
-          console.log('找到商品')
-          this.showCommodityArray = this.searchCommodityName
-        } else {
-          console.log('没有找到商品')
-          axios.get('/api/recommend/categoryBased', {
-            params: {
-              category: value
-            }
-          }).then((response) => {
-            console.log(response.data)
-            this.searchCommodityCategory = response.data.data
-            if(this.searchCommodityCategory.length > 0) {
-              console.log('找到商品')
-              this.showCommodityArray = this.searchCommodityCategory
-            } else {
-              console.log('没有找到商品')
-              this.showCommodityArray = []
-              ElMessage({
-              showClose: true,
-              type: 'warning', 
-              message: '没有找到想要的商品噢，换个商品试试吧！'
-            })
-            }
-          })
-        }
-      })
+      axios
+        .get('/api/commodity/findByCommodityName', {
+          params: {
+            name: value
+          }
+        })
+        .then((response) => {
+          console.log(response.data)
+          this.searchCommodityName = response.data.data
+          if (this.searchCommodityName.length > 0) {
+            console.log('找到商品')
+            this.showCommodityArray = this.searchCommodityName
+          } else {
+            console.log('没有找到商品')
+            axios
+              .get('/api/recommend/categoryBased', {
+                params: {
+                  category: value
+                }
+              })
+              .then((response) => {
+                console.log(response.data)
+                this.searchCommodityCategory = response.data.data
+                if (this.searchCommodityCategory.length > 0) {
+                  console.log('找到商品')
+                  this.showCommodityArray = this.searchCommodityCategory
+                } else {
+                  console.log('没有找到商品')
+                  this.showCommodityArray = []
+                  ElMessage({
+                    showClose: true,
+                    type: 'warning',
+                    message: '没有找到想要的商品噢，换个商品试试吧！'
+                  })
+                }
+              })
+          }
+        })
     }
   }
 }
