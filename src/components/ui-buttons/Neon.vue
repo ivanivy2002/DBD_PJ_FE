@@ -43,14 +43,14 @@ export default {
 .btn-76 {
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: button;
-  background-color: #b4e7ea;
+  background-color: #91cbcc;
   background-image: none;
   color: #ffffff;
   cursor: pointer;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
     Noto Color Emoji;
-  font-size: 25px;
+  font-size: 20px;
   line-height: 1.5;
   margin: 0;
   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
@@ -70,12 +70,12 @@ export default {
   display: none;
 }
 .btn-76 {
-  --neon: #b4e7ea;
+  --neon: #91cbcc;
   box-sizing: border-box;
   display: block;
   font-weight: 900;
   -webkit-mask-image: none;
-  outline: 4px solid #b4e7ea;
+  outline: 4px solid  #91cbcc;
   outline-offset: -4px;
   overflow: hidden;
   padding: 1.2rem 3rem;

@@ -86,7 +86,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="activeSelect === '4'" class="personal-balance">
+    <div v-if="activeSelect === '4'" class="personal-info-display">
       <h2>个人资金</h2>
       <p>当前余额: {{ balance }}</p>
       <el-form
@@ -104,7 +104,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="activeSelect === '3'" class="change-password">
+    <div v-if="activeSelect === '3'" class="personal-info-display">
       <h2>修改密码</h2>
       <el-form
         :model="changePasswordForm"
@@ -128,11 +128,13 @@
       </el-form>
     </div>
     <div v-if="activeSelect == 5" class="addressManage">
+   
       <div class="create-address">
         <el-button type="success" @click="createAddress" plain>新增收货地址</el-button>
         <br />
         <br />
       </div>
+     
       <el-card class="box-card" v-for="(address, index) in addresses" :key="index">
         <div slot="header" class="clearfix">
           <div class="defaultAddress" v-if="address.ifDefault == true">
@@ -167,6 +169,7 @@
         <div class="text item">
           <strong>详细地址：</strong>
           {{ address.address }}
+
         </div>
       </el-card>
 
@@ -687,6 +690,7 @@ export default {
   border-radius: 5px;
   margin-bottom: 20px;
   width: 100%;
+  /* height: 280px; */
   max-width: 600px;
 }
 
@@ -699,6 +703,7 @@ h2 {
 .user-form,
 .balance-form,
 .password-form {
+
   margin-top: 20px;
 }
 
@@ -778,7 +783,7 @@ h2 {
 }
 
 .box-card {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  background-color: rgb(153, 212, 209);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;
@@ -807,6 +812,7 @@ h2 {
 .defaultAddress span {
   margin-right: 4px;
 }
+
 </style>
 
 <!-- <style scoped>
