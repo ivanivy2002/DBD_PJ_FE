@@ -107,6 +107,8 @@ export default {
     setInterval(() => {
       this.fetchActivity()
     }, 1000)
+    this.activityId = localStorage.getItem('activityId')
+    this.fetchCategory()
   },
   computed: {
     rules: function () {
@@ -175,10 +177,6 @@ export default {
         ]
       }
     }
-  },
-  mounted() {
-    this.activityId = localStorage.getItem('activityId')
-    this.fetchCategory()
   },
   methods: {
     async joinSend() {

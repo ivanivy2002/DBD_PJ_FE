@@ -68,7 +68,7 @@
   <!--            </el-col>-->
   <!--        </el-row>-->
   <!--    </div>-->
-  <div class="store-board" style="z-index: -1">
+  <div class="store-board" style="z-index: 1">
     <el-row gutter="24">
       <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
         <el-card class="animated-card" shadow="hover" @click="navigateToCommodity(store.id)">
@@ -118,8 +118,8 @@ export default {
           x: 10,
           y: 20,
           regFund: 100,
-          monthlySales: 2000,
-          monthlyAmount: 200,
+          // monthlySales: 2000,
+          // monthlyAmount: 200,
           status: '开启成功',
           createTime: '2023-05-12 20:16:46',
           originFund: 2000,
@@ -254,8 +254,8 @@ export default {
             x: activity.x,
             y: activity.y,
             regFund: activity.regFund,
-            monthlySales: activity.monthlySales,
-            monthlyAmount: activity.monthlyAmount,
+            // monthlySales: activity.monthlySales,
+            // monthlyAmount: activity.monthlyAmount,
             status: activity.status,
             createTime: activity.createTime,
             originFund: activity.originFund,

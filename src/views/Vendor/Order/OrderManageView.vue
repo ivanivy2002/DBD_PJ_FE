@@ -82,7 +82,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 export default {
@@ -157,6 +156,7 @@ export default {
         const commodityInfo = await this.getCommodityInfo(order.commodityId)
         const shopInfo = await this.getShopInfo(order.shopId)
         order.commodityName = commodityInfo.commodityName
+        order.price = commodityInfo.price
         order.imagePath = commodityInfo.imagePath
         order.shopName = shopInfo.shopName
         // this.$set(this.orderData, i, order)
