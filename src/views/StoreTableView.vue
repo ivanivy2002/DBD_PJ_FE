@@ -431,6 +431,7 @@ export default {
   position: relative;
   top: 70px;
   left: 10px;
+  /* padding: 2px; */
 }
 .activity-parent {
   position: relative;
@@ -441,13 +442,18 @@ h1 {
 }
 .category {
   font-size: 15pt;
-
+  text-align: center;
   color: #8a9193;
   margin: 20px 0;
 }
 .category i {
   margin-right: 15px;
   font-size: 1em;
+}
+
+.info {
+  position:relative;
+  left: 8%;
 }
 
 .info input[type='text']:focus {
@@ -528,7 +534,8 @@ h1 {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  background-image: linear-gradient(-45deg, #b7ced4, #7dbac3);
+  /* background-image: linear-gradient(-45deg, #b7ced4, #7dbac3); */
+  background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);
   /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); */
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
 }
