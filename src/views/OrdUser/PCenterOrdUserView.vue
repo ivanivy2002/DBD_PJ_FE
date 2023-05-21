@@ -128,13 +128,12 @@
       </el-form>
     </div>
     <div v-if="activeSelect == 5" class="addressManage">
-   
       <div class="create-address">
         <el-button type="success" @click="createAddress" plain>新增收货地址</el-button>
         <br />
         <br />
       </div>
-     
+
       <el-card class="box-card" v-for="(address, index) in addresses" :key="index">
         <div slot="header" class="clearfix">
           <div class="defaultAddress" v-if="address.ifDefault == true">
@@ -169,7 +168,6 @@
         <div class="text item">
           <strong>详细地址：</strong>
           {{ address.address }}
-
         </div>
       </el-card>
 
@@ -703,7 +701,6 @@ h2 {
 .user-form,
 .balance-form,
 .password-form {
-
   margin-top: 20px;
 }
 
@@ -812,7 +809,6 @@ h2 {
 .defaultAddress span {
   margin-right: 4px;
 }
-
 </style>
 
 <!-- <style scoped>

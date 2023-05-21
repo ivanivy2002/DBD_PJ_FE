@@ -75,7 +75,7 @@ export default {
   display: block;
   font-weight: 900;
   -webkit-mask-image: none;
-  outline: 4px solid  #91cbcc;
+  outline: 4px solid #91cbcc;
   outline-offset: -4px;
   overflow: hidden;
   padding: 1.2rem 3rem;

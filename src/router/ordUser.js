@@ -10,6 +10,7 @@ import OrderPayView from '@/views/Orduser/Order/OrderPayView'
 import OrderDetailView from '@/views/Orduser/Order/OrderDetailView'
 // import ActivityCommodity from '@/views/OrdUser/ActivityCommodityView.vue'
 import ActivityCommodityView from '@/views/OrdUser/ActivityCommodityView.vue'
+import OrdUserHomeView from '@/views/OrdUser/OrdUserHomeView.vue'
 
 export default [
   {
@@ -22,8 +23,13 @@ export default [
         component: StoreTableView
       },
       {
+        path: '/home/orduser/home',
+        component: OrdUserHomeView
+      },
+      {
         path: '/home/orduser',
         redirect: '/home/orduser/store'
+        // TODO: 这里之后改成OrdUserHomeView
       },
       {
         path: '/home/orduser/commodity',

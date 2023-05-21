@@ -234,7 +234,7 @@ export default {
           {
             validator: (rule, value, callback) => {
               const date = new Date(value)
-              const cutoff = new Date('2023-04-16')
+              const cutoff = new Date('2023-06-21')
               if (date > cutoff) {
                 callback(new Error('注册时间不得晚于2023年4月16日'))
               } else {

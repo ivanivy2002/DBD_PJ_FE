@@ -122,7 +122,7 @@ export default {
 }
 
 .header .el-menu {
- background-color: #91cbcc;
+  background-color: #91cbcc;
   border: none;
   min-height: 100%;
 }
