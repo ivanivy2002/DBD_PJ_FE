@@ -249,7 +249,7 @@ export default {
     checkStop(remainTime, activity) {
       // console.log(remainTime)
       if (remainTime === 0) {
-        //TODO:BUG 500 ERR
+        //TODO:BUG 500 ERR 已解决
         console.log(remainTime + ' ' + activity.activityName + ' to off')
         const activityId = activity.id
         try {

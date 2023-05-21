@@ -1,54 +1,31 @@
 <template>
-  <div class="commodity-view">
-    <el-row gutter="24">
+  <div class="commodity">
+    <el-row>
       <el-col
-        v-for="commodity in commodities"
-        :key="commodity.id"
         :xs="24"
         :sm="12"
         :md="8"
         :lg="6"
+        v-for="(item, index) in showCommodityArray"
+        :key="index"
       >
         <el-card
-          class="commodity-card animated-card"
           shadow="hover"
-          :class="{
-            food: commodity.category === 'food',
-            clothes: commodity.category === 'clothes',
-            electronics: commodity.category === 'electronics'
-          }"
+          class="animated-card"
+          @click="navigateToCommodityDetail(item.id, item.shopId)"
         >
-          <div slot="header" class="commodity-header">
-            <div class="commodity-name">{{ commodity.commodityName }}</div>
+          <div class="image">
+            <!-- <img
+                  v-for="imageUrl in getImageUrls(item.imagePath)"
+                  :key="imageUrl"
+                  :src="imageUrl"
+                /> -->
+            <img :src="getImageUrls(item.imagePath)[0]" />
           </div>
-          <div class="commodity-info">
-            <div class="commodity-content">介绍：{{ commodity.intro }}</div>
-            <div class="commodity-content">价格：{{ commodity.price }}</div>
-            <div class="commodity-image">
-              <img
-                v-for="imageUrl in getImageUrls(commodity.imagePath)"
-                :key="imageUrl"
-                :src="imageUrl"
-              />
-            </div>
-            <div class="commodity-action">
-              <el-input-number
-                v-model="commodityNum"
-                :min="1"
-                :max="10"
-                label="数量"
-                controls-position="right"
-                style="width: 120px"
-              ></el-input-number>
-              <el-button color="#626aef" @click="PunchaseDirect(commodity.id, commodityNum)">
-                直接购买
-              </el-button>
-              <el-button
-                type="primary"
-                @click="addToCart(commodity.id, commodityNum, commodity.shopId)"
-                ><el-icon><ShoppingCart /></el-icon
-              ></el-button>
-            </div>
+          <div class="good-info">
+            <div class="good-title">{{ item.commodityName }}</div>
+            <div class="good-price">￥{{ item.price }}</div>
+            <div class="good-sales">销量：{{ item.salesNum }}</div>
           </div>
         </el-card>
       </el-col>
@@ -56,171 +33,116 @@
   </div>
 </template>
 
+<!-- other code remains the same -->
+
 <script>
-import { ElRow, ElCol, ElCard, ElButton, ElInputNumber, ElMessage } from 'element-plus'
+// import { reactive } from 'vue'
+import { ElCol, ElRow } from 'element-plus'
 import axios from 'axios'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import 'swiper/swiper-bundle.min.css'
-import CommoditySwiper from '../../components/CommoditySwiper.vue'
 
 export default {
   components: {
     ElRow,
-    ElCol,
-    ElCard,
-    ElButton,
-    ElInputNumber,
-    Swiper,
-    SwiperSlide,
-    CommoditySwiper
+    ElCol
   },
   data() {
     return {
-      imageUrls: [],
-      swiperOptions: {
-        pagination: {
-          el: '.swiper-pagination'
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
+      activityId: 0,
+      showCommodityArray: [], // 展示在页面上的商品数组
+      userBasedArray: [], // 基于用户的推荐数组
+      hotRecommendData: [], // 热门推荐数组
+      userBasedThreshold: 4, // 基于用户的推荐阈值，如果小于​该值，则显示热门推荐
+      searchContent: '',
+      activities: [
+        {
+          activityName: '活动0',
+          id: 1,
+          lastTime: 999,
+          activityFund: 999999,
+          x: 10,
+          y: 20,
+          regFund: 100,
+          // monthlySales: 2000,
+          // monthlyAmount: 200,
+          status: '开启成功',
+          createTime: '2023-05-12 20:16:46',
+          originFund: 2000,
+          categories: []
+          // remainTimeString: '',
         }
-      },
-      activityId: '', // 假设shopId已经从localStorage中获取
-      commodities: [],
-      commodityInfoArray: []
-      // commodityNum: 0 // 购物车数量
+      ]
     }
   },
+  computed: {},
   async mounted() {
+    // TODO: setInterval Disabled, 以下三行
+    // setInterval(() => {
+    //   this.fetchActivity()
+    // }, 1000)
+
+    // await this.fetchActivity()
     this.activityId = localStorage.getItem('showActivityId')
-    try {
-      const commoditiesResponse = await this.fetchData()
-      console.log(commoditiesResponse.data)
-      this.commodities = commoditiesResponse.data.map((commodity) => ({
-        id: commodity.id,
-        commodityName: commodity.commodityName,
-        intro: commodity.intro,
-        price: commodity.price,
-        shopId: commodity.shopId,
-        imagePath: commodity.imagePath,
-        commodityNum: 1 // 初始商品数量为1
-      }))
-      console.log(this.commodities)
-    } catch (error) {
-      console.log(error)
-    }
+    await this.fetchData()
   },
   methods: {
     async fetchData() {
-      try {
-        this.activityId = localStorage.getItem('showActivityId')
-        const response = await axios.get('/api/home/getCommodityInActivity', {
+      await axios
+        .get('/api/home/getCommodityInActivity', {
           params: { activityId: this.activityId }
         })
-        console.log(response.data)
-        return response.data
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    // NOTE: 添加商品到购物车
-    addToCart(commodityId, quantity, shopId) {
-      try {
-        const response = axios
-          .post('/api/shoppingCart/addCommodity/', {
-            // NOTE: 传一个body
-            id: null,
-            userId: localStorage.getItem('userId'),
-            shopId: shopId,
-            commodityId: commodityId,
-            commodityNum: quantity,
-            status: '有效'
-          })
-          .then((response) => {
-            console.log(response)
-            console.log(`Adding commodity with ID ${commodityId} to cart`)
-            if (response.data.code === 200) {
-              // this.commodityNum += quantity // 将添加的商品数量加入购物车数量
-              ElMessage({
-                //用于弹出消息提示
-                showClose: true,
-                type: 'success', //如果成功
-                message: '添加成功'
-              })
-            } else {
-              ElMessage({
-                showClose: true,
-                type: 'error', //如果失败输出状态码
-                message: '操作失败:' + response.data.msg
+        .then((response) => {
+          console.log(response.data.data)
+          if (response.data.code == 200) {
+            console.log('获取活动商品成功')
+            this.showCommodityArray = response.data.data
+            if (this.showCommodityArray.length == 0) {
+              this.$message({
+                message: '该活动暂无商品',
+                type: 'warning'
               })
             }
-          })
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    // NOTE: 直接购买商品
-    PunchaseDirect(commodityId, Num) {
-      this.$confirm('确定要直接购买吗？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.getCommodityInfo(commodityId, Num)
-
-        // this.$nextTick(() => {
-        //   console.log(commodityInfo)
-        //   localStorage.setItem('commodityArray', JSON.stringify(commodityInfo))
-        //   this.$router.push('/home/orduser/order/create')
-        // })
-      })
-      // .catch(() => {
-      //   // this.$message({
-      //   //   type: 'info',
-      //   //   message: '已取消购买'
-      //   // })
-      // })
-    },
-    // NOTE: 通过commodityId查询commodity的各个属性
-    async getCommodityInfo(commodityId, Num) {
-      let commodityInfo = {}
-      await axios
-        .get('/api/commodity/displayInfo', {
-          params: { commodityId: commodityId }
-        })
-        .then((response) => {
-          console.log(response)
-          if (response.data.code == 200) {
-            console.log('成功获取商品信息')
-            console.log(response.data.data)
-            commodityInfo = response.data.data
-            commodityInfo.commodityNum = Num
-            commodityInfo.userId = localStorage.getItem('userId')
-            commodityInfo.commodityId = commodityId
-            // console.log(commodityInfo)
-            this.commodityInfoArray.push(commodityInfo)
-            localStorage.setItem('commodityArray', JSON.stringify(this.commodityInfoArray))
-            this.$router.push('/home/orduser/order/create')
-          } else {
-            console.log('获取商品信息失败')
-            commodityInfo = {} // 返回一个空对象
           }
         })
-        .catch((error) => {
-          console.log(error)
-          commodityInfo = {} // 返回一个空对象
-        })
-      return commodityInfo
     },
-    // async fetchImages() {
-    //   // 从后端获取图片URL并存储在imageUrls数组中
-    //   const response = await fetch('/api/images');
-    //   const data = await response.json();
-    //   this.imageUrls = data.imageUrls;
-    // },
+    navigateToCommodityDetail(commodityId, shopId) {
+      localStorage.setItem('showCommodityId', commodityId)
+      localStorage.setItem('showShopId', shopId)
+      axios
+        .put('/api/recommend/userOperationRecord', {
+          // 用户点击记录
+          userId: localStorage.getItem('userId'),
+          commodityId: commodityId,
+          // shopId: shopId,
+          operationType: 0
+        })
+        .then((response) => {
+          console.log(response.data)
+          if (response.data.code == 200) {
+            console.log('用户点击记录成功')
+            this.$router.push('/home/orduser/commodity/detail')
+          }
+        })
+    },
+    fetchCategories(activityId) {
+      axios
+        .get('/api/category/getActivityCategory', {
+          params: {
+            activityId: activityId
+          }
+        })
+        .then((response) => {
+          console.log(response.data.data)
+          const activity = this.activities.find((item) => item.id === activityId)
+          if (activity) {
+            activity.categories = response.data.data
+          }
+          return activity.categories
+        })
+    },
+    // eslint-disable-next-line no-unused-vars
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
+      //  || imagePaths == undefined || imagePaths == ''
       if (!imagePaths) {
         console.log('图片路径为空')
         return []
@@ -233,33 +155,186 @@ export default {
 </script>
 
 <style scoped>
-.info {
-  width: 100%;
+.commodity {
+  margin: 20px;
 }
 
-.info h1 {
-  font-size: 40px;
-  color: #4befc3;
-  text-transform: uppercase;
-  text-align: center;
+.el-row {
+  margin: 0 -10px;
 }
 
-.commodity-view {
-  position: relative;
-  top: 30px;
-  margin: 24px;
+.el-col {
+  padding: 0 10px;
 }
 
 .animated-card {
-  border-radius: 4px;
-  padding: 24px;
-  margin-bottom: 24px;
-  cursor: default;
-  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-  /* background-image: linear-gradient(-45deg, #63d5cd, #50b9b0); */
-  background: #63d5cd;
+  transition: box-shadow 0.3s ease-in-out;
+}
 
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+.animated-card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+img {
+  width: 120px;
+  height: 120px;
+}
+
+.good-info {
+  padding: 10px;
+  text-align: center;
+}
+
+.good-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.good-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f60;
+  margin-bottom: 10px;
+}
+
+.good-sales {
+  font-size: 14px;
+  color: #999;
+}
+.info {
+  width: 100%;
+}
+.info input[type='text'] {
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  font-size: 16px;
+  width: 300px;
+  /* height: 200px; */
+  position: relative;
+  top: 50px;
+  left: 500px;
+  outline: none;
+}
+.classify {
+  background-color: #e3e6eb;
+  width: 20%;
+  height: 250px;
+  position: relative;
+  top: 70px;
+  left: 10px;
+}
+.activity-parent {
+  position: relative;
+  top: 40px;
+}
+h1 {
+  color: #8a9193;
+}
+.category {
+  font-size: 15pt;
+
+  color: #8a9193;
+  margin: 20px 0;
+}
+.category i {
+  margin-right: 15px;
+  font-size: 1em;
+}
+
+.info input[type='text']:focus {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.search {
+  position: relative;
+  top: 50px;
+  left: 860px;
+  font-size: 24px;
+  color: #333;
+}
+.store-board {
+  position: relative;
+  top: 500px;
+  padding: 24px;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 28px;
+  font-weight: bold;
+  font-family: 'Microsoft YaHei', Arial, Helvetica, sans-serif;
+  margin-bottom: 12px;
+  cursor: pointer;
+  /* 鼠标悬停时显示手型 */
+  color: #e3f0f0;
+}
+
+.card-content {
+  font-size: 24px;
+  color: #ffffff;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.card-intro {
+  font-size: 24px;
+  color: #ffffff;
+  margin-top: 12px;
+  font-family: 'songti', serif;
+}
+
+/*//activity*/
+.activity-board {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  /*padding: 24px;*/
+
+  /*background-color: #d91b1b;*/ /* TEST:WIDTH SEE */
+
+  /*min-height: 100vh;*/
+  /*min-width: 200vh;*/
+  margin: 20px;
+  width: 100%;
+}
+
+.animated-card-activity {
+  /*margin: 0 auto;*/
+  /*display: block;*/
+  /*background-color: #26d6cd;*/
+  /* opacity: 100%; */
+  /* border: 1px solid #ccc; /* 添加边框 */
+  border-radius: 20px;
+  /*padding: 100px;*/
+  /*padding-left: 100px;*/
+  /*padding-right: 100px;*/
+  /*padding-inline: 20px;*/
+  /*margin-bottom: 10px;*/
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  /* 添加渐变动画和阴影效果 */
+  background-image: linear-gradient(-45deg, #b7ced4, #7dbac3);
+  /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); */
+  box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
+}
+
+.activity-col {
+  display: flex;
+  width: 100%;
 }
 
 .animated-card:hover {
@@ -267,97 +342,102 @@ export default {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
-.commodity-card.food {
-  background-color: #a5d6a7;
-}
-
-.commodity-card.clothes {
-  background-color: #ffd54f;
-}
-
-.commodity-card.electronics {
-  background-color: #90caf9;
-}
-
-.commodity-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.commodity-name {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  cursor: default;
-  color: #fff;
-}
-
-.commodity-content {
-  font-size: 14px;
-  color: #cfd8dc;
-  margin-bottom: 4px;
-}
-
-.commodity-action {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.el-input-number {
-  width: 80px;
-}
-
-.el-button {
-  margin-left: 10px;
-}
-
-.commodity-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.commodity-image {
-  width: 100%;
-  height: 100%;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
-.commodity-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.animated-card {
+  background-color: #26d6cd;
+  opacity: 100%;
   border-radius: 4px;
-}
-
-/* Swiper styles */
-.swiper-slide {
-  text-align: center;
-  width: 100%;
-  height: auto;
-  position: relative;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
-  background-color: #fff;
-  opacity: 0.5;
-  border-radius: 50%;
-  margin: 0 8px;
+  padding: 24px;
+  margin-bottom: 24px;
   cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+
+  /* 添加渐变动画和阴影效果 */
+  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.swiper-pagination-bullet-active {
-  opacity: 1;
+.activity-card-header {
+  display: flex;
+  /*justify-content: space-between;*/
+  justify-content: center;
+}
+
+.activity-card-title {
+  font-size: 40px;
+  font-weight: bold;
+  font-family: 'Microsoft YaHei', Arial, Helvetica, sans-serif;
+  /*font-family: 'Microsoft YaHei', Arial, Helvetica, serif;*/
+  /*font-family: SimSun,serif;*/
+
+  margin-bottom: 12px;
+  cursor: pointer;
+  /* 鼠标悬停时显示手型 */
+  color: #e3f0f0;
+  justify-content: center;
+}
+
+.activity-card-content {
+  font-size: 24px;
+  color: #ffffff;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /*text-align: center;*/
+  justify-content: center;
+}
+
+.category-title {
+  margin-right: 5px;
+  font-family: '宋体', serif;
+  color: #ffffff;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /*background-color: rgba(69, 18, 238, 0.7);*/
+  /*background-color: #4f46e5;*/
+  /*color: #4f46e5;*/
+}
+
+.category-list span {
+  margin-right: 5px;
+  background-color: rgba(18, 29, 238, 0.3);
+  border-radius: 5px;
+  /*padding: 5px 10px;*/
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.activity-carousel {
+  position: relative;
+  top: -220px;
+  left: 330px;
+  width: 60%;
+  /* border: 1px solid rgb(172, 235, 235); //添加边框 */
+  border-radius: 20px; /* 设置圆角 */
+}
+
+.el-carousel__item .el-card {
+  height: 100vh;
+  color: #475669;
+  opacity: 0.75;
+  /*line-height: 100px;*/
+  margin: 0;
+  /*text-align: center;*/
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
+
+.category-span {
+  background-color: #4f46e5;
+  color: #1d1d1d;
 }
 </style>
