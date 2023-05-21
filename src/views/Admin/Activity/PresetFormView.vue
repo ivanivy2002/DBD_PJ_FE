@@ -6,7 +6,7 @@
         <el-form-item label="活动名称" prop="activityName">
           <el-input v-model="presetForm.activityName"></el-input>
         </el-form-item>
-        <el-form-item label="持续时间" prop="lastTime">
+        <el-form-item label="持续时间（天）" prop="lastTime">
           <el-input v-model="presetForm.lastTime"></el-input>
         </el-form-item>
         <el-form-item label="活动资金" prop="activityFund">
