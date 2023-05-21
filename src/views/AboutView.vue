@@ -59,7 +59,8 @@
   flex-direction: row;
   /* background: linear-gradient(to bottom right, #b1e8f4, #87e7f8); */
   /* background: linear-gradient(to bottom right, #c2e7ef, #abe5ef); */
-  background-color: #abe5ef;
+  background-color: #8accd8;
+
   color: white;
   /* text-shadow: 1px 1px 2px rgb      a(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;

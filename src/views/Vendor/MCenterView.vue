@@ -1,7 +1,6 @@
 <template>
   <div class="shop-center">
-    <div class="shop-info">
-      <h2>修改商店信息(目前不需要！)</h2>
+   
       <!--      <el-form-->
       <!--        :model="shopInfoForm"-->
       <!--        :rules="rules"-->
@@ -38,7 +37,7 @@
       <!--          <el-button @click="resetForm">重置</el-button>-->
       <!--        </el-form-item>-->
       <!--      </el-form>-->
-    </div>
+ 
     <div class="shop-balance">
       <h2>商店资金</h2>
       <p>当前余额: {{ balance }}</p>

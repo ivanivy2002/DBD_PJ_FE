@@ -113,7 +113,7 @@ export default {
         updateTime: null
       },
       commodities: [],
-      gotoMCenterText: '修改商店信息/充值',
+      gotoMCenterText: '充值',
       gotoCommodityText: '修改商品',
       ButtonRemove: 'primary'
     }
