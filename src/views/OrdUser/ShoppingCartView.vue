@@ -315,17 +315,20 @@ export default {
   color: red;
 }
 .shopping-cart {
+  position:relative;
+  top:30px;
   padding: 24px;
   background-color: #ffffff;
 }
 
 .card-header {
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 24px;
   border-bottom: 1px solid #ebeef5;
-  background-color: #24b8c6;
+  background-color: #abd8dc;
   color: #fff;
 }
 
