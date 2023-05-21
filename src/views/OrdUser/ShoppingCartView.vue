@@ -35,7 +35,7 @@
             </el-button-group>
           </template>
         </el-table-column>
-        <el-table-column prop="activityId" label="活动" width="80" />
+        <el-table-column prop="activityName" label="活动" width="80" class="activity" />
         <el-table-column label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.status === '有效' ? 'success' : 'danger'">{{ row.status }}</el-tag>
@@ -62,8 +62,6 @@
 <script>
 import { ElTable, ElTableColumn, ElTag, ElButton, ElCard, ElMessage } from 'element-plus'
 import axios from 'axios'
-import { Minus, Plus } from '@element-plus/icons-vue'
-
 export default {
   components: {
     ElTable,
@@ -165,12 +163,15 @@ export default {
         const cartItem = this.cartItems[i]
         const commodityInfo = await this.getCommodityInfo(cartItem.commodityId)
         const shopInfo = await this.getShopInfo(cartItem.shopId)
+        console.log(`shopId: ${cartItem.shopId}`)
         cartItem.commodityName = commodityInfo.commodityName
         cartItem.price = commodityInfo.price
         cartItem.intro = commodityInfo.intro
         cartItem.activityId = commodityInfo.activityId //!
+        const activityInfo = await this.getActivityInfo(cartItem.activityId)
         cartItem.imagePath = commodityInfo.imagePath
         cartItem.shopName = shopInfo.shopName
+        cartItem.activityName = activityInfo.activityName
         // this.$set(this.cartItems, i, cartItem)
         this.cartItems[i] = { ...cartItem } // 将cartItem对象复制到cartItems数组的第i个位置
       }
@@ -233,7 +234,37 @@ export default {
       const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
     },
-    async getActivityInfo() {},
+    async getActivityInfo(activityId) {
+      console.log('activityId', activityId)
+      let activityInfo = {}
+      if (activityId == -1) {
+        activityInfo = {
+          activityName: '暂无'
+        }
+        return activityInfo
+      }
+      await axios
+        .get('/api/activity/display', {
+          params: {
+            activityId: activityId
+          }
+        })
+        .then((response) => {
+          if (response.data.code == 200) {
+            console.log('成功获取活动信息')
+            console.log(response.data.data)
+            activityInfo = response.data.data
+          } else {
+            console.log('获取活动信息失败')
+            activityInfo = {} // 返回一个空对象
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          activityInfo = {} // 返回一个空对象
+        })
+      return activityInfo
+    },
     // TODO: 参数还没写完
     submitOrder() {
       const commodityArray = this.selectedItems.map((item) => item) //* 这里将多选框选中的商品的commodityId提取出来，拼成一个数组
@@ -280,7 +311,12 @@ export default {
 </script>
 
 <style scoped>
+.activity {
+  color: red;
+}
 .shopping-cart {
+  position: relative;
+  top: 30px;
   padding: 24px;
   background-color: #ffffff;
 }
@@ -291,7 +327,7 @@ export default {
   align-items: center;
   padding: 24px;
   border-bottom: 1px solid #ebeef5;
-  background-color: #24b8c6;
+  background-color: #abd8dc;
   color: #fff;
 }
 

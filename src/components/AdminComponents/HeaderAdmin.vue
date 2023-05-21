@@ -123,7 +123,7 @@ export default {
 }
 
 .header .el-menu {
-  background-image: linear-gradient(to bottom right, rgba(23, 206, 177, 0.89), #17e5ca);
+  background-color: #91cbcc;
   border: none;
   min-height: 100%;
 }
@@ -136,7 +136,7 @@ export default {
 .header-logo {
   font-size: 40px;
   font-weight: bold;
-  color: #2bbb9e;
+  color: #43b9c2;
   margin-right: 15px;
 }
 
@@ -150,7 +150,7 @@ export default {
 }
 
 .header .el-menu-item span {
-  color: rgba(33, 220, 186, 0.95);
+  color: rgba(60, 190, 216, 0.95);
   font-weight: 500;
 }
 .welcomeWord {

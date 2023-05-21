@@ -167,8 +167,13 @@ export default {
 .account-management {
   margin: 20px;
   padding: 20px;
+  position: relative;
+  top: 50px;
+  width: 60%;
+  height: 400px;
+  left: 270px;
   /* background-color: #f0f0f0; */
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  background-image: linear-gradient(-45deg, #b2dcdf, #97e8e4);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
 }

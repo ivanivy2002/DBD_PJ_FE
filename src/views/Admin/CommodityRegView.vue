@@ -432,6 +432,8 @@ export default {
   /* background-color: #2d2d2d; */
 }
 .container {
+  position: relative;
+  top: 40px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;

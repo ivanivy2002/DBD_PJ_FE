@@ -8,7 +8,7 @@
           <span class="store-info-label">商店名称：</span>
           <span class="store-info-value">{{ shopInfoForm.shopName }}</span>
         </div>
-        <div class="store-info-item">
+        <!-- <div class="store-info-item">
           <span class="store-info-label">商品类别：</span>
           <div class="store-info-value">
             <span
@@ -18,7 +18,7 @@
               >{{ category }}</span
             >
           </div>
-        </div>
+        </div> -->
         <div class="store-info-item">
           <span class="store-info-label">商店简介：</span>
           <span class="store-info-value">{{ shopInfoForm.intro }}</span>
@@ -113,7 +113,7 @@ export default {
         updateTime: null
       },
       commodities: [],
-      gotoMCenterText: '修改商店信息/充值',
+      gotoMCenterText: '充值',
       gotoCommodityText: '修改商品',
       ButtonRemove: 'primary'
     }
@@ -126,7 +126,8 @@ export default {
       return () => {
         if (
           this.shopInfoForm.removeStatus == '待审核' ||
-          this.shopInfoForm.removeStatus == '未申请'
+          this.shopInfoForm.removeStatus == '未申请' ||
+          this.shopInfoForm.removeStatus == '已拒绝'
         ) {
           return false
         } else {
@@ -224,6 +225,7 @@ export default {
             .then((response) => {
               // NOTE: 如果修改的话需要更新session
               console.log(response.data)
+              console.log(111)
               this.shopInfoForm = {
                 //* 拿数据
                 id: response.data.data.id,
@@ -231,9 +233,9 @@ export default {
                 shopName: response.data.data.shopName,
                 userName: response.data.data.userName,
                 idNumber: response.data.data.idNumber,
-                categories: response.data.data.categories
-                  .split(',')
-                  .map((category) => category.trim()),
+                // categories: response.data.data.categories
+                //   .split(',')
+                //   .map((category) => category.trim()),
                 intro: response.data.data.intro,
                 address: response.data.data.address,
                 regStatus: response.data.data.regStatus,

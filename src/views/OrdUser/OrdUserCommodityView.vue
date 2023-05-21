@@ -1,8 +1,8 @@
 <template>
-  <div class="info">
-    <!-- TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
-    <h1>商品页面</h1>
-  </div>
+  <!-- <div class="info">
+     TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
+  <!-- <h1>商品页面</h1>
+  </div> -->
   <div class="commodity-view">
     <el-row gutter="24">
       <el-col
@@ -83,7 +83,6 @@ import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper-bundle.min.css'
 import CommoditySwiper from '../../components/CommoditySwiper.vue'
-import { ShoppingCart } from '@element-plus/icons-vue'
 
 export default {
   components: {
@@ -98,7 +97,7 @@ export default {
   },
   data() {
     return {
-      imageUrls: [],
+      commodityNum: 1,
       imageUrls: [],
       swiperOptions: {
         pagination: {
@@ -188,7 +187,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.getCommodityInfo(commodityId, Num)
+        this.getCommodityInfo(commodityId, Num) // 跳转的逻辑写在这个函数里面
 
         // this.$nextTick(() => {
         //   console.log(commodityInfo)
@@ -217,6 +216,8 @@ export default {
             console.log(response.data.data)
             commodityInfo = response.data.data
             commodityInfo.commodityNum = Num
+            commodityInfo.userId = localStorage.getItem('userId')
+            commodityInfo.commodityId = commodityId
             // console.log(commodityInfo)
             this.commodityInfoArray.push(commodityInfo)
             localStorage.setItem('commodityArray', JSON.stringify(this.commodityInfoArray))
@@ -240,7 +241,7 @@ export default {
     // },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
-      if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
+      if (!imagePaths) {
         console.log('图片路径为空')
         return []
       }
@@ -252,7 +253,7 @@ export default {
 </script>
 
 <style scoped>
-.info {
+/* .info {
   width: 100%;
 }
 
@@ -261,9 +262,11 @@ export default {
   color: #4befc3;
   text-transform: uppercase;
   text-align: center;
-}
+} */
 
 .commodity-view {
+  position: relative;
+  top: 30px;
   margin: 24px;
 }
 
@@ -274,7 +277,8 @@ export default {
   margin-bottom: 24px;
   cursor: default;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  /* background-image: linear-gradient(-45deg, #24b8c6, #26d6cd); */
+  background: #63d5cd;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 

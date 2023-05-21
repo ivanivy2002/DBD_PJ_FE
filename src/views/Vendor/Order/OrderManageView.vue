@@ -27,7 +27,7 @@
           <el-table :data="orderData" style="width: 100%">
             <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
             <!-- <el-table-column prop="shopName" label="店铺"> </el-table-column> -->
-            <el-table-column prop="commodityName" label="商品名称" width="180px"> </el-table-column>
+            <el-table-column prop="commodityName" label="商品名称" width="120px"> </el-table-column>
             <el-table-column prop="imagePath" label="商品图片">
               <template #default="{ row }">
                 <img
@@ -37,8 +37,12 @@
                 />
               </template>
             </el-table-column>
-            <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
-            <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
+            <el-table-column prop="price" label="单价" width="80"> </el-table-column>
+            <el-table-column prop="paidAmount" label="支付价格" width="80"> </el-table-column>
+            <el-table-column prop="commodityNum" label="数量" width="80"> </el-table-column>
+            <el-table-column prop="address" label="收货地址" width="80"> </el-table-column>
+            <el-table-column prop="name" label="收货人" width="80"> </el-table-column>
+            <el-table-column prop="createTime" label="购买时间" width="120"> </el-table-column>
             <el-table-column prop="status" label="状态" width="120">
               <template #default="{ row }">
                 <el-tag :type="statusTagType(row.status)" disable-transitions>{{
@@ -82,7 +86,6 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 export default {
@@ -156,9 +159,13 @@ export default {
         const order = this.orderData[i]
         const commodityInfo = await this.getCommodityInfo(order.commodityId)
         const shopInfo = await this.getShopInfo(order.shopId)
+        const addressInfo = await this.getAddressInfo(order.addressId)
         order.commodityName = commodityInfo.commodityName
+        order.price = commodityInfo.price
         order.imagePath = commodityInfo.imagePath
         order.shopName = shopInfo.shopName
+        order.name = addressInfo.name
+        order.address = addressInfo.address
         // this.$set(this.orderData, i, order)
         this.orderData[i] = { ...order } // 将order对象复制到orderData数组的第i个位置
       }
@@ -210,6 +217,41 @@ export default {
           shopInfo = {} // 返回一个空对象
         })
       return shopInfo
+    },
+    async getAddressInfo(addressId) {
+      // 发送请求获取地址信息
+      let addressInfo = {}
+      await axios
+        .get('/api/address/displayAddressInfo', { params: { addressId: addressId } })
+        .then((response) => {
+          console.log(response)
+          if (response.data.code == 200) {
+            console.log('成功获取地址信息')
+            console.log(response.data.data)
+            addressInfo = response.data.data
+          } else {
+            console.log('获取地址信息失败')
+            addressInfo = {} // 返回一个空对象
+          }
+        })
+      return addressInfo
+    },
+    // NOTE: 下面这个用不到
+    async getUserInfo(userId) {
+      // 发送请求获取用户信息
+      let userInfo = {}
+      await axios.get('/api/user/displayInfo', { params: { userId: userId } }).then((response) => {
+        console.log(response)
+        if (response.data.code == 200) {
+          console.log('成功获取用户信息')
+          console.log(response.data.data)
+          userInfo = response.data.data
+        } else {
+          console.log('获取用户信息失败')
+          userInfo = {} // 返回一个空对象
+        }
+      })
+      return userInfo
     },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)

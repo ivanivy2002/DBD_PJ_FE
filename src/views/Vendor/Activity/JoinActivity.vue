@@ -3,7 +3,7 @@
     <!--        <div class="form-header">活动新开</div>-->
     <div class="form-container">
       <el-form ref="form" :model="joinForm" label-width="125px" :rules="rules">
-        <el-form-item label="参加商品类别" prop="category">
+        <el-form-item v-if="errorMessage == ''" label="参加商品类别" prop="category">
           <!--   这里的categoriesSend 是什么？？是绑定的数据去向-->
           <!--                    -->
           <el-checkbox-group v-model="categoriesSend">
@@ -12,18 +12,28 @@
             </el-checkbox>
           </el-checkbox-group>
         </el-form-item>
+        <el-form-item v-if="errorMessage == '您的商店中没有此次活动的商品种类！'">
+          <div class="error">
+            {{ errorMessage }}
+          </div>
+        </el-form-item>
 
-        <el-form-item>
+        <el-form-item v-if="errorMessage == ''">
           <el-button type="primary" @click="joinSend" style="color: #fff">参加</el-button>
           <!--                    <el-button type="primary" @click="resetForm" style="color: #fff">重置</el-button>-->
+        </el-form-item>
+        <el-form-item v-if="errorMessage == '您的商店中没有此次活动的商品种类！'">
+          <el-button plain>
+            <router-link to="/home/vendor/activity">返回</router-link>
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
-  <div class="activity-board">
+  <!-- <div class="activity-board">
     <el-row gutter="24">
       <el-col class="activity-col" v-for="activity in activities" :key="activity.id">
-        <!--              :xs="24" :sm="12" :md="8"  :lg="20"-->
+                     :xs="24" :sm="12" :md="8"  :lg="20"
         <el-card class="animated-card-activity" shadow="hover">
           <div class="card-header">
             <div class="card-title">活动 {{ activity.id }}</div>
@@ -36,7 +46,7 @@
         </el-card>
       </el-col>
     </el-row>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -87,52 +97,7 @@ export default {
           // remainTimeString: '',
         }
       ],
-      validateUserName: (rule, value, callback) => {
-        if (!/^(?!_)(?!.*?_$)[a-zA-Z0-9_]{3,10}$/.test(value)) {
-          callback(new Error('请输入正确格式的用户名！'))
-        } else {
-          callback()
-        }
-      },
-      //* 中国大陆身份证号：包括前两位的区间、出生年份、出生月份、出生日期、顺序码和校验码
-      validateIdNumber: (rule, value, callback) => {
-        if (!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
-          callback(new Error('请输入正确的身份证号！'))
-        } else {
-          callback()
-        }
-      },
-      validateIntro: (rule, value, callback) => {
-        if (value.length > 128) {
-          callback(new Error('商店简介不能超过128个字符！'))
-        } else {
-          callback()
-        }
-      },
-      validateAddress: (rule, value, callback) => {
-        if (value.length > 32) {
-          callback(new Error('备案地址不能超过32个字符！'))
-        } else {
-          callback()
-        }
-      },
-      // NOTE: 先将value转换为浮点数 检查是否为之后检查大小
-      validateFund: (rule, value, callback) => {
-        const fund = parseFloat(value)
-        if (isNaN(fund) || fund <= 1000) {
-          callback(new Error('资金需大于1000元！'))
-        } else {
-          callback()
-        }
-      },
-      validateActivityFund: (rule, value, callback) => {
-        const fund = parseFloat(value)
-        if (isNaN(fund) || fund <= 0) {
-          callback(new Error('资金需大于' + 0 + '元！'))
-        } else {
-          callback()
-        }
-      },
+      errorMessage: '',
       $message: this.message //引入$message组件
     }
   },
@@ -142,6 +107,8 @@ export default {
     setInterval(() => {
       this.fetchActivity()
     }, 1000)
+    this.activityId = localStorage.getItem('activityId')
+    this.fetchCategory()
   },
   computed: {
     rules: function () {
@@ -211,7 +178,6 @@ export default {
       }
     }
   },
-
   methods: {
     async joinSend() {
       // NOTE: 前端检查是否符合规范
@@ -219,55 +185,37 @@ export default {
       await this.$refs.form.validate((valid) => {
         console.log(valid)
         if (valid) {
-          // TODO:加入 loading 遮罩层，在请求数据时显示加载动画，避免用户误以为页面卡顿或未响应。?
-          //NOTE: 把注册成功后的弹窗放在后端响应成功的回调函数中，确保在后端成功保存数据后再弹窗。
-          // NOTE: 处理注册逻辑
           this.joinForm.originFund = this.joinForm.activityFund
           console.log('申请提交', this.joinForm) // 控制台输出信息
           this.loading = true // 开启 loading 动画
           // this.joinForm.categories = this.joinWithComma(this.categories) //* 将多个单词用+拼起来
+          // NOTE: 将 categoriesSend 数组中的每个元素添加到 URLSearchParams 对象中
+          const params = new URLSearchParams()
+          params.append('shopId', localStorage.getItem('shopId'))
+          this.categoriesSend.forEach((category) => {
+            params.append('categories', category)
+          })
+          // 添加 activityId 到 URLSearchParams 对象中
+          params.append('activityId', this.activityId)
           axios
-            .post('/api/shop/joinActivity', this.joinForm)
+            .put('/api/shop/joinActivity?' + params)
             .then((response) => {
               console.log(response.data)
               // NOTE: 只有当后端返回200时显示注册成功
               if (response.data.code === 200) {
-                console.log('第一步成功')
-                this.activityId = response.data.activityId
-                console.log(this.activityId)
-                console.log(this.categoriesSend)
-
-                // NOTE: 将 categoriesSend 数组中的每个元素添加到 URLSearchParams 对象中
-                const params = new URLSearchParams()
-                this.categoriesSend.forEach((category) => {
-                  params.append('categories', category)
+                console.log('成功')
+                this.$message({
+                  showClose: true,
+                  type: 'success', //如果成功输出状态码
+                  message: '申请成功'
                 })
-                // 添加 activityId 到 URLSearchParams 对象中
-                params.append('activityId', this.activityId)
-
-                // 发送 POST 请求，将 URLSearchParams 对象作为参数传递
-                axios
-                  .post('/api/category/saveActivityCategory?' + params.toString())
-                  .then((response) => {
-                    console.log(response.data)
-                    if (response.data.code === 200) {
-                      console.log('第二步成功')
-                      ElMessage({
-                        //用于弹出消息提示
-                        showClose: true,
-                        type: 'success', //如果成功
-                        message: '活动预设成功'
-                      })
-                      this.$refs.form.resetFields() // 重置表单
-                      // this.dialogFormVisible = false
-                    }
-                  })
+                this.$router.push('/home/vendor')
               } else {
-                console.error('活动预设失败，请重试！')
+                console.log(response.data)
                 ElMessage({
                   showClose: true,
                   type: 'error', //如果失败输出状态码
-                  message: '活动预设失败:' + response.data.msg
+                  message: '申请失败:' + response.data.msg
                 })
               }
             })
@@ -290,17 +238,36 @@ export default {
     },
     fetchCategory: async function () {
       try {
-        const response = await axios.get('/api/category/getCategoryList')
-        console.log(response.data.data)
-        this.categoryState.categoryData = response.data.data.map((row) => {
-          console.log(row)
-          return row
-        })
-        // 使用 map 方法提取 category 字段，生成一个包含所有 category 值的向量
-        this.categoryVector = this.categoryState.categoryData.map((item) => item.category)
-        // 输出 categoryVector，可以看到它包含了所有 category 值
-        console.log(this.categoryVector)
-        console.log(this.categoryState.categoryData)
+        const response = await axios
+          .get('/api/category/getCategoryList', {
+            params: {
+              shopId: localStorage.getItem('shopId'),
+              activityId: this.activityId
+            }
+          })
+          .then((response) => {
+            if (response.data.code === 200) {
+              console.log('获取分类成功')
+              console.log(response.data.data)
+              this.categoryState.categoryData = response.data.data.map((row) => {
+                console.log(row)
+                return row
+              })
+              // 使用 map 方法提取 category 字段，生成一个包含所有 category 值的向量
+              this.categoryVector = this.categoryState.categoryData.map((item) => item.category)
+              // 输出 categoryVector，可以看到它包含了所有 category 值
+              console.log(this.categoryVector)
+              console.log(this.categoryState.categoryData)
+            } else {
+              console.log('没有可选择的分类')
+              this.errorMessage = response.data.msg
+              ElMessage({
+                showClose: true,
+                type: 'error', //如果失败输出
+                message: '抱歉，' + response.data.msg
+              })
+            }
+          })
       } catch (error) {
         console.log(error)
       }
@@ -374,6 +341,10 @@ export default {
 </script>
 
 <style scoped>
+.error {
+  font-size: 20px;
+  color: rgb(34, 33, 30);
+}
 .info h1 {
   font-size: 40px;
   color: #4befc3;
@@ -459,13 +430,11 @@ export default {
 }
 
 .join-form {
+  position: relative;
+  top: 30px;
   max-width: 600px;
   margin: 0 auto;
-  background-image: linear-gradient(
-    to bottom right,
-    rgba(177, 234, 221, 0.91),
-    rgba(49, 231, 206, 0.71)
-  );
+  background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);
   padding: 30px;
   border-radius: 10px;
 }

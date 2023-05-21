@@ -1,124 +1,126 @@
 <template>
-  <el-container>
-    <el-header>
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>订单管理</el-breadcrumb-item>
-        <el-breadcrumb-item>所有订单</el-breadcrumb-item>
-      </el-breadcrumb>
-    </el-header>
-    <el-main>
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <!-- NOTE: 这个方法挺厉害的，选中之后调用函数设置不同的activeStatus -->
-          <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
-            <el-submenu index="1">
-              <template #title>
-                <i class="el-icon-notebook-1"></i>
-                订单分类
-              </template>
-              <el-menu-item index="所有订单">所有订单</el-menu-item>
-              <el-menu-item index="待支付">待支付</el-menu-item>
-              <el-menu-item index="待发货">待发货</el-menu-item>
-              <el-menu-item index="待收货">待收货</el-menu-item>
-              <el-menu-item index="已完成">已完成</el-menu-item>
-              <el-menu-item index="已撤销">已撤销</el-menu-item>
-              <el-menu-item index="已退款">已退款</el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </el-col>
-        <el-col :span="18">
-          <el-table :data="orderData" stripe style="width: 100%">
-            <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
-            <el-table-column prop="shopName" label="店铺"> </el-table-column>
-            <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
-            <el-table-column prop="imagePath" label="商品图片">
-              <template #default="{ row }">
-                <img
-                  v-for="imageUrl in getImageUrls(row.imagePath)"
-                  :key="imageUrl"
-                  :src="imageUrl"
-                />
-              </template>
-            </el-table-column>
-            <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
-            <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
-            <el-table-column prop="status" label="状态" width="120">
-              <template #default="{ row }">
-                <el-tag :type="statusTagType(row.status)" disable-transitions>{{
-                  row.status
-                }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="createTime" label="下单时间" width="180"> </el-table-column>
-            <el-table-column label="操作" width="180">
-              <template #default="{ row }">
-                <el-button
-                  v-if="activeStatus === '所有订单'"
-                  type="default"
-                  size="mini"
-                  @click="navigateToOrderDetail(row)"
-                  >详情</el-button
-                >
-                <el-button
-                  v-if="activeStatus === '待支付'"
-                  type="primary"
-                  size="mini"
-                  @click="handlePay(row)"
-                  >支付</el-button
-                >
-                <el-button
-                  v-if="activeStatus === '待支付'"
-                  type="warning"
-                  size="mini"
-                  @click="handleCancel(row)"
-                  >撤销</el-button
-                >
-                <el-button
-                  v-if="activeStatus === '待收货'"
-                  type="success"
-                  size="mini"
-                  @click="handleConfirm(row)"
-                  >确认收货</el-button
-                >
-                <el-button
-                  v-if="activeStatus === '待发货' || activeStatus === '待收货'"
-                  type="warning"
-                  size="mini"
-                  @click="handleRefund(row)"
-                  >申请退款</el-button
-                >
-                <el-button
-                  v-if="
-                    activeStatus === '已完成' ||
-                    activeStatus === '已撤销' ||
-                    activeStatus === '已退款'
-                  "
-                  type="danger"
-                  size="mini"
-                  @click="handleRemove(row)"
-                  >删除记录</el-button
-                >
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[5, 10, 20, 50]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="totalOrders"
-          ></el-pagination>
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+  <div class="container">
+    <el-container>
+      <el-header>
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+          <el-breadcrumb-item>所有订单</el-breadcrumb-item>
+        </el-breadcrumb>
+      </el-header>
+      <el-main>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <!-- NOTE: 这个方法挺厉害的，选中之后调用函数设置不同的activeStatus -->
+            <el-menu default-active="1" class="el-menu-vertical-demo" @select="handleSelect">
+              <el-submenu index="1">
+                <template #title>
+                  <i class="el-icon-notebook-1"></i>
+                  订单分类
+                </template>
+                <el-menu-item index="所有订单">所有订单</el-menu-item>
+                <el-menu-item index="待支付">待支付</el-menu-item>
+                <el-menu-item index="待发货">待发货</el-menu-item>
+                <el-menu-item index="待收货">待收货</el-menu-item>
+                <el-menu-item index="已完成">已完成</el-menu-item>
+                <el-menu-item index="已撤销">已撤销</el-menu-item>
+                <el-menu-item index="已退款">已退款</el-menu-item>
+              </el-submenu>
+            </el-menu>
+          </el-col>
+          <el-col :span="18">
+            <el-table :data="orderData" stripe style="width: 100%">
+              <el-table-column prop="id" label="订单号" width="80px"> </el-table-column>
+              <el-table-column prop="shopName" label="店铺"> </el-table-column>
+              <el-table-column prop="commodityName" label="商品名称"> </el-table-column>
+              <el-table-column prop="imagePath" label="商品图片">
+                <template #default="{ row }">
+                  <img
+                    v-for="imageUrl in getImageUrls(row.imagePath)"
+                    :key="imageUrl"
+                    :src="imageUrl"
+                  />
+                </template>
+              </el-table-column>
+              <el-table-column prop="paidAmount" label="价格" width="120"> </el-table-column>
+              <el-table-column prop="commodityNum" label="数量" width="100"> </el-table-column>
+              <el-table-column prop="status" label="状态" width="120">
+                <template #default="{ row }">
+                  <el-tag :type="statusTagType(row.status)" disable-transitions>{{
+                    row.status
+                  }}</el-tag>
+                </template>
+              </el-table-column>
+              <el-table-column prop="createTime" label="下单时间" width="180"> </el-table-column>
+              <el-table-column label="操作" width="180">
+                <template #default="{ row }">
+                  <el-button
+                    v-if="activeStatus === '所有订单'"
+                    type="default"
+                    size="mini"
+                    @click="navigateToOrderDetail(row)"
+                    >详情</el-button
+                  >
+                  <el-button
+                    v-if="activeStatus === '待支付'"
+                    type="primary"
+                    size="mini"
+                    @click="handlePay(row)"
+                    >支付</el-button
+                  >
+                  <el-button
+                    v-if="activeStatus === '待支付'"
+                    type="warning"
+                    size="mini"
+                    @click="handleCancel(row)"
+                    >撤销</el-button
+                  >
+                  <el-button
+                    v-if="activeStatus === '待收货'"
+                    type="success"
+                    size="mini"
+                    @click="handleConfirm(row)"
+                    >确认收货</el-button
+                  >
+                  <el-button
+                    v-if="activeStatus === '待发货' || activeStatus === '待收货'"
+                    type="warning"
+                    size="mini"
+                    @click="handleRefund(row)"
+                    >申请退款</el-button
+                  >
+                  <el-button
+                    v-if="
+                      activeStatus === '已完成' ||
+                      activeStatus === '已撤销' ||
+                      activeStatus === '已退款'
+                    "
+                    type="danger"
+                    size="mini"
+                    @click="handleRemove(row)"
+                    >删除记录</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[5, 10, 20, 50]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalOrders"
+            ></el-pagination>
+          </el-col>
+        </el-row>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
-import { toRaw } from 'vue'
+// import { toRaw } from 'vue'
 export default {
   name: 'OrderList',
   data() {
@@ -186,6 +188,7 @@ export default {
         const commodityInfo = await this.getCommodityInfo(order.commodityId)
         const shopInfo = await this.getShopInfo(order.shopId)
         order.commodityName = commodityInfo.commodityName
+        order.category = commodityInfo.category
         order.imagePath = commodityInfo.imagePath
         order.shopName = shopInfo.shopName
         // this.$set(this.orderData, i, order)
@@ -258,9 +261,12 @@ export default {
       //   type: 'warning'
       // })
       //   .then(() => {
+      localStorage.setItem('category', row.category)
       localStorage.setItem('orderPrice', row.paidAmount) // 将订单价格存入localStorage
       // localStorage.setItem('orderId', row.id) // 将订单id存入localStorage
-      localStorage.setItem('orderIdArray', JSON.stringify(row.id)) // 将订单id存入localStorage
+      let orderIdArray = []
+      orderIdArray.push(row.id)
+      localStorage.setItem('orderIdArray', JSON.stringify(orderIdArray)) // 将订单id存入localStorage
       this.$router.push('/home/orduser/order/pay') // 跳转到支付页面
       // })
       // .catch(() => {
@@ -472,6 +478,10 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900');
 
+.container {
+  position: relative;
+  top: 35px;
+}
 img {
   width: 50px;
   height: 50px;

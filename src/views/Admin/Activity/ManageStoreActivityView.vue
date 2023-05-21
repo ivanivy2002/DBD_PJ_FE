@@ -2,7 +2,7 @@
   <div class="container">
     <el-table :data="state.tableData" style="width: 100%">
       <el-table-column prop="shopName" label="店名"></el-table-column>
-      <el-table-column prop="categories" label="商品类别"></el-table-column>
+      <!-- <el-table-column prop="categories" label="商品类别"></el-table-column> -->
       <!--      <el-table-column prop="idNumber" label="身份证号"></el-table-column>-->
       <!--      <el-table-column prop="intro" label="商店简介"></el-table-column>-->
       <!--      <el-table-column prop="address" label="备案地址"></el-table-column>-->
@@ -177,6 +177,8 @@ export default {
 
 <style scoped>
 .container {
+  position: relative;
+  top: 30px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 15px;

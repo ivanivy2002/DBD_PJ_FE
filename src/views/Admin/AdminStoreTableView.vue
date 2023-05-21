@@ -65,8 +65,8 @@ export default {
           x: 10,
           y: 20,
           regFund: 100,
-          monthlySales: 2000,
-          monthlyAmount: 200,
+          // monthlySales: 2000,
+          // monthlyAmount: 200,
           status: '开启成功',
           createTime: '2023-05-12 16:16:46',
           originFund: 2000

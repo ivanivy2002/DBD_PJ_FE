@@ -28,7 +28,7 @@
         21307130470
       </h1>
       <p class="intro-text">
-        大家好，我是陈沛仪，来自贵州省贵阳市。喜欢吃辣且在上海继续保持，退化程度远没有上面那位严重；喜欢熬夜且经常三教久留，但和上面那位一样爱长痘；喜欢敲代码且也来了软工，但和上面那位一样好像都不太聪明的样子。
+        大家好，我是陈沛仪，来自贵州省贵阳市。喜欢吃辣且在上海继续保持，退化程度远没有左边那位严重；喜欢熬夜且经常三教久留，但和左边那位一样爱长痘；喜欢敲代码且也来了软工，但和左边那位一样好像都不太聪明的样子。
       </p>
     </div>
     <div class="intro-section">
@@ -57,9 +57,12 @@
   /*justify-content: center;*/
   align-items: center;
   flex-direction: row;
-  background: linear-gradient(to bottom right, #b1e8f4, #87e7f8);
+  /* background: linear-gradient(to bottom right, #b1e8f4, #87e7f8); */
+  /* background: linear-gradient(to bottom right, #c2e7ef, #abe5ef); */
+  background-color: #8accd8;
+
   color: white;
-  /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
+  /* text-shadow: 1px 1px 2px rgb      a(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;
 }
 
@@ -72,6 +75,8 @@
 
 .intro-section {
   flex-basis: calc(25% - 1rem);
+  /* margin-left: 2em; */
+  /* margin-right: 2em; */
   margin-bottom: 2rem;
   text-align: center;
   padding: 2px;

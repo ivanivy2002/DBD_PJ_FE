@@ -1,7 +1,12 @@
 <template>
   <div class="info">
     <span class="search">&#x1F50D;</span>
-    <input type="text" placeholder="搜索..." />
+    <input
+      type="text"
+      placeholder="请按回车开始搜索..."
+      v-model="searchContent"
+      @keyup.enter="Search"
+    />
   </div>
 
   <link
@@ -49,44 +54,34 @@
       </el-carousel-item>
     </el-carousel>
   </div>
-  <!--  //origin Card Activity-->
-  <!--    <div class="activity-board">-->
-  <!--        <el-row gutter="24">-->
-  <!--            <el-col class="activity-col" v-for="activity in activities" :key="activity.id">-->
-  <!--                &lt;!&ndash;              :xs="24" :sm="12" :md="8"  :lg="20"&ndash;&gt;-->
-  <!--                <el-card-->
-  <!--                        class="animated-card-activity"-->
-  <!--                        shadow="hover"-->
-  <!--                        @click="navigateToActivity(activity.id)"-->
-  <!--                >-->
-  <!--                    <div class="card-header">-->
-  <!--                        <div class="card-title">活动 {{ activity.id }}</div>-->
-  <!--                    </div>-->
-  <!--                    <div class="card-content">活动状态：{{ activity.status }}</div>-->
-  <!--                    <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>-->
-  <!--                </el-card>-->
-  <!--            </el-col>-->
-  <!--        </el-row>-->
-  <!--    </div>-->
-  <div class="store-board" style="z-index: 1">
-    <el-row gutter="24">
-      <el-col v-for="store in stores" :key="store.shopName" :xs="24" :sm="12" :md="8" :lg="6">
-        <el-card class="animated-card" shadow="hover" @click="navigateToCommodity(store.id)">
-          <div class="card-header">
-            <div class="card-title">
-              {{ store.shopName }}
-            </div>
+
+  <div class="commodity">
+    <el-row>
+      <el-col
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="6"
+        v-for="(item, index) in showCommodityArray"
+        :key="index"
+      >
+        <el-card
+          shadow="hover"
+          class="animated-card"
+          @click="navigateToCommodityDetail(item.id, item.shopId)"
+        >
+          <div class="image">
+            <!-- <img
+                  v-for="imageUrl in getImageUrls(item.imagePath)"
+                  :key="imageUrl"
+                  :src="imageUrl"
+                /> -->
+            <img :src="getImageUrls(item.imagePath)[0]" />
           </div>
-          <div class="card-content">
-            <span class="category-title">商品类别：</span>
-            <div class="category-list">
-              <span v-for="(category, index) in store.categories" :key="index">{{
-                category.category
-              }}</span>
-            </div>
-          </div>
-          <div class="card-content card-intro">
-            <span class="category-title">商店简介：</span>{{ store.intro }}
+          <div class="good-info">
+            <div class="good-title">{{ item.commodityName }}</div>
+            <div class="good-price">￥{{ item.price }}</div>
+            <div class="good-sales">销量：{{ item.salesNum }}</div>
           </div>
         </el-card>
       </el-col>
@@ -98,7 +93,7 @@
 
 <script>
 // import { reactive } from 'vue'
-import { ElCol, ElRow } from 'element-plus'
+import { ElCol, ElRow, ElMessage } from 'element-plus'
 import axios from 'axios'
 
 export default {
@@ -108,7 +103,12 @@ export default {
   },
   data() {
     return {
-      stores: [],
+      showCommodityArray: [], // 展示在页面上的商品数组
+      userBasedArray: [], // 基于用户的推荐数组
+      hotRecommendData: [], // 热门推荐数组
+      userBasedThreshold: 4, // 基于用户的推荐阈值，如果小于​该值，则显示热门推荐
+      searchCommodityName: '',
+      searchCommodityCategory: '',
       activities: [
         {
           activityName: '活动0',
@@ -153,7 +153,61 @@ export default {
     //
     // },
   },
+  async mounted() {
+    // TODO: setInterval Disabled, 以下三行
+    setInterval(() => {
+      this.fetchActivity()
+    }, 1000)
+
+    await this.fetchActivity()
+    await this.fetchRecommendData()
+  },
   methods: {
+    async fetchRecommendData() {
+      await axios
+        .get('/api/recommend/userBased', {
+          params: {
+            userId: localStorage.getItem('userId')
+          }
+        })
+        .then((response) => {
+          console.log(response.data)
+          this.userBasedArray = response.data.data
+          if (this.userBasedArray.length <= this.userBasedThreshold) {
+            // 如果低于阈值，就用热门推荐
+            this.fetchHotRecommendData()
+            return
+          } else {
+            this.showCommodityArray = this.userBasedArray
+          }
+        })
+    },
+    async fetchHotRecommendData() {
+      await axios.get('/api/recommend/valueBased').then((response) => {
+        console.log(response.data)
+        this.hotRecommendData = response.data.data
+        this.showCommodityArray = this.hotRecommendData
+      })
+    },
+    navigateToCommodityDetail(commodityId, shopId) {
+      localStorage.setItem('showCommodityId', commodityId)
+      localStorage.setItem('showShopId', shopId)
+      axios
+        .put('/api/recommend/userOperationRecord', {
+          // 用户点击记录
+          userId: localStorage.getItem('userId'),
+          commodityId: commodityId,
+          // shopId: shopId,
+          operationType: 0
+        })
+        .then((response) => {
+          console.log(response.data)
+          if (response.data.code == 200) {
+            console.log('用户点击记录成功')
+            this.$router.push('/home/orduser/commodity/detail')
+          }
+        })
+    },
     calRemainTime(activity) {
       //     createTime,lastTime
       const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
@@ -197,47 +251,16 @@ export default {
       if (remainTime === 0) {
         //TODO:BUG 500 ERR
         console.log(remainTime + ' ' + activity.activityName + ' to off')
-        // const activityId = activity.id;
-        // try {
-        //     axios.put('/api/activity/stop', null, {
-        //         params: {
-        //             activityId: activity.id
-        //         }
-        //     })
-        // } catch (error) {
-        //     console.log(error)
-        // }
-      }
-    },
-    splitByComma(str) {
-      return str.split(',').map((category) => category.trim())
-    },
-    async fetchStore() {
-      try {
-        // TODO: 相对路径（'api/home/display'）访问出错，这个问题应该和路由相关
-        const response = await axios.get('/api/home/displayShop')
-        // const response = await axios.get('api/home/display')
-        console.log(response.data.data)
-        this.stores = response.data.data.map((store) => {
-          console.log('what')
-          this.fetchShopCategories(store.id)
-          return {
-            id: store.id,
-            shopName: store.shopName,
-            // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
-            // TODO: 目前categories字段的值不能为NULL，否则会报错
-            // categories: store.categories.split(',').map((category) => category.trim()),
-            //TODO: categories is removed from the chart..
-            // categories: this.splitByComma(store.categories),
-
-            intro: store.intro
-          }
-        })
-        // /category/getShopCategory
-        return response.data.data
-      } catch (error) {
-        console.log(error)
-        throw error
+        const activityId = activity.id
+        try {
+          axios.put('/api/activity/stop', null, {
+            params: {
+              activityId: activity.id
+            }
+          })
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     async fetchActivity() {
@@ -285,36 +308,6 @@ export default {
           return activity.categories
         })
     },
-    fetchShopCategories(id) {
-      axios
-        .get('/api/category/getShopCategory', {
-          params: {
-            shopId: id
-          }
-        })
-        .then((response) => {
-          console.log(response.data.data)
-          const store = this.stores.find((item) => item.id === id)
-          if (store) {
-            store.categories = response.data.data
-          }
-          return store.categories
-        })
-    },
-    navigateToCommodity(shopId) {
-      localStorage.setItem('showShopId', shopId) // 注意：将showShopId存入localStorage
-      // TODO: 这里的路由上面需不需要显示shopId
-      // this.$router.push({ path: `/home/orduser/commodity/${shopId}` });
-      if (localStorage.getItem('role') == '1') {
-        this.$router.push({ path: `/home/orduser/commodity` })
-      }
-      if (localStorage.getItem('role') == '2') {
-        this.$router.push({ path: `/home/vendor/commodityTable` })
-      }
-      if (localStorage.getItem('role') == '3') {
-        this.$router.push({ path: `/home/admin/commodityTable` })
-      }
-    },
     // eslint-disable-next-line no-unused-vars
     navigateToActivity(activityId) {
       // TODO: 这下面可能还要修正一下，统一命名
@@ -331,83 +324,122 @@ export default {
           path: '/home/orduser/activityCommodity'
         })
       }
+    },
+    getImageUrls(imagePaths) {
+      // NOTE: 从后端获取图片的url(特殊URL)
+      //  || imagePaths == undefined || imagePaths == ''
+      if (!imagePaths) {
+        console.log('图片路径为空')
+        return []
+      }
+      const baseUrl = '/api/display/commodity/'
+      return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
+    },
+    Search(event) {
+      // 获取输入框的值
+      let value = event.target.value
+      // 调用搜索功能
+      this.doSearch(value)
+    },
+    doSearch(value) {
+      console.log(value)
+      // 具体搜索逻辑...
+      axios
+        .get('/api/commodity/findByCommodityName', {
+          params: {
+            name: value
+          }
+        })
+        .then((response) => {
+          console.log(response.data)
+          this.searchCommodityName = response.data.data
+          if (this.searchCommodityName.length > 0) {
+            console.log('找到商品')
+            this.showCommodityArray = this.searchCommodityName
+          } else {
+            console.log('没有找到商品')
+            axios
+              .get('/api/recommend/categoryBased', {
+                params: {
+                  category: value
+                }
+              })
+              .then((response) => {
+                console.log(response.data)
+                this.searchCommodityCategory = response.data.data
+                if (this.searchCommodityCategory.length > 0) {
+                  console.log('找到商品')
+                  this.showCommodityArray = this.searchCommodityCategory
+                } else {
+                  console.log('没有找到商品')
+                  this.showCommodityArray = []
+                  ElMessage({
+                    showClose: true,
+                    type: 'warning',
+                    message: '没有找到想要的商品噢，换个商品试试吧！'
+                  })
+                }
+              })
+          }
+        })
     }
-  },
-  // filters: {
-  //     formatTime(value) {
-  //         const hours = Math.floor(value / 60);
-  //         const minutes = value % 60;
-  //         return `${hours}小时${minutes}分钟`;
-  //     },
-  // },
-  async mounted() {
-    // Store
-    // try {
-    //     const storesResponse = await this.fetchStore()
-    //     console.log(storesResponse.data)
-    //     // storesData = storesResponse.data //* 无须重新赋值
-    //     // this.removeZerosInObjectArray(storesData)
-    //     this.stores = storesResponse.data.map((store) => (
-    //         {
-    //             id: store.id,
-    //             shopName: store.shopName,
-    //             // NOTE: 先使用 split('+') 方法将字符串按照 + 号拆分为多个子字符串，然后使用 map() 方法遍历每个子字符串并使用 trim() 方法去除首尾空格
-    //             // TODO: 目前categories字段的值不能为NULL，否则会报错
-    //             // categories: store.categories.split(',').map((category) => category.trim()),
-    //             //TODO: categories is removed from the chart..
-    //             // categories: this.splitByComma(store.categories),
-    //
-    //             intro: store.intro
-    //         }))
-    //     // console.log(store.categories)
-    // } catch (error) {
-    //     console.log(error)
-    // }
-    // Activity
-    await this.fetchStore()
-    await this.fetchActivity()
-    // try {
-    //     const activityResponse = await this.fetchActivity()
-    //     // console.log("activity: \n")
-    //     // console.log(activityResponse.data)
-    //     this.activities = activityResponse.data.map((activity) => {
-    //         const remainTimeString = this.calRemainTime(activity);
-    //             return {
-    //                 id: activity.id,
-    //                 lastTime: activity.lastTime,
-    //                 activityFund: activity.activityFund,
-    //                 x: activity.x,
-    //                 y: activity.y,
-    //                 regFund: activity.regFund,
-    //                 monthlySales: activity.monthlySales,
-    //                 monthlyAmount: activity.monthlyAmount,
-    //                 status: activity.status,
-    //                 createTime: activity.createTime,
-    //                 originFund: activity.originFund,
-    //                 remainTimeString: remainTimeString
-    //             };
-    //         }
-    //     )
-    //
-    // } catch (error) {
-    //     console.log(error)
-    // }
-
-    // TODO: setInterval Disabled, 以下三行
-    setInterval(() => {
-      this.fetchActivity()
-    }, 1000)
-
-    // this.startTimer()
   }
-  // beforeUnmount(){
-  //     this.stopTimer();
-  //     clearInterval(this.timer);  // 销毁定时器
-  // },
 }
 </script>
 
 <style scoped>
+.commodity {
+  margin: 20px;
+}
+
+.el-row {
+  margin: 0 -10px;
+}
+
+.el-col {
+  padding: 0 10px;
+}
+
+.animated-card {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.animated-card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.image {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+img {
+  width: 120px;
+  height: 120px;
+}
+
+.good-info {
+  padding: 10px;
+  text-align: center;
+}
+
+.good-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.good-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #f60;
+  margin-bottom: 10px;
+}
+
+.good-sales {
+  font-size: 14px;
+  color: #999;
+}
 .info {
   width: 100%;
 }
@@ -431,7 +463,6 @@ export default {
   position: relative;
   top: 70px;
   left: 10px;
-  /* padding: 2px; */
 }
 .activity-parent {
   position: relative;
@@ -442,18 +473,13 @@ h1 {
 }
 .category {
   font-size: 15pt;
-  text-align: center;
+
   color: #8a9193;
   margin: 20px 0;
 }
 .category i {
   margin-right: 15px;
   font-size: 1em;
-}
-
-.info {
-  position: relative;
-  left: 8%;
 }
 
 .info input[type='text']:focus {
@@ -534,8 +560,7 @@ h1 {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* 添加渐变动画和阴影效果 */
-  /* background-image: linear-gradient(-45deg, #b7ced4, #7dbac3); */
-  background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);
+  background-image: linear-gradient(-45deg, #b7ced4, #7dbac3);
   /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); */
   box-sizing: border-box; /* 设置子元素的box-sizing为border-box */
 }

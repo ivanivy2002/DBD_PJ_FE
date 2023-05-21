@@ -26,7 +26,7 @@
       </el-col>
       <el-col
         :span="12"
-        v-if="order.status === 1 || order.status === 2 || order.status === 3 || order.status === 4"
+        v-if="order.status === 0 || order.status === 1 || order.status === 2 || order.status === 4"
       >
         <strong>订单状态：</strong>
         <el-steps :active="order.status" align-center>
@@ -55,7 +55,7 @@
 
 <script>
 import axios from 'axios'
-import { Delete } from '@element-plus/icons-vue'
+// import { Delete } from '@element-plus/icons-vue'
 export default {
   data() {
     return {
@@ -160,11 +160,11 @@ export default {
     setStatusNum(status) {
       switch (status) {
         case '待支付':
-          return 1
+          return 0
         case '待发货':
-          return 2
+          return 1
         case '待收货':
-          return 3
+          return 2
         case '已完成':
           return 4
         case '待退款':

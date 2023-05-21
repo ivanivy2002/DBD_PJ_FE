@@ -86,7 +86,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="activeSelect === '4'" class="personal-balance">
+    <div v-if="activeSelect === '4'" class="personal-info-display">
       <h2>个人资金</h2>
       <p>当前余额: {{ balance }}</p>
       <el-form
@@ -104,7 +104,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div v-if="activeSelect === '3'" class="change-password">
+    <div v-if="activeSelect === '3'" class="personal-info-display">
       <h2>修改密码</h2>
       <el-form
         :model="changePasswordForm"
@@ -114,13 +114,25 @@
         class="password-form"
       >
         <el-form-item label="原密码" prop="oldPassword">
-          <el-input v-model="changePasswordForm.oldPassword" type="password"></el-input>
+          <el-input
+            v-model="changePasswordForm.oldPassword"
+            type="password"
+            :show-password="true"
+          ></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="newPassword">
-          <el-input v-model="changePasswordForm.newPassword" type="password"></el-input>
+          <el-input
+            v-model="changePasswordForm.newPassword"
+            type="password"
+            :show-password="true"
+          ></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="confirmPassword">
-          <el-input v-model="changePasswordForm.confirmPassword" type="password"></el-input>
+          <el-input
+            v-model="changePasswordForm.confirmPassword"
+            type="password"
+            :show-password="true"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="changePassword">提交</el-button>
@@ -133,6 +145,7 @@
         <br />
         <br />
       </div>
+
       <el-card class="box-card" v-for="(address, index) in addresses" :key="index">
         <div slot="header" class="clearfix">
           <div class="defaultAddress" v-if="address.ifDefault == true">
@@ -687,6 +700,7 @@ export default {
   border-radius: 5px;
   margin-bottom: 20px;
   width: 100%;
+  /* height: 280px; */
   max-width: 600px;
 }
 
@@ -778,7 +792,7 @@ h2 {
 }
 
 .box-card {
-  background-image: linear-gradient(-45deg, #24b8c6, #26d6cd);
+  background-color: rgb(153, 212, 209);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   padding: 30px;
   border-radius: 5px;

@@ -17,7 +17,7 @@
             {{ orderPrice }}
           </div>
           <div class="button-container">
-            <el-button type="primary" @click="payOrder">支付订单</el-button>
+            <el-button type="primary" @click="payOrder" :disabled="disabled">支付订单</el-button>
           </div>
         </el-col>
       </el-row>
@@ -31,6 +31,7 @@ import { ElMessage } from 'element-plus'
 export default {
   data() {
     return {
+      disabled: false,
       userBalance: 0,
       orderPrice: 0,
       orderId: 0,
@@ -92,33 +93,7 @@ export default {
                   orderId: orderId
                 }
               })
-              .then((res) => {
-                if (res.data.code == 200) {
-                  console.log('支付成功')
-                  axios
-                    .post('/api/user/recharge', null, {
-                      params: {
-                        userId: localStorage.getItem('userId'), //获取cookie中的id
-                        // userId: 20,
-                        amount: this.orderPrice * -1 // 传一个负的"充值金额"，实现扣款
-                        // TODO: 这里amount和balance的命名和关系
-                      }
-                    })
-                    .then((response) => {
-                      console.log(response.data)
-                      console.log('扣款成功！')
-                    })
-                    .catch((err) => {
-                      console.log(err)
-                    })
-                } else {
-                  ElMessage({
-                    showClose: true,
-                    type: 'error',
-                    message: '支付失败: ' + res.data.msg
-                  })
-                }
-              })
+              .then((res) => {})
               .catch((err) => {
                 console.log(err)
               })
@@ -129,6 +104,8 @@ export default {
             message: '支付成功！'
           })
           this.getUserBalance()
+          this.disabled = true
+          this.$router.push('/home/orduser/paySuccess')
         } else {
           ElMessage({
             showClose: true,

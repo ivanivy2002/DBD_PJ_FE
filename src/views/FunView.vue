@@ -39,7 +39,9 @@ h1 {
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  background: linear-gradient(to bottom right, #177f7f, #32c8b2);
+  /* background: linear-gradient(to bottom right, #177f7f, #32c8b2); */
+  background: #63d5cd;
+
   color: white;
   /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;
