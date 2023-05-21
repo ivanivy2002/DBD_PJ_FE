@@ -122,7 +122,7 @@ th {
 
 .menu {
   display: flex;
-  gap: 1rem;
+  /* gap: 1rem; */
 }
 
 .menu-item {

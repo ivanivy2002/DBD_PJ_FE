@@ -62,7 +62,6 @@ import axios from 'axios'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/swiper-bundle.min.css'
 import CommoditySwiper from '../../components/CommoditySwiper.vue'
-import { ShoppingCart } from '@element-plus/icons-vue'
 
 export default {
   components: {
@@ -222,7 +221,7 @@ export default {
     // },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
-      if (imagePaths == null || imagePaths == undefined || imagePaths == '') {
+      if (!imagePaths) {
         console.log('图片路径为空')
         return []
       }

@@ -62,8 +62,6 @@
 <script>
 import { ElTable, ElTableColumn, ElTag, ElButton, ElCard, ElMessage } from 'element-plus'
 import axios from 'axios'
-import { Minus, Plus } from '@element-plus/icons-vue'
-
 export default {
   components: {
     ElTable,
