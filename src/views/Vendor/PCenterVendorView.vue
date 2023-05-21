@@ -114,13 +114,25 @@
         class="password-form"
       >
         <el-form-item label="原密码" prop="oldPassword">
-          <el-input v-model="changePasswordForm.oldPassword" type="password"     :show-password="true"></el-input>
+          <el-input
+            v-model="changePasswordForm.oldPassword"
+            type="password"
+            :show-password="true"
+          ></el-input>
         </el-form-item>
         <el-form-item label="新密码" prop="newPassword">
-          <el-input v-model="changePasswordForm.newPassword" type="password"  :show-password="true"></el-input>
+          <el-input
+            v-model="changePasswordForm.newPassword"
+            type="password"
+            :show-password="true"
+          ></el-input>
         </el-form-item>
         <el-form-item label="确认新密码" prop="confirmPassword">
-          <el-input v-model="changePasswordForm.confirmPassword" type="password"   :show-password="true"></el-input>
+          <el-input
+            v-model="changePasswordForm.confirmPassword"
+            type="password"
+            :show-password="true"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="changePassword">提交</el-button>

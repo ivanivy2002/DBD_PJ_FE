@@ -11,6 +11,8 @@ import OrderDetailView from '@/views/Orduser/Order/OrderDetailView'
 // import ActivityCommodity from '@/views/OrdUser/ActivityCommodityView.vue'
 import ActivityCommodityView from '@/views/OrdUser/ActivityCommodityView.vue'
 import OrdUserHomeView from '@/views/OrdUser/OrdUserHomeView.vue'
+import CommodityDetailView from '@/views/OrdUser/CommodityDetailView.vue'
+import PaySuccessView from '@/views/OrdUser/Order/PaySuccessView.vue'
 
 export default [
   {
@@ -28,8 +30,8 @@ export default [
       },
       {
         path: '/home/orduser',
-        redirect: '/home/orduser/store'
-        // TODO: 这里之后改成OrdUserHomeView
+        redirect: '/home/orduser/home'
+        // 注意这里的跳转有修改
       },
       {
         path: '/home/orduser/commodity',
@@ -70,6 +72,16 @@ export default [
         path: '/home/orduser/activityCommodity',
         name: 'ActivityCommodityView',
         component: ActivityCommodityView
+      },
+      {
+        path: '/home/orduser/commodity/detail',
+        name: 'CommodityDetailView',
+        component: CommodityDetailView
+      },
+      {
+        path: '/home/orduser/paySuccess',
+        name: 'PaySuccessView',
+        component: PaySuccessView
       }
     ]
   }

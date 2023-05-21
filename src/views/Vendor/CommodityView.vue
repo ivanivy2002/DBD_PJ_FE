@@ -643,9 +643,9 @@ export default {
 </script>
 
 <style scoped>
-.container{
-  position:relative;
-  top:30px;
+.container {
+  position: relative;
+  top: 30px;
 }
 .el-table {
   color: #2c3e50;

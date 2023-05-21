@@ -452,7 +452,7 @@ h1 {
 }
 
 .info {
-  position:relative;
+  position: relative;
   left: 8%;
 }
 

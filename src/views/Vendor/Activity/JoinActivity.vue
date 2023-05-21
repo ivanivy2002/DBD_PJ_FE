@@ -433,8 +433,8 @@ export default {
 }
 
 .join-form {
-  position:relative;
-  top:30px;
+  position: relative;
+  top: 30px;
   max-width: 600px;
   margin: 0 auto;
   background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);

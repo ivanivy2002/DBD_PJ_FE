@@ -165,10 +165,10 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-.ActivityButton{
-  position:relative;
-  top:-50px;
-  left:420px;
+.ActivityButton {
+  position: relative;
+  top: -50px;
+  left: 420px;
 }
 .card-title {
   font-size: 28px;

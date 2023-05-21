@@ -188,7 +188,9 @@ export default {
         this.calculateReduction() // 在这里调用是为了保证顺序执行
       })
     },
+
     calculateReduction() {
+      // TODO:这里加上检查余额的逻辑
       // 计算优惠
       // 商品列表，包括商品的活动ID、价格和数量
       // let commodities = [
@@ -358,7 +360,22 @@ export default {
         return
       }
       this.commodityArray.forEach((commodity) => {
+        localStorage.setItem('category', commodity.category)
         commodity.addressId = this.selectAddressId
+        axios
+          .put('/api/recommend/userOperationRecord', {
+            // 用户点击记录
+            userId: localStorage.getItem('userId'),
+            commodityId: commodity.commodityId,
+            // shopId: shopId,
+            operationType: 2
+          })
+          .then((response) => {
+            console.log(response.data)
+            if (response.data.code == 200) {
+              console.log('用户点击记录成功')
+            }
+          })
       })
       this.$confirm('确定要提交吗？', '提示', {
         confirmButtonText: '确定',

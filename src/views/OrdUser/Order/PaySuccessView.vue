@@ -1,12 +1,7 @@
 <template>
-  <div class="info">
+  <!-- <div class="info">
     <span class="search">&#x1F50D;</span>
-    <input
-      type="text"
-      placeholder="请按回车开始搜索..."
-      v-model="searchContent"
-      @keyup.enter="Search"
-    />
+    <input type="text" placeholder="请按回车开始搜索..." v-model="searchContent" @keyup.enter="Search" />
   </div>
 
   <link
@@ -19,40 +14,12 @@
     <h1 class="category"><i class="fas fa-shoe-prints"></i>女鞋 / 男鞋 / 箱包</h1>
     <h1 class="category"><i class="fas fa-utensils"></i>食品 / 生鲜 / 母婴</h1>
     <h1 class="category"><i class="fas fa-magic"></i>美妆 / 饰品 / 洗护</h1>
-  </div>
-  <div class="activity-carousel">
-    <el-carousel height="300px">
-      <el-carousel-item class="activity-col" v-for="activity in activities" :key="activity.id">
-        <!--              :xs="24" :sm="12" :md="8"  :lg="20"-->
-        <el-card
-          class="animated-card-activity"
-          shadow="hover"
-          @click="navigateToActivity(activity.id)"
-        >
-          <div class="activity-parent">
-            <div class="activity-card-header">
-              <!--              活动 {{ activity.id }}-->
-              <div class="activity-card-title">{{ activity.activityName }}</div>
-            </div>
-            <div class="activity-card-content">满{{ activity.x }}减{{ activity.y }}</div>
-            <!--                    <div class="activity-card-content">活动状态：{{ activity.status }}</div>-->
-            <div class="activity-card-content">{{ calRemainTime(activity) }}</div>
-            <div class="activity-card-content">
-              <!--                        <span class="category-title">活动商品：</span>-->
-              <div class="category-list">
-                <span
-                  v-for="(category, index) in activity.categories"
-                  :key="index"
-                  class="category-span"
-                >
-                  {{ category.category }}</span
-                >
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </el-carousel-item>
-    </el-carousel>
+  </div> -->
+  <div class="pay-success">
+    <div class="success-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="success-text">支付成功！😀</div>
   </div>
 
   <div class="commodity">
@@ -93,7 +60,7 @@
 
 <script>
 // import { reactive } from 'vue'
-import { ElCol, ElRow, ElMessage } from 'element-plus'
+import { ElCol, ElRow } from 'element-plus'
 import axios from 'axios'
 
 export default {
@@ -107,8 +74,7 @@ export default {
       userBasedArray: [], // 基于用户的推荐数组
       hotRecommendData: [], // 热门推荐数组
       userBasedThreshold: 4, // 基于用户的推荐阈值，如果小于​该值，则显示热门推荐
-      searchCommodityName: '',
-      searchCommodityCategory: '',
+      searchContent: '',
       activities: [
         {
           activityName: '活动0',
@@ -129,51 +95,28 @@ export default {
       ]
     }
   },
-  computed: {
-    // calRemainTime() {
-    //     return (endTime, activities) => {
-    //         // 对所有的 activities 进行处理，计算出剩余时间并返回一个新数组
-    //         return activities.map((activity) => {
-    //             const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
-    //             const currentTime = Math.floor(Date.now() / 1000)
-    //             const remainTime = Math.max(createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime, 0)
-    //             const second = remainTime % 60
-    //             let minute = Math.floor(remainTime / 60)
-    //             let hour = Math.floor(minute / 60)
-    //             minute = minute % 60
-    //             const day = Math.floor(hour / 60)
-    //             hour = hour % 60
-    //             const remainTimeString= `${day}天${hour}小时${minute}分钟${second}秒`
-    //             return {
-    //                 ...activity,
-    //                 remainTimeString,
-    //             }
-    //         });
-    //     };
-    //
-    // },
-  },
+  computed: {},
   async mounted() {
     // TODO: setInterval Disabled, 以下三行
     // setInterval(() => {
     //   this.fetchActivity()
     // }, 1000)
 
-    await this.fetchActivity()
+    // await this.fetchActivity()
     await this.fetchRecommendData()
   },
   methods: {
     async fetchRecommendData() {
       await axios
-        .get('/api/recommend/userBased', {
+        .get('/api/recommend/categoryBased', {
           params: {
-            userId: localStorage.getItem('userId')
+            category: localStorage.getItem('category')
           }
         })
         .then((response) => {
           console.log(response.data)
           this.userBasedArray = response.data.data
-          if (this.userBasedArray.length <= this.userBasedThreshold) {
+          if (this.userBasedArray.length == 0) {
             // 如果低于阈值，就用热门推荐
             this.fetchHotRecommendData()
             return
@@ -207,61 +150,6 @@ export default {
             this.$router.push('/home/orduser/commodity/detail')
           }
         })
-    },
-    calRemainTime(activity) {
-      //     createTime,lastTime
-      const createTimeInSeconds = Math.floor(Date.parse(activity.createTime) / 1000)
-      const currentTime = Math.floor(Date.now() / 1000)
-      // const dateCreatTime = new Date(activity.createTime)
-      // console.log(activity.createTime)
-      // console.log(dateCreatTime)
-      // console.log(createTimeInSeconds)
-      // console.log(activity.lastTime)
-      const remainTime = Math.max(
-        createTimeInSeconds + activity.lastTime * 3600 * 24 - currentTime,
-        0
-      )
-      this.checkStop(remainTime, activity)
-      const second = remainTime % 60
-      let minute = Math.floor(remainTime / 60)
-      // const hour = Math.floor(remainTime / 3600)
-      let hour = Math.floor(minute / 60)
-      minute = minute % 60
-      const day = Math.floor(hour / 24)
-      hour = hour % 24
-      // const minute = Math.floor((remainTime - 3600 * hour) / 60)
-      const secondString = String(second).padStart(2, '0')
-      const minuteString = String(minute).padStart(2, '0')
-      const hourString = String(hour).padStart(2, '0')
-      // const dayString = String(day).padStart(2, "0");
-      return `${day}天${hourString}小时${minuteString}分钟${secondString}秒`
-    },
-    // startTimer() {
-    //     // 每秒钟更新一次 remainTime 的值
-    //     this.timer = setInterval(() => {
-    //         // eslint-disable-next-line no-self-assign
-    //         this.activities = this.activities
-    //     }, 1000)
-    // },
-    // stopTimer() {
-    //     clearInterval(this.timer) // 销毁定时器
-    // },
-    checkStop(remainTime, activity) {
-      // console.log(remainTime)
-      if (remainTime === 0) {
-        //TODO:BUG 500 ERR
-        console.log(remainTime + ' ' + activity.activityName + ' to off')
-        // const activityId = activity.id;
-        // try {
-        //     axios.put('/api/activity/stop', null, {
-        //         params: {
-        //             activityId: activity.id
-        //         }
-        //     })
-        // } catch (error) {
-        //     console.log(error)
-        // }
-      }
     },
     async fetchActivity() {
       try {
@@ -309,22 +197,6 @@ export default {
         })
     },
     // eslint-disable-next-line no-unused-vars
-    navigateToActivity(activityId) {
-      // TODO: 这下面可能还要修正一下，统一命名
-      localStorage.setItem('showActivityId', activityId) // 注意：将showActivityId存入localStorage
-      localStorage.setItem('activityId', activityId)
-      if (localStorage.getItem('role') == '3') {
-        this.$router.push({ path: `/home/admin/activity` })
-      }
-      if (localStorage.getItem('role') == '2') {
-        this.$router.push({ path: `/home/vendor/joinActivity` })
-      }
-      if (localStorage.getItem('role') == '1') {
-        this.$router.push({
-          path: '/home/orduser/activityCommodity'
-        })
-      }
-    },
     getImageUrls(imagePaths) {
       // NOTE: 从后端获取图片的url(特殊URL)
       //  || imagePaths == undefined || imagePaths == ''
@@ -334,50 +206,6 @@ export default {
       }
       const baseUrl = '/api/display/commodity/'
       return imagePaths.split(',').map((imagePath) => `${baseUrl}${imagePath.trim()}`)
-    },
-    Search(event) {
-      // 获取输入框的值
-      let value = event.target.value
-      // 调用搜索功能
-      this.doSearch(value)
-    },
-    doSearch(value) {
-      console.log(value)
-      // 具体搜索逻辑...
-      axios.get('/api/commodity/findByCommodityName', {
-        params: {
-          name: value
-        }
-      }).then((response) => {
-        console.log(response.data)
-        this.searchCommodityName = response.data.data
-        if(this.searchCommodityName.length > 0) {
-          console.log('找到商品')
-          this.showCommodityArray = this.searchCommodityName
-        } else {
-          console.log('没有找到商品')
-          axios.get('/api/recommend/categoryBased', {
-            params: {
-              category: value
-            }
-          }).then((response) => {
-            console.log(response.data)
-            this.searchCommodityCategory = response.data.data
-            if(this.searchCommodityCategory.length > 0) {
-              console.log('找到商品')
-              this.showCommodityArray = this.searchCommodityCategory
-            } else {
-              console.log('没有找到商品')
-              this.showCommodityArray = []
-              ElMessage({
-              showClose: true,
-              type: 'warning', 
-              message: '没有找到想要的商品噢，换个商品试试吧！'
-            })
-            }
-          })
-        }
-      })
     }
   }
 }
@@ -668,5 +496,24 @@ h1 {
 .category-span {
   background-color: #4f46e5;
   color: #1d1d1d;
+}
+
+.pay-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.success-icon {
+  font-size: 5rem;
+  color: #52c41a;
+  margin-bottom: 2rem;
+}
+
+.success-text {
+  font-size: 2rem;
+  color: #52c41a;
 }
 </style>

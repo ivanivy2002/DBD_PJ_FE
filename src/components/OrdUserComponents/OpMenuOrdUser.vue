@@ -35,7 +35,7 @@ export default {
   name: 'OpMenuOrdUser',
   methods: {
     gotoStorePage() {
-      this.$router.push('/home/orduser/store')
+      this.$router.push('/home/orduser/home')
     },
     gotoPCenter() {
       this.$router.push('/home/orduser/profile')

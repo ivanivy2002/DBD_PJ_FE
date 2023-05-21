@@ -1,8 +1,8 @@
 <template>
   <!-- <div class="info">
      TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
-    <!-- <h1>商品页面</h1>
-  </div> --> 
+  <!-- <h1>商品页面</h1>
+  </div> -->
   <div class="commodity-view">
     <el-row gutter="24">
       <el-col
@@ -97,6 +97,7 @@ export default {
   },
   data() {
     return {
+      commodityNum: 1,
       imageUrls: [],
       swiperOptions: {
         pagination: {
@@ -186,7 +187,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.getCommodityInfo(commodityId, Num)
+        this.getCommodityInfo(commodityId, Num) // 跳转的逻辑写在这个函数里面
 
         // this.$nextTick(() => {
         //   console.log(commodityInfo)
@@ -264,8 +265,8 @@ export default {
 } */
 
 .commodity-view {
-  position:relative;
-  top:30px;
+  position: relative;
+  top: 30px;
   margin: 24px;
 }
 
@@ -277,7 +278,7 @@ export default {
   cursor: default;
   transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
   /* background-image: linear-gradient(-45deg, #24b8c6, #26d6cd); */
-    background:  #63d5cd;
+  background: #63d5cd;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
