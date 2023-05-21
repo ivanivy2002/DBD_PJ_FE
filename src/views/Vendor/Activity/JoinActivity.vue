@@ -345,8 +345,8 @@ export default {
 
 <style scoped>
 .error {
-  font-size: 25px;
-  color: brown;
+  font-size: 20px;
+  color: rgb(34, 33, 30);
 }
 .info h1 {
   font-size: 40px;
@@ -433,13 +433,11 @@ export default {
 }
 
 .join-form {
+  position:relative;
+  top:30px;
   max-width: 600px;
   margin: 0 auto;
-  background-image: linear-gradient(
-    to bottom right,
-    rgba(177, 234, 221, 0.91),
-    rgba(49, 231, 206, 0.71)
-  );
+  background-image: linear-gradient(-45deg, #63d5cd, #50b9b0);
   padding: 30px;
   border-radius: 10px;
 }

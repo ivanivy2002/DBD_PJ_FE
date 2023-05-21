@@ -11,7 +11,8 @@
           <div class="card-header">
             <div class="card-title">{{ activity.activityName }}</div>
           </div>
-          <div class="card-content">活动状态：{{ activity.status }}</div>
+          <!--这里应该不用展示活动状态-->
+          <!-- <div class="card-content">活动状态：{{ activity.status }}</div> -->
           <div class="card-content">剩余时间：{{ calRemainTime(activity) }}</div>
           <div class="card-content">商品类别：{{ activity.category }}</div>
           <div class="ActivityButton" @click="navigateToActivity(activity.id)">
@@ -164,7 +165,11 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
+.ActivityButton{
+  position:relative;
+  top:-50px;
+  left:420px;
+}
 .card-title {
   font-size: 28px;
   font-weight: bold;
