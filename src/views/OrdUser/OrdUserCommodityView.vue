@@ -216,6 +216,8 @@ export default {
             console.log(response.data.data)
             commodityInfo = response.data.data
             commodityInfo.commodityNum = Num
+            commodityInfo.userId = localStorage.getItem('userId')
+            commodityInfo.commodityId = commodityId
             // console.log(commodityInfo)
             this.commodityInfoArray.push(commodityInfo)
             localStorage.setItem('commodityArray', JSON.stringify(this.commodityInfoArray))
