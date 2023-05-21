@@ -1,8 +1,5 @@
 <template>
-  <div class="info">
-    <!-- TODO: 我希望能在这里显示店铺名称，或者存到localStorage里面？ -->
-    <h1>商品页面</h1>
-  </div>
+  <!-- NOTE：首页展示 -->
   <div class="commodity-view">
     <el-row gutter="24">
       <el-col
@@ -29,36 +26,17 @@
             <div class="commodity-content">介绍：{{ commodity.intro }}</div>
             <div class="commodity-content">价格：{{ commodity.price }}</div>
             <div class="commodity-image">
-              <!-- BUG: 图片轮播失败 -->
-              <swiper
-                :slides-per-view="1"
-                :space-between="8"
-                navigation
-                :pagination="{ clickable: true }"
-                :autoplay="{ delay: 3000 }"
-                effect="fade"
-                observer
-                observeParents
-                class="swiper-container"
-              >
-                <swiper-wrapper>
-                  <swiper-slide
-                    v-for="imageUrl in getImageUrls(commodity.imagePath)"
-                    :key="imageUrl"
-                  >
-                    <img :src="imageUrl" />
-                  </swiper-slide>
-                </swiper-wrapper>
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-              </swiper>
+              <img
+                v-for="imageUrl in getImageUrls(commodity.imagePath)"
+                :key="imageUrl"
+                :src="imageUrl"
+              />
             </div>
             <div class="commodity-action">
               <el-input-number
                 v-model="commodityNum"
                 :min="1"
-                :max="10000"
+                :max="10"
                 label="数量"
                 controls-position="right"
                 style="width: 120px"
@@ -66,7 +44,9 @@
               <el-button color="#626aef" @click="PunchaseDirect(commodity.id, commodityNum)">
                 直接购买
               </el-button>
-              <el-button type="primary" @click="addToCart(commodity.id, commodityNum)"
+              <el-button
+                type="primary"
+                @click="addToCart(commodity.id, commodityNum, commodity.shopId)"
                 ><el-icon><ShoppingCart /></el-icon
               ></el-button>
             </div>
@@ -107,13 +87,14 @@ export default {
           prevEl: '.swiper-button-prev'
         }
       },
-      // shopId: '', // 假设shopId已经从localStorage中获取
+      activityId: '', // 假设shopId已经从localStorage中获取
       commodities: [],
       commodityInfoArray: []
       // commodityNum: 0 // 购物车数量
     }
   },
   async mounted() {
+    this.activityId = localStorage.getItem('showActivityId')
     try {
       const commoditiesResponse = await this.fetchData()
       console.log(commoditiesResponse.data)
@@ -122,6 +103,7 @@ export default {
         commodityName: commodity.commodityName,
         intro: commodity.intro,
         price: commodity.price,
+        shopId: commodity.shopId,
         imagePath: commodity.imagePath,
         commodityNum: 1 // 初始商品数量为1
       }))
@@ -133,9 +115,9 @@ export default {
   methods: {
     async fetchData() {
       try {
-        //   this.shopId = localStorage.getItem('showShopId')
-        const response = await axios.get('/api/commodity/displayQualified/', {
-          params: { shopId: this.shopId }
+        // this.activityId = localStorage.getItem('showActivityId')
+        const response = await axios.get('/api/home/getCommodityInActivity', {
+          params: { activityId: this.activityId }
         })
         console.log(response.data)
         return response.data
@@ -144,14 +126,14 @@ export default {
       }
     },
     // NOTE: 添加商品到购物车
-    addToCart(commodityId, quantity) {
+    addToCart(commodityId, quantity, shopId) {
       try {
         const response = axios
           .post('/api/shoppingCart/addCommodity/', {
             // NOTE: 传一个body
             id: null,
             userId: localStorage.getItem('userId'),
-            shopId: localStorage.getItem('showShopId'),
+            shopId: shopId,
             commodityId: commodityId,
             commodityNum: quantity,
             status: '有效'

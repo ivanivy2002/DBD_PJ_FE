@@ -393,10 +393,10 @@ export default {
     //     console.log(error)
     // }
 
-    //TODO: setInterval Disabled, 以下三行
-    // setInterval(() => {
-    //     this.fetchActivity()
-    // }, 2000)
+    // TODO: setInterval Disabled, 以下三行
+    setInterval(() => {
+      this.fetchActivity()
+    }, 1000)
 
     // this.startTimer()
   }
