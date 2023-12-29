@@ -13,11 +13,17 @@ import TestRouterHomeExtend from '@/components/TestRouterHomeExtend'
 export default {
   name: 'NewHome',
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     TrueHeader,
+    // eslint-disable-next-line vue/no-unused-components
     Lorem,
+    // eslint-disable-next-line vue/no-reserved-component-names,vue/no-unused-components
     Header,
+    // eslint-disable-next-line vue/no-reserved-component-names,vue/no-unused-components
     Aside,
+    // eslint-disable-next-line vue/no-unused-components
     LoginForm,
+    // eslint-disable-next-line vue/no-unused-components
     TestRouterHomeExtend
   }
 }

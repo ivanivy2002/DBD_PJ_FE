@@ -11,6 +11,9 @@
     <el-menu-item index="2-1" @click="gotoStoreManagePage">
       <button class="btn btn-outline-primary">管理店铺</button>
     </el-menu-item>
+    <el-menu-item index="2-1" @click="gotoUserManagePage">
+      <button class="btn btn-outline-primary">管理普通用户</button>
+    </el-menu-item>
     <el-menu-item index="2-2" @click="gotoCommodityRegManagePage">
       <button class="btn btn-outline-primary">管理商品上架</button>
     </el-menu-item>
@@ -65,6 +68,9 @@ export default {
     },
     gotoManageStoreActivityPage() {
       this.$router.push('/home/admin/manageStoreActivity')
+    },
+    gotoUserManagePage() {
+      this.$router.push('/home/admin/manageUser')
     }
   },
   setup() {

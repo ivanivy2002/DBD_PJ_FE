@@ -7,7 +7,7 @@
         </div> -->
     <div class="title">
       <div class="title-text">
-        <h1>Welcome to GanSui Mall!</h1>
+        <h1>Welcome to YW2 Mall!</h1>
       </div>
     </div>
     <div class="parent-element">
@@ -31,10 +31,11 @@
                 :show-password="true"
               ></el-input>
             </el-form-item>
-            <el-form-item label="管理员" id="login3">
+            <el-form-item label="角色" id="login3">
               <el-radio-group v-model="loginForm.role">
-                <el-radio label="1" size="large">是</el-radio>
-                <el-radio label="0" size="large">否</el-radio>
+                <el-radio label="1" size="large">普通用户</el-radio>
+                <el-radio label="2" size="large">商户</el-radio>
+                <el-radio label="3" size="large">管理员</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item>

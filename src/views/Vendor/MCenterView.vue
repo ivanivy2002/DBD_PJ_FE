@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       // shopInfoForm: {
-      //   shopName: 'GanSuiShop',
+      //   shopName: 'YW2Shop',
       //   email: '2251@vwv.com',
       //   address: '超级天空城3区55街道干碎小区',
       //   intro: 'what is life for?',

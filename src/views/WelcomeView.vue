@@ -2,7 +2,7 @@
   <div class="center" @mouseenter="isHover = true" @mouseleave="isHover = false">
     <div class="content">
       <h1>Welcome!</h1>
-      <h1 id="title" @click="showConfetti">GanSui Mall</h1>
+      <h1 id="title" @click="showConfetti">YW2 Mall</h1>
       <br />
       <nav class="routerText">
         <RouterLink to="/about">About</RouterLink>
@@ -20,6 +20,7 @@
 import JSConfetti from 'js-confetti'
 const confetti = new JSConfetti()
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Welcome',
   mounted() {
     this.showConfetti()
@@ -48,7 +49,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(to bottom right, #c2e7ef, #abe5ef);
+  background: linear-gradient(to bottom right, #9ae8b9, #58a973);
   color: white;
   /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); */
   transition: background 0.5s ease-in-out;
@@ -59,7 +60,7 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: #88d3dd;
+  background-color: #44a862;
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -102,7 +103,7 @@ nav {
   margin: 0 1em;
   padding: 0.75em 1.5em;
   border-radius: 2em;
-  background: #6ea7d8;
+  background: rgba(110, 216, 159, 0.99);
   color: white;
   text-decoration: none;
   text-transform: uppercase;

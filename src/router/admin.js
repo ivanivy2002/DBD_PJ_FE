@@ -7,6 +7,7 @@ import CommodityRegView from '@/views/Admin/CommodityRegView.vue'
 import CommodityChangeInfoView from '@/views/Admin/CommodityChangeInfoView.vue'
 // import CommodityTableView from '@/views/CommodityTableView.vue'
 import AdminCommodityView from '@/views/Admin/AdminCommodityView.vue'
+import ManageUserView from '@/views/Admin/ManageUserView.vue'
 // import CashFlowRecordView from '@/views/Admin/CashFlowRecordView.vue'
 import ActivityManage from '@/views/Admin/Activity/ActivityManage.vue'
 import PresetFormView from '@/views/Admin/Activity/PresetFormView.vue'
@@ -20,6 +21,11 @@ export default [
     path: '/home/admin',
     component: Admin,
     children: [
+      {
+        path: '/home/admin/manageUser',
+        name: 'ManageUserView',
+        component: ManageUserView
+      },
       {
         path: '/home/admin/money',
         name: 'ManageMoneyView',

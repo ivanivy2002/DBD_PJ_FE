@@ -1,6 +1,6 @@
 <template>
   <button class="btn-87" style="margin-left: 10px">
-    <span @click="gotoWelcome">GanSui</span>
+    <span @click="gotoWelcome">YW2</span>
     <svg aria-hidden><circle></circle></svg>
   </button>
 </template>
